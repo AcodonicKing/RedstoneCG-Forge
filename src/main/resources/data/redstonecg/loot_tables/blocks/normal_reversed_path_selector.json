@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:block",
+  "random_sequence": "redstonecg:blocks/normal_reversed_path_selector",
+  "pools": [
+    {
+      "rolls": 1.0,
+      "conditions": [
+        {
+          "condition": "minecraft:survives_explosion"
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "redstonecg:normal_reversed_path_selector"
+        }
+      ]
+    }
+  ]
+}

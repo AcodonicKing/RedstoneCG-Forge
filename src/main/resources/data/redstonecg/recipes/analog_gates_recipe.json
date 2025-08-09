@@ -1,0 +1,20 @@
+{
+    "type": "redstonecg:redcu_crafting",
+    "designation": "analog/normal",
+    "ingredients": [
+        { "item": "redstonecg:smooth_stone_plate"},
+        { "item": "minecraft:redstone" },
+        { "item": "minecraft:quartz" }
+    ],
+    "outputs": [
+        { "id": "redstonecg:normal_analog_source", "Count": 1 },
+        { "id": "redstonecg:normal_analog_bias", "Count": 1 },
+        { "id": "redstonecg:normal_analog_gain", "Count": 1 },
+        { "id": "redstonecg:normal_analog_pass", "Count": 1 },
+        { "id": "redstonecg:normal_analog_memory", "Count": 1 },
+        { "id": "redstonecg:normal_analog_subtractor", "Count": 1 },
+        { "id": "redstonecg:normal_analog_differential", "Count": 1 },
+        { "id": "redstonecg:normal_analog_max", "Count": 1 },
+        { "id": "redstonecg:normal_analog_min", "Count": 1 }
+    ]
+}

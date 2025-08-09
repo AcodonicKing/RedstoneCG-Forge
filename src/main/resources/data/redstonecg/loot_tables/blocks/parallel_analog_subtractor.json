@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:block",
+  "random_sequence": "redstonecg:blocks/parallel_analog_subtractor",
+  "pools": [
+    {
+      "rolls": 1.0,
+      "conditions": [
+        {
+          "condition": "minecraft:survives_explosion"
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "redstonecg:parallel_analog_subtractor"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+    "type": "redstonecg:redcu_crafting",
+    "designation": "digital/parallel",
+    "ingredients": [
+        { "item": "redstonecg:smooth_stone_plate"},
+        { "item": "minecraft:redstone" }
+    ],
+    "outputs": [
+        { "id": "redstonecg:parallel_and", "Count": 1 },
+        { "id": "redstonecg:parallel_or", "Count": 1 },
+        { "id": "redstonecg:parallel_nand", "Count": 1 },
+        { "id": "redstonecg:parallel_nor", "Count": 1 }
+    ]
+}

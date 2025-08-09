@@ -1,0 +1,9 @@
+{
+  "parent": "redstonecg:custom/wall_component",
+  "textures": {
+    "all": "redstonecg:block/parallel/hybrid/one_way_path_selector/on_a",
+    "particle": "redstonecg:block/parallel/hybrid/one_way_path_selector/on_a",
+    "0": "redstonecg:block/parallel/hybrid/one_way_path_selector/on_a"
+  },
+  "render_type": "solid"
+}

@@ -1,0 +1,9 @@
+{
+  "parent": "redstonecg:custom/floor_component",
+  "textures": {
+    "all": "redstonecg:block/universal_indicator/ui8",
+    "particle": "redstonecg:block/universal_indicator/ui8",
+    "0": "redstonecg:block/universal_indicator/ui8"
+  },
+  "render_type": "solid"
+}

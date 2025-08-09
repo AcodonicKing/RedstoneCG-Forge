@@ -1,0 +1,7 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "redstonecg:item/normal/hybrid/comparator"
+  },
+  "render_type": "translucent"
+}

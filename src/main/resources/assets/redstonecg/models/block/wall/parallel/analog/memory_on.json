@@ -1,0 +1,9 @@
+{
+  "parent": "redstonecg:custom/wall_component",
+  "textures": {
+    "all": "redstonecg:block/parallel/analog/memory_on",
+    "particle": "redstonecg:block/parallel/analog/memory_on",
+    "0": "redstonecg:block/parallel/analog/memory_on"
+  },
+  "render_type": "solid"
+}

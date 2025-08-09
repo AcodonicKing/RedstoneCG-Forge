@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:block",
+  "random_sequence": "redstonecg:blocks/parallel_d_latch",
+  "pools": [
+    {
+      "rolls": 1.0,
+      "conditions": [
+        {
+          "condition": "minecraft:survives_explosion"
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "redstonecg:parallel_d_latch"
+        }
+      ]
+    }
+  ]
+}

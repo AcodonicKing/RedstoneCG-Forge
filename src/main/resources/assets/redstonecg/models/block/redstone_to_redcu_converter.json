@@ -1,0 +1,9 @@
+{
+  "parent": "redstonecg:custom/redstone_to_redcu_converter",
+  "textures": {
+    "all": "redstonecg:block/redstone_to_redcu_converter",
+    "particle": "redstonecg:block/redstone_to_redcu_converter",
+    "4": "redstonecg:block/redstone_to_redcu_converter"
+  },
+  "render_type": "solid"
+}

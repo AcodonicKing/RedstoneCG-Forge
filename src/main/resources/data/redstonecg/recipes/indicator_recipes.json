@@ -1,0 +1,13 @@
+{
+    "type": "redstonecg:redcu_crafting",
+    "designation": "indicators/normal",
+    "ingredients": [
+        { "item": "redstonecg:smooth_stone_plate"},
+        { "item": "minecraft:redstone" }
+    ],
+    "outputs": [
+        { "id": "redstonecg:seven_segment_indicator", "Count": 1 },
+        { "id": "redstonecg:clock_filling_indicator", "Count": 1 },
+        { "id": "redstonecg:orb_indicator", "Count": 1 }
+    ]
+}

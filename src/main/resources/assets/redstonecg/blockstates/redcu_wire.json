@@ -1,0 +1,396 @@
+{
+	"multipart":[
+		{
+			"when":{"connection": "1|2|5|6|7|9|10", "facing": "down"},
+			"apply":{"model": "redstonecg:custom/floor_redcu_wire", "y": 0, "x": 0}
+		},
+		{
+			"when":{"connection": "0|4|5|6|8|9|10", "facing": "down"},
+			"apply":{"model": "redstonecg:custom/floor_redcu_wire", "y": 90, "x": 0}
+		},
+		{
+			"when":{"connection": "1|3|4|7|8|9|10", "facing": "down"},
+			"apply":{"model": "redstonecg:custom/floor_redcu_wire", "y": 180, "x": 0}
+		},
+		{
+			"when":{"connection": "0|2|3|6|7|8|10", "facing": "down"},
+			"apply":{"model": "redstonecg:custom/floor_redcu_wire", "y": 270, "x": 0}
+		},
+
+		{
+			"when":{"connection": "1|2|5|6|7|9|10", "facing": "north"},
+			"apply":{"model": "redstonecg:custom/wall_redcu_wire", "y": 90, "x": 0}
+		},
+		{
+			"when":{"connection": "0|4|5|6|8|9|10", "facing": "north"},
+			"apply":{"model": "redstonecg:custom/wall_redcu_wire", "y": 90, "x": 90}
+		},
+		{
+			"when":{"connection": "1|3|4|7|8|9|10", "facing": "north"},
+			"apply":{"model": "redstonecg:custom/wall_redcu_wire", "y": 90, "x": 180}
+		},
+		{
+			"when":{"connection": "0|2|3|6|7|8|10", "facing": "north"},
+			"apply":{"model": "redstonecg:custom/wall_redcu_wire", "y": 90, "x": 270}
+		},
+
+		{
+			"when":{"connection": "1|2|5|6|7|9|10", "facing": "east"},
+			"apply":{"model": "redstonecg:custom/wall_redcu_wire", "y": 180, "x": 0}
+		},
+		{
+			"when":{"connection": "0|4|5|6|8|9|10", "facing": "east"},
+			"apply":{"model": "redstonecg:custom/wall_redcu_wire", "y": 180, "x": 90}
+		},
+		{
+			"when":{"connection": "1|3|4|7|8|9|10", "facing": "east"},
+			"apply":{"model": "redstonecg:custom/wall_redcu_wire", "y": 180, "x": 180}
+		},
+		{
+			"when":{"connection": "0|2|3|6|7|8|10", "facing": "east"},
+			"apply":{"model": "redstonecg:custom/wall_redcu_wire", "y": 180, "x": 270}
+		},
+
+		{
+			"when":{"connection": "1|2|5|6|7|9|10", "facing": "south"},
+			"apply":{"model": "redstonecg:custom/wall_redcu_wire", "y": 270, "x": 0}
+		},
+		{
+			"when":{"connection": "0|4|5|6|8|9|10", "facing": "south"},
+			"apply":{"model": "redstonecg:custom/wall_redcu_wire", "y": 270, "x": 90}
+		},
+		{
+			"when":{"connection": "1|3|4|7|8|9|10", "facing": "south"},
+			"apply":{"model": "redstonecg:custom/wall_redcu_wire", "y": 270, "x": 180}
+		},
+		{
+			"when":{"connection": "0|2|3|6|7|8|10", "facing": "south"},
+			"apply":{"model": "redstonecg:custom/wall_redcu_wire", "y": 270, "x": 270}
+		},
+
+		{
+			"when":{"connection": "1|2|5|6|7|9|10", "facing": "west"},
+			"apply":{"model": "redstonecg:custom/wall_redcu_wire", "y": 0, "x": 0}
+		},
+		{
+			"when":{"connection": "0|4|5|6|8|9|10", "facing": "west"},
+			"apply":{"model": "redstonecg:custom/wall_redcu_wire", "y": 0, "x": 90}
+		},
+		{
+			"when":{"connection": "1|3|4|7|8|9|10", "facing": "west"},
+			"apply":{"model": "redstonecg:custom/wall_redcu_wire", "y": 0, "x": 180}
+		},
+		{
+			"when":{"connection": "0|2|3|6|7|8|10", "facing": "west"},
+			"apply":{"model": "redstonecg:custom/wall_redcu_wire", "y": 0, "x": 270}
+		},
+
+		{
+			"when":{"connection": "1|2|5|6|7|9|10", "facing": "up"},
+			"apply":{"model": "redstonecg:custom/floor_redcu_wire", "y": 0, "x": 180}
+		},
+		{
+			"when":{"connection": "0|4|5|6|8|9|10", "facing": "up"},
+			"apply":{"model": "redstonecg:custom/floor_redcu_wire", "y": 270, "x": 180}
+		},
+		{
+			"when":{"connection": "1|3|4|7|8|9|10", "facing": "up"},
+			"apply":{"model": "redstonecg:custom/floor_redcu_wire", "y": 180, "x": 180}
+		},
+		{
+			"when":{"connection": "0|2|3|6|7|8|10", "facing": "up"},
+			"apply":{"model": "redstonecg:custom/floor_redcu_wire", "y": 90, "x": 180}
+		},
+
+
+
+		{
+			"when":{"connection": "0", "facing": "down"},
+			"apply":{"model": "redstonecg:custom/floor_redcu_knot_i", "y": 90, "x": 0}
+		},
+		{
+			"when":{"connection": "1", "facing": "down"},
+			"apply":{"model": "redstonecg:custom/floor_redcu_knot_i", "y": 0, "x": 0}
+		},
+
+		{
+			"when":{"connection": "0", "facing": "north"},
+			"apply":{"model": "redstonecg:custom/wall_redcu_knot_i", "y": 90, "x": 90}
+		},
+		{
+			"when":{"connection": "1", "facing": "north"},
+			"apply":{"model": "redstonecg:custom/wall_redcu_knot_i", "y": 90, "x": 0}
+		},
+
+		{
+			"when":{"connection": "0", "facing": "east"},
+			"apply":{"model": "redstonecg:custom/wall_redcu_knot_i", "y": 180, "x": 90}
+		},
+		{
+			"when":{"connection": "1", "facing": "east"},
+			"apply":{"model": "redstonecg:custom/wall_redcu_knot_i", "y": 180, "x": 0}
+		},
+
+		{
+			"when":{"connection": "0", "facing": "south"},
+			"apply":{"model": "redstonecg:custom/wall_redcu_knot_i", "y": 270, "x": 90}
+		},
+		{
+			"when":{"connection": "1", "facing": "south"},
+			"apply":{"model": "redstonecg:custom/wall_redcu_knot_i", "y": 270, "x": 0}
+		},
+
+		{
+			"when":{"connection": "0", "facing": "west"},
+			"apply":{"model": "redstonecg:custom/wall_redcu_knot_i", "y": 0, "x": 90}
+		},
+		{
+			"when":{"connection": "1", "facing": "west"},
+			"apply":{"model": "redstonecg:custom/wall_redcu_knot_i", "y": 0, "x": 0}
+		},
+
+		{
+			"when":{"connection": "0", "facing": "up"},
+			"apply":{"model": "redstonecg:custom/floor_redcu_knot_i", "y": 90, "x": 180}
+		},
+		{
+			"when":{"connection": "1", "facing": "up"},
+			"apply":{"model": "redstonecg:custom/floor_redcu_knot_i", "y": 0, "x": 180}
+		},
+
+
+
+		{
+			"when":{"connection": "2", "facing": "down"},
+			"apply":{"model": "redstonecg:custom/floor_redcu_knot_l", "y": 270, "x": 0}
+		},
+		{
+			"when":{"connection": "3", "facing": "down"},
+			"apply":{"model": "redstonecg:custom/floor_redcu_knot_l", "y": 180, "x": 0}
+		},
+		{
+			"when":{"connection": "4", "facing": "down"},
+			"apply":{"model": "redstonecg:custom/floor_redcu_knot_l", "y": 90, "x": 0}
+		},
+		{
+			"when":{"connection": "5", "facing": "down"},
+			"apply":{"model": "redstonecg:custom/floor_redcu_knot_l", "y": 0, "x": 0}
+		},
+
+		{
+			"when":{"connection": "2", "facing": "north"},
+			"apply":{"model": "redstonecg:custom/wall_redcu_knot_l", "y": 90, "x": 270}
+		},
+		{
+			"when":{"connection": "3", "facing": "north"},
+			"apply":{"model": "redstonecg:custom/wall_redcu_knot_l", "y": 90, "x": 180}
+		},
+		{
+			"when":{"connection": "4", "facing": "north"},
+			"apply":{"model": "redstonecg:custom/wall_redcu_knot_l", "y": 90, "x": 90}
+		},
+		{
+			"when":{"connection": "5", "facing": "north"},
+			"apply":{"model": "redstonecg:custom/wall_redcu_knot_l", "y": 90, "x": 0}
+		},
+
+		{
+			"when":{"connection": "2", "facing": "east"},
+			"apply":{"model": "redstonecg:custom/wall_redcu_knot_l", "y": 180, "x": 270}
+		},
+		{
+			"when":{"connection": "3", "facing": "east"},
+			"apply":{"model": "redstonecg:custom/wall_redcu_knot_l", "y": 180, "x": 180}
+		},
+		{
+			"when":{"connection": "4", "facing": "east"},
+			"apply":{"model": "redstonecg:custom/wall_redcu_knot_l", "y": 180, "x": 90}
+		},
+		{
+			"when":{"connection": "5", "facing": "east"},
+			"apply":{"model": "redstonecg:custom/wall_redcu_knot_l", "y": 180, "x": 0}
+		},
+
+		{
+			"when":{"connection": "2", "facing": "south"},
+			"apply":{"model": "redstonecg:custom/wall_redcu_knot_l", "y": 270, "x": 270}
+		},
+		{
+			"when":{"connection": "3", "facing": "south"},
+			"apply":{"model": "redstonecg:custom/wall_redcu_knot_l", "y": 270, "x": 180}
+		},
+		{
+			"when":{"connection": "4", "facing": "south"},
+			"apply":{"model": "redstonecg:custom/wall_redcu_knot_l", "y": 270, "x": 90}
+		},
+		{
+			"when":{"connection": "5", "facing": "south"},
+			"apply":{"model": "redstonecg:custom/wall_redcu_knot_l", "y": 270, "x": 0}
+		},
+
+		{
+			"when":{"connection": "2", "facing": "west"},
+			"apply":{"model": "redstonecg:custom/wall_redcu_knot_l", "y": 0, "x": 270}
+		},
+		{
+			"when":{"connection": "3", "facing": "west"},
+			"apply":{"model": "redstonecg:custom/wall_redcu_knot_l", "y": 0, "x": 180}
+		},
+		{
+			"when":{"connection": "4", "facing": "west"},
+			"apply":{"model": "redstonecg:custom/wall_redcu_knot_l", "y": 0, "x": 90}
+		},
+		{
+			"when":{"connection": "5", "facing": "west"},
+			"apply":{"model": "redstonecg:custom/wall_redcu_knot_l", "y": 0, "x": 0}
+		},
+
+		{
+			"when":{"connection": "2", "facing": "up"},
+			"apply":{"model": "redstonecg:custom/floor_redcu_knot_l", "y": 90, "x": 180}
+		},
+		{
+			"when":{"connection": "3", "facing": "up"},
+			"apply":{"model": "redstonecg:custom/floor_redcu_knot_l", "y": 180, "x": 180}
+		},
+		{
+			"when":{"connection": "4", "facing": "up"},
+			"apply":{"model": "redstonecg:custom/floor_redcu_knot_l", "y": 270, "x": 180}
+		},
+		{
+			"when":{"connection": "5", "facing": "up"},
+			"apply":{"model": "redstonecg:custom/floor_redcu_knot_l", "y": 0, "x": 180}
+		},
+
+
+
+		{
+			"when":{"connection": "6", "facing": "down"},
+			"apply":{"model": "redstonecg:custom/floor_redcu_knot_t", "y": 0, "x": 0}
+		},
+		{
+			"when":{"connection": "7", "facing": "down"},
+			"apply":{"model": "redstonecg:custom/floor_redcu_knot_t", "y": 270, "x": 0}
+		},
+		{
+			"when":{"connection": "8", "facing": "down"},
+			"apply":{"model": "redstonecg:custom/floor_redcu_knot_t", "y": 180, "x": 0}
+		},
+		{
+			"when":{"connection": "9", "facing": "down"},
+			"apply":{"model": "redstonecg:custom/floor_redcu_knot_t", "y": 90, "x": 0}
+		},
+
+		{
+			"when":{"connection": "6", "facing": "north"},
+			"apply":{"model": "redstonecg:custom/wall_redcu_knot_t", "y": 90, "x": 0}
+		},
+		{
+			"when":{"connection": "7", "facing": "north"},
+			"apply":{"model": "redstonecg:custom/wall_redcu_knot_t", "y": 90, "x": 270}
+		},
+		{
+			"when":{"connection": "8", "facing": "north"},
+			"apply":{"model": "redstonecg:custom/wall_redcu_knot_t", "y": 90, "x": 180}
+		},
+		{
+			"when":{"connection": "9", "facing": "north"},
+			"apply":{"model": "redstonecg:custom/wall_redcu_knot_t", "y": 90, "x": 90}
+		},
+
+		{
+			"when":{"connection": "6", "facing": "east"},
+			"apply":{"model": "redstonecg:custom/wall_redcu_knot_t", "y": 180, "x": 0}
+		},
+		{
+			"when":{"connection": "7", "facing": "east"},
+			"apply":{"model": "redstonecg:custom/wall_redcu_knot_t", "y": 180, "x": 270}
+		},
+		{
+			"when":{"connection": "8", "facing": "east"},
+			"apply":{"model": "redstonecg:custom/wall_redcu_knot_t", "y": 180, "x": 180}
+		},
+		{
+			"when":{"connection": "9", "facing": "east"},
+			"apply":{"model": "redstonecg:custom/wall_redcu_knot_t", "y": 180, "x": 90}
+		},
+
+		{
+			"when":{"connection": "6", "facing": "south"},
+			"apply":{"model": "redstonecg:custom/wall_redcu_knot_t", "y": 270, "x": 0}
+		},
+		{
+			"when":{"connection": "7", "facing": "south"},
+			"apply":{"model": "redstonecg:custom/wall_redcu_knot_t", "y": 270, "x": 270}
+		},
+		{
+			"when":{"connection": "8", "facing": "south"},
+			"apply":{"model": "redstonecg:custom/wall_redcu_knot_t", "y": 270, "x": 180}
+		},
+		{
+			"when":{"connection": "9", "facing": "south"},
+			"apply":{"model": "redstonecg:custom/wall_redcu_knot_t", "y": 270, "x": 90}
+		},
+
+		{
+			"when":{"connection": "6", "facing": "west"},
+			"apply":{"model": "redstonecg:custom/wall_redcu_knot_t", "y": 0, "x": 0}
+		},
+		{
+			"when":{"connection": "7", "facing": "west"},
+			"apply":{"model": "redstonecg:custom/wall_redcu_knot_t", "y": 0, "x": 270}
+		},
+		{
+			"when":{"connection": "8", "facing": "west"},
+			"apply":{"model": "redstonecg:custom/wall_redcu_knot_t", "y": 0, "x": 180}
+		},
+		{
+			"when":{"connection": "9", "facing": "west"},
+			"apply":{"model": "redstonecg:custom/wall_redcu_knot_t", "y": 0, "x": 90}
+		},
+
+		{
+			"when":{"connection": "6", "facing": "up"},
+			"apply":{"model": "redstonecg:custom/floor_redcu_knot_t", "y": 0, "x": 180}
+		},
+		{
+			"when":{"connection": "7", "facing": "up"},
+			"apply":{"model": "redstonecg:custom/floor_redcu_knot_t", "y": 90, "x": 180}
+		},
+		{
+			"when":{"connection": "8", "facing": "up"},
+			"apply":{"model": "redstonecg:custom/floor_redcu_knot_t", "y": 180, "x": 180}
+		},
+		{
+			"when":{"connection": "9", "facing": "up"},
+			"apply":{"model": "redstonecg:custom/floor_redcu_knot_t", "y": 270, "x": 180}
+		},
+
+
+
+		{
+			"when":{"connection": "10", "facing": "down"},
+			"apply":{"model": "redstonecg:custom/floor_redcu_knot_x", "y": 0, "x": 0}
+		},
+		{
+			"when":{"connection": "10", "facing": "north"},
+			"apply":{"model": "redstonecg:custom/floor_redcu_knot_x", "y": 0, "x": 270}
+		},
+		{
+			"when":{"connection": "10", "facing": "east"},
+			"apply":{"model": "redstonecg:custom/floor_redcu_knot_x", "y": 90, "x": 270}
+		},
+		{
+			"when":{"connection": "10", "facing": "south"},
+			"apply":{"model": "redstonecg:custom/floor_redcu_knot_x", "y": 180, "x": 270}
+		},
+		{
+			"when":{"connection": "10", "facing": "west"},
+			"apply":{"model": "redstonecg:custom/floor_redcu_knot_x", "y": 270, "x": 270}
+		},
+		{
+			"when":{"connection": "10", "facing": "up"},
+			"apply":{"model": "redstonecg:custom/floor_redcu_knot_x", "y": 0, "x": 180}
+		}
+  	]
+}

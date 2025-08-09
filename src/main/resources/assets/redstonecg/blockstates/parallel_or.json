@@ -1,0 +1,313 @@
+{
+	"multipart":[
+		{
+			"when":{"visible_state": "false", "rotation": "north", "facing": "down"},
+			"apply":{"model":"redstonecg:block/floor/parallel/digital/or_off", "x": 0, "y": 0}
+		},
+		{
+			"when":{"visible_state": "false", "rotation": "east", "facing": "down"},
+			"apply":{"model":"redstonecg:block/floor/parallel/digital/or_off", "x": 0, "y": 90}
+		},
+		{
+			"when":{"visible_state": "false", "rotation": "south", "facing": "down"},
+			"apply":{"model":"redstonecg:block/floor/parallel/digital/or_off", "x": 0, "y": 180}
+		},
+		{
+			"when":{"visible_state": "false", "rotation": "west", "facing": "down"},
+			"apply":{"model":"redstonecg:block/floor/parallel/digital/or_off", "x": 0, "y": 270}
+		},
+
+		{
+			"when":{"visible_state": "false", "rotation": "north", "facing": "north"},
+			"apply":{"model": "redstonecg:block/wall/parallel/digital/or_off", "x": 0, "y": 90}
+		},
+		{
+			"when":{"visible_state": "false", "rotation": "east", "facing": "north"},
+			"apply":{"model": "redstonecg:block/wall/parallel/digital/or_off", "x": 90, "y": 90}
+		},
+		{
+			"when":{"visible_state": "false", "rotation": "south", "facing": "north"},
+			"apply":{"model": "redstonecg:block/wall/parallel/digital/or_off", "x": 180, "y": 90}
+		},
+		{
+			"when":{"visible_state": "false", "rotation": "west", "facing": "north"},
+			"apply":{"model": "redstonecg:block/wall/parallel/digital/or_off", "x": 270, "y": 90}
+		},
+
+		{
+			"when":{"visible_state": "false", "rotation": "north", "facing": "east"},
+			"apply":{"model":"redstonecg:block/wall/parallel/digital/or_off", "x": 0, "y": 180}
+		},
+		{
+			"when":{"visible_state": "false", "rotation": "east", "facing": "east"},
+			"apply":{"model":"redstonecg:block/wall/parallel/digital/or_off", "x": 90, "y": 180}
+		},
+		{
+			"when":{"visible_state": "false", "rotation": "south", "facing": "east"},
+			"apply":{"model":"redstonecg:block/wall/parallel/digital/or_off", "x": 180, "y": 180}
+		},
+		{
+			"when":{"visible_state": "false", "rotation": "west", "facing": "east"},
+			"apply":{"model":"redstonecg:block/wall/parallel/digital/or_off", "x": 270, "y": 180}
+		},
+
+		{
+			"when":{"visible_state": "false", "rotation": "north", "facing": "south"},
+			"apply":{"model":"redstonecg:block/wall/parallel/digital/or_off", "x": 0, "y": 270}
+		},
+		{
+			"when":{"visible_state": "false", "rotation": "east", "facing": "south"},
+			"apply":{"model":"redstonecg:block/wall/parallel/digital/or_off", "x": 90, "y": 270}
+		},
+		{
+			"when":{"visible_state": "false", "rotation": "south", "facing": "south"},
+			"apply":{"model":"redstonecg:block/wall/parallel/digital/or_off", "x": 180, "y": 270}
+		},
+		{
+			"when":{"visible_state": "false", "rotation": "west", "facing": "south"},
+			"apply":{"model":"redstonecg:block/wall/parallel/digital/or_off", "x": 270, "y": 270}
+		},
+
+		{
+			"when":{"visible_state": "false", "facing": "west", "rotation": "north"},
+			"apply":{"model":"redstonecg:block/wall/parallel/digital/or_off", "x": 0, "y": 0}
+		},
+		{
+			"when":{"visible_state": "false", "facing": "west", "rotation": "east"},
+			"apply":{"model":"redstonecg:block/wall/parallel/digital/or_off", "x": 90, "y": 0}
+		},
+		{
+			"when":{"visible_state": "false","facing": "west", "rotation": "south"},
+			"apply":{"model":"redstonecg:block/wall/parallel/digital/or_off", "x": 180, "y": 0}
+		},
+		{
+			"when":{"visible_state": "false", "facing": "west", "rotation": "west"},
+			"apply":{"model":"redstonecg:block/wall/parallel/digital/or_off", "x": 270, "y": 0}
+		},
+
+		{
+			"when":{"visible_state": "false", "rotation": "north", "facing": "up"},
+			"apply":{"model":"redstonecg:block/floor/parallel/digital/or_off", "x": 180, "y": 0}
+		},
+		{
+			"when":{"visible_state": "false", "rotation": "east", "facing": "up"},
+			"apply":{"model":"redstonecg:block/floor/parallel/digital/or_off", "x": 180, "y": 270}
+		},
+		{
+			"when":{"visible_state": "false", "rotation": "south", "facing": "up"},
+			"apply":{"model":"redstonecg:block/floor/parallel/digital/or_off", "x": 180, "y": 180}
+		},
+		{
+			"when":{"visible_state": "false", "rotation": "west", "facing": "up"},
+			"apply":{"model":"redstonecg:block/floor/parallel/digital/or_off", "x": 180, "y": 90}
+		},
+
+
+
+		{
+			"when":{"visible_state": "true", "rotation": "north", "facing": "down"},
+			"apply":{"model":"redstonecg:block/floor/parallel/digital/or_on", "x": 0, "y": 0}
+		},
+		{
+			"when":{"visible_state": "true", "rotation": "east", "facing": "down"},
+			"apply":{"model":"redstonecg:block/floor/parallel/digital/or_on", "x": 0, "y": 90}
+		},
+		{
+			"when":{"visible_state": "true", "rotation": "south", "facing": "down"},
+			"apply":{"model":"redstonecg:block/floor/parallel/digital/or_on", "x": 0, "y": 180}
+		},
+		{
+			"when":{"visible_state": "true", "rotation": "west", "facing": "down"},
+			"apply":{"model":"redstonecg:block/floor/parallel/digital/or_on", "x": 0, "y": 270}
+		},
+
+		{
+			"when":{"visible_state": "true", "rotation": "north", "facing": "north"},
+			"apply":{"model": "redstonecg:block/wall/parallel/digital/or_on", "x": 0, "y": 90}
+		},
+		{
+			"when":{"visible_state": "true", "rotation": "east", "facing": "north"},
+			"apply":{"model": "redstonecg:block/wall/parallel/digital/or_on", "x": 90, "y": 90}
+		},
+		{
+			"when":{"visible_state": "true", "rotation": "south", "facing": "north"},
+			"apply":{"model": "redstonecg:block/wall/parallel/digital/or_on", "x": 180, "y": 90}
+		},
+		{
+			"when":{"visible_state": "true", "rotation": "west", "facing": "north"},
+			"apply":{"model": "redstonecg:block/wall/parallel/digital/or_on", "x": 270, "y": 90}
+		},
+
+		{
+			"when":{"visible_state": "true", "rotation": "north", "facing": "east"},
+			"apply":{"model":"redstonecg:block/wall/parallel/digital/or_on", "x": 0, "y": 180}
+		},
+		{
+			"when":{"visible_state": "true", "rotation": "east", "facing": "east"},
+			"apply":{"model":"redstonecg:block/wall/parallel/digital/or_on", "x": 90, "y": 180}
+		},
+		{
+			"when":{"visible_state": "true", "rotation": "south", "facing": "east"},
+			"apply":{"model":"redstonecg:block/wall/parallel/digital/or_on", "x": 180, "y": 180}
+		},
+		{
+			"when":{"visible_state": "true", "rotation": "west", "facing": "east"},
+			"apply":{"model":"redstonecg:block/wall/parallel/digital/or_on", "x": 270, "y": 180}
+		},
+
+		{
+			"when":{"visible_state": "true", "rotation": "north", "facing": "south"},
+			"apply":{"model":"redstonecg:block/wall/parallel/digital/or_on", "x": 0, "y": 270}
+		},
+		{
+			"when":{"visible_state": "true", "rotation": "east", "facing": "south"},
+			"apply":{"model":"redstonecg:block/wall/parallel/digital/or_on", "x": 90, "y": 270}
+		},
+		{
+			"when":{"visible_state": "true", "rotation": "south", "facing": "south"},
+			"apply":{"model":"redstonecg:block/wall/parallel/digital/or_on", "x": 180, "y": 270}
+		},
+		{
+			"when":{"visible_state": "true", "rotation": "west", "facing": "south"},
+			"apply":{"model":"redstonecg:block/wall/parallel/digital/or_on", "x": 270, "y": 270}
+		},
+
+		{
+			"when":{"visible_state": "true", "facing": "west", "rotation": "north"},
+			"apply":{"model":"redstonecg:block/wall/parallel/digital/or_on", "x": 0, "y": 0}
+		},
+		{
+			"when":{"visible_state": "true", "facing": "west", "rotation": "east"},
+			"apply":{"model":"redstonecg:block/wall/parallel/digital/or_on", "x": 90, "y": 0}
+		},
+		{
+			"when":{"visible_state": "true","facing": "west", "rotation": "south"},
+			"apply":{"model":"redstonecg:block/wall/parallel/digital/or_on", "x": 180, "y": 0}
+		},
+		{
+			"when":{"visible_state": "true", "facing": "west", "rotation": "west"},
+			"apply":{"model":"redstonecg:block/wall/parallel/digital/or_on", "x": 270, "y": 0}
+		},
+
+		{
+			"when":{"visible_state": "true", "rotation": "north", "facing": "up"},
+			"apply":{"model":"redstonecg:block/floor/parallel/digital/or_on", "x": 180, "y": 0}
+		},
+		{
+			"when":{"visible_state": "true", "rotation": "east", "facing": "up"},
+			"apply":{"model":"redstonecg:block/floor/parallel/digital/or_on", "x": 180, "y": 270}
+		},
+		{
+			"when":{"visible_state": "true", "rotation": "south", "facing": "up"},
+			"apply":{"model":"redstonecg:block/floor/parallel/digital/or_on", "x": 180, "y": 180}
+		},
+		{
+			"when":{"visible_state": "true", "rotation": "west", "facing": "up"},
+			"apply":{"model":"redstonecg:block/floor/parallel/digital/or_on", "x": 180, "y": 90}
+		},
+
+
+
+		{
+			"when": {"facing": "down", "rotation": "north"},
+			"apply": {"model":"redstonecg:block/floor/pins/stb", "x": 0, "y": 0}
+		},
+		{
+			"when": {"facing": "down", "rotation": "east"},
+			"apply": {"model":"redstonecg:block/floor/pins/stb", "x": 0, "y": 90}
+		},
+		{
+			"when": {"facing": "down", "rotation": "south"},
+			"apply": {"model":"redstonecg:block/floor/pins/stb", "x": 0, "y": 180}
+		},
+		{
+			"when": {"facing": "down", "rotation": "west"},
+			"apply": {"model":"redstonecg:block/floor/pins/stb", "x": 0, "y": 270}
+		},
+
+		{
+			"when": {"facing": "north", "rotation": "north"},
+			"apply": {"model":"redstonecg:block/wall/pins/stb", "x": 0, "y": 90}
+		},
+		{
+			"when": {"facing": "north", "rotation": "east"},
+			"apply": {"model":"redstonecg:block/wall/pins/stb", "x": 90, "y": 90}
+		},
+		{
+			"when": {"facing": "north", "rotation": "south"},
+			"apply": {"model":"redstonecg:block/wall/pins/stb", "x": 180, "y": 90}
+		},
+		{
+			"when": {"facing": "north", "rotation": "west"},
+			"apply": {"model":"redstonecg:block/wall/pins/stb", "x": 270, "y": 90}
+		},
+
+		{
+			"when": {"facing": "east", "rotation": "north"},
+			"apply": {"model":"redstonecg:block/wall/pins/stb", "x": 0, "y": 180}
+		},
+		{
+			"when": {"facing": "east", "rotation": "east"},
+			"apply": {"model":"redstonecg:block/wall/pins/stb", "x": 90, "y": 180}
+		},
+		{
+			"when": {"facing": "east", "rotation": "south"},
+			"apply": {"model":"redstonecg:block/wall/pins/stb", "x": 180, "y": 180}
+		},
+		{
+			"when": {"facing": "east", "rotation": "west"},
+			"apply": {"model":"redstonecg:block/wall/pins/stb", "x": 270, "y": 180}
+		},
+
+		{
+			"when": {"facing": "south", "rotation": "north"},
+			"apply": {"model":"redstonecg:block/wall/pins/stb", "x": 0, "y": 270}
+		},
+		{
+			"when": {"facing": "south", "rotation": "east"},
+			"apply": {"model":"redstonecg:block/wall/pins/stb", "x": 90, "y": 270}
+		},
+		{
+			"when": {"facing": "south", "rotation": "south"},
+			"apply": {"model":"redstonecg:block/wall/pins/stb", "x": 180, "y": 270}
+		},
+		{
+			"when": {"facing": "south", "rotation": "west"},
+			"apply": {"model":"redstonecg:block/wall/pins/stb", "x": 270, "y": 270}
+		},
+
+		{
+			"when": {"facing": "west", "rotation": "north"},
+			"apply": {"model":"redstonecg:block/wall/pins/stb", "x": 0, "y": 0}
+		},
+		{
+			"when": {"facing": "west", "rotation": "east"},
+			"apply": {"model":"redstonecg:block/wall/pins/stb", "x": 90, "y": 0}
+		},
+		{
+			"when": {"facing": "west", "rotation": "south"},
+			"apply": {"model":"redstonecg:block/wall/pins/stb", "x": 180, "y": 0}
+		},
+		{
+			"when": {"facing": "west", "rotation": "west"},
+			"apply": {"model":"redstonecg:block/wall/pins/stb", "x": 270, "y": 0}
+		},
+
+		{
+			"when": {"facing": "up", "rotation": "north"},
+			"apply": {"model":"redstonecg:block/floor/pins/stb", "x": 180, "y": 0}
+		},
+		{
+			"when": {"facing": "up", "rotation": "east"},
+			"apply": {"model":"redstonecg:block/floor/pins/stb", "x": 180, "y": 270}
+		},
+		{
+			"when": {"facing": "up", "rotation": "south"},
+			"apply": {"model":"redstonecg:block/floor/pins/stb", "x": 180, "y": 180}
+		},
+		{
+			"when": {"facing": "up", "rotation": "west"},
+			"apply": {"model":"redstonecg:block/floor/pins/stb", "x": 180, "y": 90}
+		}
+	]
+}

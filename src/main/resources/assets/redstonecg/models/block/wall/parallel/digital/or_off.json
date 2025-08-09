@@ -1,0 +1,9 @@
+{
+  "parent": "redstonecg:custom/wall_component",
+  "textures": {
+    "all": "redstonecg:block/parallel/digital/or_off",
+    "particle": "redstonecg:block/parallel/digital/or_off",
+    "0": "redstonecg:block/parallel/digital/or_off"
+  },
+  "render_type": "solid"
+}

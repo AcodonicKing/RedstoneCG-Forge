@@ -1,0 +1,76 @@
+{
+  "variants": {
+    "model=0,waterlogged=false": {
+      "model": "redstonecg:custom/floor_redcu_wire_transition_wire"
+    },
+    "model=1,waterlogged=false": {
+      "model": "redstonecg:custom/floor_redcu_node_is_on"
+    },
+    "model=2,waterlogged=false": {
+      "model": "redstonecg:custom/floor_redcu_node_is_od"
+    },
+    "model=3,waterlogged=false": {
+      "model": "redstonecg:custom/floor_redcu_node_isu_on"
+    },
+    "model=4,waterlogged=false": {
+      "model": "redstonecg:custom/floor_redcu_node_is_ond"
+    },
+    "model=5,waterlogged=false": {
+      "model": "redstonecg:custom/floor_redcu_node_isu_ond"
+    },
+    "model=6,waterlogged=false": {
+      "model": "redstonecg:custom/floor_redcu_node_isu_o"
+    },
+    "model=7,waterlogged=false": {
+      "model": "redstonecg:custom/floor_redcu_knot_i"
+    },
+    "model=8,waterlogged=false": {
+      "model": "redstonecg:custom/floor_redcu_knot_l"
+    },
+    "model=9,waterlogged=false": {
+      "model": "redstonecg:custom/floor_redcu_knot_t"
+    },
+    "model=10,waterlogged=false": {
+      "model": "redstonecg:custom/floor_redcu_knot_x"
+    },
+    "model=11,waterlogged=false": {
+      "model": "redstonecg:custom/floor_redcu_node_i_o"
+    },
+    "model=0,waterlogged=true": {
+      "model": "redstonecg:custom/floor_redcu_wire_transition_wire"
+    },
+    "model=1,waterlogged=true": {
+      "model": "redstonecg:custom/floor_redcu_node_is_on"
+    },
+    "model=2,waterlogged=true": {
+      "model": "redstonecg:custom/floor_redcu_node_is_od"
+    },
+    "model=3,waterlogged=true": {
+      "model": "redstonecg:custom/floor_redcu_node_isu_on"
+    },
+    "model=4,waterlogged=true": {
+      "model": "redstonecg:custom/floor_redcu_node_is_ond"
+    },
+    "model=5,waterlogged=true": {
+      "model": "redstonecg:custom/floor_redcu_node_isu_ond"
+    },
+    "model=6,waterlogged=true": {
+      "model": "redstonecg:custom/floor_redcu_node_isu_o"
+    },
+    "model=7,waterlogged=true": {
+      "model": "redstonecg:custom/floor_redcu_knot_i"
+    },
+    "model=8,waterlogged=true": {
+      "model": "redstonecg:custom/floor_redcu_knot_l"
+    },
+    "model=9,waterlogged=true": {
+      "model": "redstonecg:custom/floor_redcu_knot_t"
+    },
+    "model=10,waterlogged=true": {
+      "model": "redstonecg:custom/floor_redcu_knot_x"
+    },
+    "model=11,waterlogged=true": {
+      "model": "redstonecg:custom/floor_redcu_node_i_o"
+    }
+  }
+}

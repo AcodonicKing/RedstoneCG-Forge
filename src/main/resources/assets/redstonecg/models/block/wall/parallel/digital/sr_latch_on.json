@@ -1,0 +1,10 @@
+{
+  "parent": "redstonecg:custom/wall_component_covered",
+  "textures": {
+    "all": "redstonecg:block/parallel_gate_on",
+    "particle": "redstonecg:block/parallel_gate_on",
+    "0": "redstonecg:block/parallel_gate_on",
+    "2": "redstonecg:block/normal/digital/sr_latch_cover"
+  },
+  "render_type": "cutout_mipped"
+}

@@ -1,0 +1,204 @@
+{
+  "variants": {
+    "rotation=north,facing=down,waterlogged=false": {
+      "model": "redstonecg:block/floor/smooth_stone_plate",
+      "x": 0, "y": 0
+    },
+    "rotation=north,facing=north,waterlogged=false": {
+      "model": "redstonecg:block/wall/smooth_stone_plate",
+      "x": 0, "y": 90
+    },
+    "rotation=north,facing=south,waterlogged=false": {
+      "model": "redstonecg:block/wall/smooth_stone_plate",
+      "x": 0, "y": 270
+    },
+    "rotation=north,facing=west,waterlogged=false": {
+      "model": "redstonecg:block/wall/smooth_stone_plate",
+      "x": 0, "y": 0
+    },
+    "rotation=north,facing=east,waterlogged=false": {
+      "model": "redstonecg:block/wall/smooth_stone_plate",
+      "x": 0, "y": 180
+    },
+    "rotation=north,facing=up,waterlogged=false": {
+      "model": "redstonecg:block/floor/smooth_stone_plate",
+      "x": 180, "y": 0
+    },
+
+    "rotation=south,facing=down,waterlogged=false": {
+      "model": "redstonecg:block/floor/smooth_stone_plate",
+      "x": 0, "y": 180
+    },
+    "rotation=south,facing=north,waterlogged=false": {
+      "model": "redstonecg:block/wall/smooth_stone_plate",
+      "x": 180, "y": 90
+    },
+    "rotation=south,facing=south,waterlogged=false": {
+      "model": "redstonecg:block/wall/smooth_stone_plate",
+      "x": 180, "y": 270
+    },
+    "rotation=south,facing=west,waterlogged=false": {
+      "model": "redstonecg:block/wall/smooth_stone_plate",
+      "x": 180, "y": 0
+    },
+    "rotation=south,facing=east,waterlogged=false": {
+      "model": "redstonecg:block/wall/smooth_stone_plate",
+      "x": 180, "y": 180
+    },
+    "rotation=south,facing=up,waterlogged=false": {
+      "model": "redstonecg:block/floor/smooth_stone_plate",
+      "x": 180, "y": 180
+    },
+
+    "rotation=east,facing=down,waterlogged=false": {
+      "model": "redstonecg:block/floor/smooth_stone_plate",
+      "x": 0, "y": 90
+    },
+    "rotation=east,facing=north,waterlogged=false": {
+      "model": "redstonecg:block/wall/smooth_stone_plate",
+      "x": 90, "y": 90
+    },
+    "rotation=east,facing=south,waterlogged=false": {
+      "model": "redstonecg:block/wall/smooth_stone_plate",
+      "x": 90, "y": 270
+    },
+    "rotation=east,facing=west,waterlogged=false": {
+      "model": "redstonecg:block/wall/smooth_stone_plate",
+      "x": 90, "y": 0
+    },
+    "rotation=east,facing=east,waterlogged=false": {
+      "model": "redstonecg:block/wall/smooth_stone_plate",
+      "x": 90, "y": 180
+    },
+    "rotation=east,facing=up,waterlogged=false": {
+      "model": "redstonecg:block/floor/smooth_stone_plate",
+      "x": 180, "y": 270
+    },
+
+    "rotation=west,facing=down,waterlogged=false": {
+      "model": "redstonecg:block/floor/smooth_stone_plate",
+      "x": 0, "y": 270
+    },
+    "rotation=west,facing=north,waterlogged=false": {
+      "model": "redstonecg:block/wall/smooth_stone_plate",
+      "x": 270, "y": 90
+    },
+    "rotation=west,facing=south,waterlogged=false": {
+      "model": "redstonecg:block/wall/smooth_stone_plate",
+      "x": 270, "y": 270
+    },
+    "rotation=west,facing=west,waterlogged=false": {
+      "model": "redstonecg:block/wall/smooth_stone_plate",
+      "x": 270, "y": 0
+    },
+    "rotation=west,facing=east,waterlogged=false": {
+      "model": "redstonecg:block/wall/smooth_stone_plate",
+      "x": 270, "y": 180
+    },
+    "rotation=west,facing=up,waterlogged=false": {
+      "model": "redstonecg:block/floor/smooth_stone_plate",
+      "x": 180, "y": 90
+    },
+
+
+    "rotation=north,facing=down,waterlogged=true": {
+      "model": "redstonecg:block/floor/smooth_stone_plate",
+      "x": 0, "y": 0
+    },
+    "rotation=north,facing=north,waterlogged=true": {
+      "model": "redstonecg:block/wall/smooth_stone_plate",
+      "x": 0, "y": 90
+    },
+    "rotation=north,facing=south,waterlogged=true": {
+      "model": "redstonecg:block/wall/smooth_stone_plate",
+      "x": 0, "y": 270
+    },
+    "rotation=north,facing=west,waterlogged=true": {
+      "model": "redstonecg:block/wall/smooth_stone_plate",
+      "x": 0, "y": 0
+    },
+    "rotation=north,facing=east,waterlogged=true": {
+      "model": "redstonecg:block/wall/smooth_stone_plate",
+      "x": 0, "y": 180
+    },
+    "rotation=north,facing=up,waterlogged=true": {
+      "model": "redstonecg:block/floor/smooth_stone_plate",
+      "x": 180, "y": 0
+    },
+
+    "rotation=south,facing=down,waterlogged=true": {
+      "model": "redstonecg:block/floor/smooth_stone_plate",
+      "x": 0, "y": 180
+    },
+    "rotation=south,facing=north,waterlogged=true": {
+      "model": "redstonecg:block/wall/smooth_stone_plate",
+      "x": 180, "y": 90
+    },
+    "rotation=south,facing=south,waterlogged=true": {
+      "model": "redstonecg:block/wall/smooth_stone_plate",
+      "x": 180, "y": 270
+    },
+    "rotation=south,facing=west,waterlogged=true": {
+      "model": "redstonecg:block/wall/smooth_stone_plate",
+      "x": 180, "y": 0
+    },
+    "rotation=south,facing=east,waterlogged=true": {
+      "model": "redstonecg:block/wall/smooth_stone_plate",
+      "x": 180, "y": 180
+    },
+    "rotation=south,facing=up,waterlogged=true": {
+      "model": "redstonecg:block/floor/smooth_stone_plate",
+      "x": 180, "y": 180
+    },
+
+    "rotation=east,facing=down,waterlogged=true": {
+      "model": "redstonecg:block/floor/smooth_stone_plate",
+      "x": 0, "y": 90
+    },
+    "rotation=east,facing=north,waterlogged=true": {
+      "model": "redstonecg:block/wall/smooth_stone_plate",
+      "x": 90, "y": 90
+    },
+    "rotation=east,facing=south,waterlogged=true": {
+      "model": "redstonecg:block/wall/smooth_stone_plate",
+      "x": 90, "y": 270
+    },
+    "rotation=east,facing=west,waterlogged=true": {
+      "model": "redstonecg:block/wall/smooth_stone_plate",
+      "x": 90, "y": 0
+    },
+    "rotation=east,facing=east,waterlogged=true": {
+      "model": "redstonecg:block/wall/smooth_stone_plate",
+      "x": 90, "y": 180
+    },
+    "rotation=east,facing=up,waterlogged=true": {
+      "model": "redstonecg:block/floor/smooth_stone_plate",
+      "x": 180, "y": 270
+    },
+
+    "rotation=west,facing=down,waterlogged=true": {
+      "model": "redstonecg:block/floor/smooth_stone_plate",
+      "x": 0, "y": 270
+    },
+    "rotation=west,facing=north,waterlogged=true": {
+      "model": "redstonecg:block/wall/smooth_stone_plate",
+      "x": 270, "y": 90
+    },
+    "rotation=west,facing=south,waterlogged=true": {
+      "model": "redstonecg:block/wall/smooth_stone_plate",
+      "x": 270, "y": 270
+    },
+    "rotation=west,facing=west,waterlogged=true": {
+      "model": "redstonecg:block/wall/smooth_stone_plate",
+      "x": 270, "y": 0
+    },
+    "rotation=west,facing=east,waterlogged=true": {
+      "model": "redstonecg:block/wall/smooth_stone_plate",
+      "x": 270, "y": 180
+    },
+    "rotation=west,facing=up,waterlogged=true": {
+      "model": "redstonecg:block/floor/smooth_stone_plate",
+      "x": 180, "y": 90
+    }
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "parent": "redstonecg:custom/wall_component",
+  "textures": {
+    "all": "redstonecg:block/parallel/analog/subtractor_on",
+    "particle": "redstonecg:block/parallel/analog/subtractor_on",
+    "0": "redstonecg:block/parallel/analog/subtractor_on"
+  },
+  "render_type": "solid"
+}

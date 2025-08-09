@@ -1,0 +1,9 @@
+{
+  "parent": "redstonecg:custom/wall_component",
+  "textures": {
+    "all": "redstonecg:block/parallel/hybrid/comparator_on",
+    "particle": "redstonecg:block/parallel/hybrid/comparator_on",
+    "0": "redstonecg:block/parallel/hybrid/comparator_on"
+  },
+  "render_type": "solid"
+}

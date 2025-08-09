@@ -1,0 +1,9 @@
+{
+  "parent": "redstonecg:custom/floor_component",
+  "textures": {
+    "all": "redstonecg:block/normal/digital/xor_on",
+    "particle": "redstonecg:block/normal/digital/xor_on",
+    "0": "redstonecg:block/normal/digital/xor_on"
+  },
+  "render_type": "cutout_mipped"
+}

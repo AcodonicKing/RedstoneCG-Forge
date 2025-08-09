@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:block",
+  "random_sequence": "redstonecg:blocks/redcu_crafter",
+  "pools": [
+    {
+      "rolls": 1.0,
+      "conditions": [
+        {
+          "condition": "minecraft:survives_explosion"
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "redstonecg:redcu_crafter"
+        }
+      ]
+    }
+  ]
+}

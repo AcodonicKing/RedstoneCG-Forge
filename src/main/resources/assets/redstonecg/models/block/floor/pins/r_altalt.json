@@ -1,0 +1,9 @@
+{
+  "parent": "redstonecg:custom/sides",
+  "textures": {
+    "all": "redstonecg:block/pins/r_altalt",
+    "particle": "redstonecg:block/pins/r_altalt",
+    "0": "redstonecg:block/pins/r_altalt"
+  },
+  "render_type": "cutout_mipped"
+}

@@ -1,0 +1,9 @@
+{
+  "parent": "redstonecg:custom/redcuwiredivertedintersection",
+  "textures": {
+    "all": "redstonecg:block/redcu_wire_intersection",
+    "particle": "redstonecg:block/redcu_wire_intersection",
+    "0": "redstonecg:block/redcu_wire_intersection"
+  },
+  "render_type": "solid"
+}

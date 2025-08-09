@@ -1,0 +1,13 @@
+{
+  "parent": "block/cube",
+  "textures": {
+    "down": "redstonecg:block/redcu_crafter_bottom",
+    "up": "redstonecg:block/redcu_crafter_top",
+    "north": "redstonecg:block/redcu_crafter_sides",
+    "east": "redstonecg:block/redcu_crafter_sides",
+    "south": "redstonecg:block/redcu_crafter_sides",
+    "west": "redstonecg:block/redcu_crafter_sides",
+    "particle": "redstonecg:block/redcu_crafter_sides"
+  },
+  "render_type": "solid"
+}

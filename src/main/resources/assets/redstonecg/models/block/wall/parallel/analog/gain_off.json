@@ -1,0 +1,9 @@
+{
+  "parent": "redstonecg:custom/wall_component",
+  "textures": {
+    "all": "redstonecg:block/parallel/analog/gain_off",
+    "particle": "redstonecg:block/parallel/analog/gain_off",
+    "0": "redstonecg:block/parallel/analog/gain_off"
+  },
+  "render_type": "solid"
+}

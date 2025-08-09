@@ -1,0 +1,9 @@
+{
+  "parent": "redstonecg:custom/wall_component",
+  "textures": {
+    "all": "redstonecg:block/normal/analog/bias_off",
+    "particle": "redstonecg:block/normal/analog/bias_off",
+    "0": "redstonecg:block/normal/analog/bias_off"
+  },
+  "render_type": "solid"
+}

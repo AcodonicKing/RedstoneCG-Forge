@@ -1,0 +1,9 @@
+{
+  "parent": "redstonecg:custom/wall_sides",
+  "textures": {
+    "all": "redstonecg:block/pins/b",
+    "particle": "redstonecg:block/pins/b",
+    "0": "redstonecg:block/pins/b"
+  },
+  "render_type": "cutout_mipped"
+}

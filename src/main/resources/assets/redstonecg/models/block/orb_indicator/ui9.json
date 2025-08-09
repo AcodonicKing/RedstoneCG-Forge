@@ -1,0 +1,9 @@
+{
+  "parent": "redstonecg:custom/floor_component",
+  "textures": {
+    "all": "redstonecg:block/orb_indicator/ui9",
+    "particle": "redstonecg:block/orb_indicator/ui9",
+    "0": "redstonecg:block/orb_indicator/ui9"
+  },
+  "render_type": "solid"
+}

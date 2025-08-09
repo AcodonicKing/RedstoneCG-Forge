@@ -1,0 +1,20 @@
+{
+  "parent": "item/handheld",
+  "textures": {
+    "layer0": "redstonecg:item/redcu_meter/off"
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "redstonecg:red_cu_meter_measuring": 0
+      },
+      "model": "redstonecg:item/redcu_meter_0"
+    },
+    {
+      "predicate": {
+        "redstonecg:red_cu_meter_measuring": 1
+      },
+      "model": "redstonecg:item/redcu_meter_1"
+    }
+  ]
+}

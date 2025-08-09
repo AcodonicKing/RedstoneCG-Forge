@@ -1,0 +1,9 @@
+{
+    "parent": "redstonecg:custom/wall_component",
+    "textures": {
+      "all": "redstonecg:block/normal/hybrid/forward_path_selector/off_b",
+      "particle": "redstonecg:block/normal/hybrid/forward_path_selector/off_b",
+      "0": "redstonecg:block/normal/hybrid/forward_path_selector/off_b"
+    },
+    "render_type": "solid"
+  }

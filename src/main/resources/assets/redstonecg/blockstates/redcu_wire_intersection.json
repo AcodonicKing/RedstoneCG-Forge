@@ -1,0 +1,105 @@
+{
+  "multipart":[
+    {
+      "when": {"facing": "down", "connection": "0"},
+      "apply": {"model":  "redstonecg:custom/floor_redcu_wire_cross_intersection", "x": 0, "y": 0}
+    },
+    {
+      "when": {"facing": "down", "connection": "1"},
+      "apply": {"model":  "redstonecg:custom/floor_redcu_wire_cross_intersection", "x": 0, "y": 90}
+    },
+    {
+      "when": {"facing": "down", "connection": "2"},
+      "apply": {"model":  "redstonecg:custom/floor_redcu_wire_diverted_intersection", "x": 0, "y": 90}
+    },
+    {
+      "when": {"facing": "down", "connection": "3"},
+      "apply": {"model":  "redstonecg:custom/floor_redcu_wire_diverted_intersection", "x": 0, "y": 0}
+    },
+
+    {
+      "when": {"facing": "north", "connection": "0"},
+      "apply": {"model":  "redstonecg:custom/wall_redcu_wire_cross_intersection", "x": 90, "y": 90}
+    },
+    {
+      "when": {"facing": "north", "connection": "1"},
+      "apply": {"model":  "redstonecg:custom/wall_redcu_wire_cross_intersection", "x": 0, "y": 90}
+    },
+    {
+      "when": {"facing": "north", "connection": "2"},
+      "apply": {"model":  "redstonecg:custom/wall_redcu_wire_diverted_intersection", "x": 90, "y": 90}
+    },
+    {
+      "when": {"facing": "north", "connection": "3"},
+      "apply": {"model":  "redstonecg:custom/wall_redcu_wire_diverted_intersection", "x": 0, "y": 90}
+    },
+
+    {
+      "when": {"facing": "east", "connection": "0"},
+      "apply": {"model":  "redstonecg:custom/wall_redcu_wire_cross_intersection", "x": 90, "y": 180}
+    },
+    {
+      "when": {"facing": "east", "connection": "1"},
+      "apply": {"model":  "redstonecg:custom/wall_redcu_wire_cross_intersection", "x": 0, "y": 180}
+    },
+    {
+      "when": {"facing": "east", "connection": "2"},
+      "apply": {"model":  "redstonecg:custom/wall_redcu_wire_diverted_intersection", "x": 90, "y": 180}
+    },
+    {
+      "when": {"facing": "east", "connection": "3"},
+      "apply": {"model":  "redstonecg:custom/wall_redcu_wire_diverted_intersection", "x": 0, "y": 180}
+    },
+
+    {
+      "when": {"facing": "south", "connection": "0"},
+      "apply": {"model":  "redstonecg:custom/wall_redcu_wire_cross_intersection", "x": 90, "y": 270}
+    },
+    {
+      "when": {"facing": "south", "connection": "1"},
+      "apply": {"model":  "redstonecg:custom/wall_redcu_wire_cross_intersection", "x": 0, "y": 270}
+    },
+    {
+      "when": {"facing": "south", "connection": "2"},
+      "apply": {"model":  "redstonecg:custom/wall_redcu_wire_diverted_intersection", "x": 90, "y": 270}
+    },
+    {
+      "when": {"facing": "south", "connection": "3"},
+      "apply": {"model":  "redstonecg:custom/wall_redcu_wire_diverted_intersection", "x": 0, "y": 270}
+    },
+
+    {
+      "when": {"facing": "west", "connection": "0"},
+      "apply": {"model":  "redstonecg:custom/wall_redcu_wire_cross_intersection", "x": 90, "y": 0}
+    },
+    {
+      "when": {"facing": "west", "connection": "1"},
+      "apply": {"model":  "redstonecg:custom/wall_redcu_wire_cross_intersection", "x": 0, "y": 0}
+    },
+    {
+      "when": {"facing": "west", "connection": "2"},
+      "apply": {"model":  "redstonecg:custom/wall_redcu_wire_diverted_intersection", "x": 90, "y": 0}
+    },
+    {
+      "when": {"facing": "west", "connection": "3"},
+      "apply": {"model":  "redstonecg:custom/wall_redcu_wire_diverted_intersection", "x": 0, "y": 0}
+    },
+
+    {
+      "when": {"facing": "up", "connection": "0"},
+      "apply": {"model":  "redstonecg:custom/floor_redcu_wire_cross_intersection", "x": 180, "y": 0}
+    },
+    {
+      "when": {"facing": "up", "connection": "1"},
+      "apply": {"model":  "redstonecg:custom/floor_redcu_wire_cross_intersection", "x": 180, "y": 90}
+    },
+    {
+      "when": {"facing": "up", "connection": "2"},
+      "apply": {"model":  "redstonecg:custom/floor_redcu_wire_diverted_intersection", "x": 180, "y": 90}
+    },
+    {
+      "when": {"facing": "up", "connection": "3"},
+      "apply": {"model":  "redstonecg:custom/floor_redcu_wire_diverted_intersection", "x": 180, "y": 0}
+    }
+  ]
+}

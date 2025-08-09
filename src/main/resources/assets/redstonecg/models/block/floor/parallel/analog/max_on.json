@@ -1,0 +1,9 @@
+{
+  "parent": "redstonecg:custom/floor_component",
+  "textures": {
+    "all": "redstonecg:block/parallel/analog/max_on",
+    "particle": "redstonecg:block/parallel/analog/max_on",
+    "0": "redstonecg:block/parallel/analog/max_on"
+  },
+  "render_type": "solid"
+}

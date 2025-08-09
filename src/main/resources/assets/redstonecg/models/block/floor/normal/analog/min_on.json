@@ -1,0 +1,9 @@
+{
+  "parent": "redstonecg:custom/floor_component",
+  "textures": {
+    "all": "redstonecg:block/normal/analog/min_on",
+    "particle": "redstonecg:block/normal/analog/min_on",
+    "0": "redstonecg:block/normal/analog/min_on"
+  },
+  "render_type": "solid"
+}

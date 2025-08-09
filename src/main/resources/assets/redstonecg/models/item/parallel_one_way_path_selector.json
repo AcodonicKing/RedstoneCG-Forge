@@ -1,0 +1,7 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "redstonecg:item/parallel/hybrid/one_way_path_selector"
+  },
+  "render_type": "translucent"
+}

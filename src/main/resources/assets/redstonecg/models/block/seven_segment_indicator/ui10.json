@@ -1,0 +1,9 @@
+{
+  "parent": "redstonecg:custom/floor_component",
+  "textures": {
+    "all": "redstonecg:block/seven_segment_indicator/ui10",
+    "particle": "redstonecg:block/seven_segment_indicator/ui10",
+    "0": "redstonecg:block/seven_segment_indicator/ui10"
+  },
+  "render_type": "solid"
+}

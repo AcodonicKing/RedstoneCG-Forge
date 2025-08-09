@@ -1,0 +1,17 @@
+{
+  "type": "redstonecg:redcu_crafting",
+  "designation": "hybrid/normal",
+  "ingredients": [
+    { "item": "redstonecg:smooth_stone_plate"},
+    { "item": "minecraft:redstone" },
+    { "item": "minecraft:quartz" }
+  ],
+  "outputs": [
+    { "id": "redstonecg:normal_comparator", "Count": 1 },
+    { "id": "redstonecg:normal_n_comparator", "Count": 1 },
+    { "id": "redstonecg:normal_forward_path_selector", "Count": 1 },
+    { "id": "redstonecg:normal_reversed_path_selector", "Count": 1 },
+    { "id": "redstonecg:normal_one_way_through_gate", "Count": 1 },
+    { "id": "redstonecg:normal_one_way_through_not_gate", "Count": 1 }
+  ]
+}

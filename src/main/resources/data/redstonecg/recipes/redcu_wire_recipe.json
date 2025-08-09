@@ -1,0 +1,10 @@
+{
+    "type": "redstonecg:redcu_crafting",
+    "designation": "wires/normal",
+    "ingredients": [
+        { "item": "redstonecg:redcu_ingot" }
+    ],
+    "outputs": [
+        { "id": "redstonecg:redcu_wire", "Count": 4 }
+    ]
+}

@@ -1,0 +1,9 @@
+{
+    "parent": "redstonecg:custom/floor_component",
+    "textures": {
+      "all": "redstonecg:block/normal/hybrid/one_way_through_gate/10",
+      "particle": "redstonecg:block/normal/hybrid/one_way_through_gate/10",
+      "0": "redstonecg:block/normal/hybrid/one_way_through_gate/10"
+    },
+    "render_type": "solid"
+  }

@@ -1,0 +1,85 @@
+{
+  "block.redstonecg.normal_and": "AND Gate",
+  "block.redstonecg.normal_or": "OR Gate",
+  "block.redstonecg.normal_xor": "XOR Gate",
+  "block.redstonecg.normal_buf": "Buffer",
+  "block.redstonecg.normal_nand": "NAND Gate",
+  "block.redstonecg.normal_nor": "NOR Gate",
+  "block.redstonecg.normal_nxor": "NXOR Gate",
+  "block.redstonecg.normal_not": "NOT Gate",
+
+  "block.redstonecg.normal_sr_latch": "SR Latch",
+  "block.redstonecg.normal_d_latch": "D Latch",
+  "block.redstonecg.normal_jk_trigger": "JK Trigger",
+  "block.redstonecg.normal_t_trigger": "T Trigger",
+
+  "block.redstonecg.normal_analog_source": "Analog Source",
+  "block.redstonecg.normal_analog_bias": "Analog Bias",
+  "block.redstonecg.normal_analog_gain": "Analog Gain",
+  "block.redstonecg.normal_analog_pass": "Analog Pass",
+  "block.redstonecg.normal_analog_differential": "Analog Differential",
+  "block.redstonecg.normal_analog_subtractor": "Analog Subtractor",
+  "block.redstonecg.normal_analog_max": "Analog Max",
+  "block.redstonecg.normal_analog_min": "Analog Min",
+  "block.redstonecg.normal_analog_memory": "Analog Memory",
+
+  "block.redstonecg.normal_comparator": "Comparator",
+  "block.redstonecg.normal_n_comparator": "Inverted Comparator",
+  "block.redstonecg.normal_forward_path_selector": "Forward Path Selector",
+  "block.redstonecg.normal_reversed_path_selector": "Reversed Path Selector",
+  "block.redstonecg.normal_one_way_through_gate": "One Way Through Gate",
+  "block.redstonecg.normal_one_way_through_not_gate": "One Way Through Not Gate",
+
+  "block.redstonecg.universal_indicator": "Universal Indicator",
+  "block.redstonecg.orb_indicator": "Orb Indicator",
+  "block.redstonecg.clock_filling_indicator": "Clock Filling Indicator",
+  "block.redstonecg.seven_segment_indicator": "Seven Segment Indicator",
+
+  "block.redstonecg.parallel_and": "Parallel AND Gate",
+  "block.redstonecg.parallel_or": "Parallel OR Gate",
+  "block.redstonecg.parallel_xor": "Parallel XOR Gate",
+  "block.redstonecg.parallel_nand": "Parallel NAND Gate",
+  "block.redstonecg.parallel_nor": "Parallel NOR Gate",
+  "block.redstonecg.parallel_nxor": "Parallel NXOR Gate",
+
+  "block.redstonecg.parallel_sr_latch": "Parallel SR Latch",
+  "block.redstonecg.parallel_d_latch": "Parallel D Latch",
+
+  "block.redstonecg.parallel_analog_bias": "Parallel Analog Bias",
+  "block.redstonecg.parallel_analog_gain": "Parallel Analog Gain",
+  "block.redstonecg.parallel_analog_pass": "Parallel Analog Pass",
+  "block.redstonecg.parallel_analog_differential": "Parallel Analog Differential",
+  "block.redstonecg.parallel_analog_subtractor": "Parallel Analog Subtractor",
+  "block.redstonecg.parallel_analog_max": "Parallel Analog Maximum",
+  "block.redstonecg.parallel_analog_min": "Parallel Analog Minimum",
+
+  "block.redstonecg.parallel_analog_memory": "Parallel Analog Memory",
+  "block.redstonecg.parallel_comparator": "Parallel Comparator",
+  "block.redstonecg.parallel_n_comparator": "Parallel Inverted Comparator",
+  "block.redstonecg.parallel_one_way_through_gate": "Parallel One Way Through Gate",
+  "block.redstonecg.parallel_one_way_through_not_gate": "Parallel One Way Through Not Gate",
+  "block.redstonecg.parallel_one_way_path_selector": "Parallel One Way Path Selector",
+
+  "block.redstonecg.redcu_wire": "RedCu Wire",
+  "block.redstonecg.redcu_wire_intersection": "RedCu Wire Intersection",
+  "block.redstonecg.redstone_to_redcu_converter": "Redstone To RedCu Converter",
+  "block.redstonecg.parallel_line_output": "Parallel Line Output",
+  "block.redstonecg.redcu_wire_transition": "RedCu Wire Transition",
+
+  "block.redstonecg.smooth_stone_plate": "Smooth Stone Plate",
+  "block.redstonecg.redcu_crafter": "RedCu Crafter",
+  "item.redstonecg.red_cu_meter": "RedCu Meter",
+  "item.redstonecg.red_cu_mixture": "RedCu Mixture",
+  "item.redstonecg.red_cu_ingot": "RedCu Ingot",
+  "item.redstonecg.rotation_bracket": "Rotation Bracket",
+
+  "itemGroup.tab_redstone_cg_creative_tab": "Redstone CG Creative Tab",
+
+  "gui.redstonecg.analog_source_gui.label_power": "Power",
+  "gui.redstonecg.analog_source_gui.button_add": "+",
+  "gui.redstonecg.analog_source_gui.button_sub": "-",
+  "gui.redstonecg.analog_source_gui.button_change": "Change",
+
+  "tooltip.redstonecg.rotation_bracket": "Right click to rotate a block clockwise.\nShift + right click to rotate counterclockwise."
+
+}

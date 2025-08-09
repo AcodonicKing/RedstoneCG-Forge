@@ -1,0 +1,7 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "redstonecg:item/normal/analog/bias"
+  },
+  "render_type": "translucent"
+}

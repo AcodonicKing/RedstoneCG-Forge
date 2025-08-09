@@ -1,0 +1,7 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "redstonecg:item/parallel_line_output"
+  },
+  "render_type": "translucent"
+}

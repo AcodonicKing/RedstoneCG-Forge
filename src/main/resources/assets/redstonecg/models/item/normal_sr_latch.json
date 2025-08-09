@@ -1,0 +1,7 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "redstonecg:item/normal/digital/sr_latch"
+  },
+  "render_type": "translucent"
+}

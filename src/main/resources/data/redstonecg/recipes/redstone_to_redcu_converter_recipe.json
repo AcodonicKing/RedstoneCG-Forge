@@ -1,0 +1,12 @@
+{
+    "type": "redstonecg:redcu_crafting",
+    "designation": "wires/normal",
+    "ingredients": [
+        { "item": "redstonecg:smooth_stone_plate"},
+        { "item": "minecraft:redstone" },
+        { "item": "redstonecg:redcu_wire"}
+    ],
+    "outputs": [
+        { "id": "redstonecg:redstone_to_redcu_converter", "Count": 1 }
+    ]
+}

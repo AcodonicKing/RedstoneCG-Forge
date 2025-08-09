@@ -1,0 +1,9 @@
+{
+  "parent": "redstonecg:custom/floor_component",
+  "textures": {
+    "all": "redstonecg:block/normal/digital/buf_on",
+    "particle": "redstonecg:block/normal/digital/buf_on",
+    "0": "redstonecg:block/normal/digital/buf_on"
+  },
+  "render_type": "solid"
+}

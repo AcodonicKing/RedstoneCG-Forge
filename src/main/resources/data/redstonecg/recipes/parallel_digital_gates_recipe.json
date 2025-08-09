@@ -1,0 +1,15 @@
+{
+    "type": "redstonecg:redcu_crafting",
+    "designation": "digital/parallel",
+    "ingredients": [
+        { "item": "redstonecg:smooth_stone_plate"},
+        { "item": "minecraft:redstone" },
+        { "item": "minecraft:quartz" }
+    ],
+    "outputs": [
+        { "id": "redstonecg:parallel_xor", "Count": 1 },
+        { "id": "redstonecg:parallel_nxor", "Count": 1 },
+        { "id": "redstonecg:parallel_sr_latch", "Count": 1 },
+        { "id": "redstonecg:parallel_d_latch", "Count": 1 }
+    ]
+}

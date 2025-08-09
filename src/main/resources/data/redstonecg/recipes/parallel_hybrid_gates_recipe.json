@@ -1,0 +1,16 @@
+{
+    "type": "redstonecg:redcu_crafting",
+    "designation": "hybrid/parallel",
+    "ingredients": [
+        { "item": "redstonecg:smooth_stone_plate"},
+        { "item": "minecraft:redstone" },
+        { "item": "minecraft:quartz" }
+    ],
+    "outputs": [
+        { "id": "redstonecg:parallel_comparator", "Count": 1 },
+        { "id": "redstonecg:parallel_n_comparator", "Count": 1 },
+        { "id": "redstonecg:parallel_one_way_path_selector", "Count": 1 },
+        { "id": "redstonecg:parallel_one_way_through_gate", "Count": 1 },
+        { "id": "redstonecg:parallel_one_way_through_not_gate", "Count": 1 }
+    ]
+}

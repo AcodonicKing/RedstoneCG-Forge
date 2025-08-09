@@ -1,0 +1,9 @@
+{
+  "parent": "redstonecg:custom/floor_component",
+  "textures": {
+    "all": "redstonecg:block/smooth_stone_plate",
+    "particle": "redstonecg:block/smooth_stone_plate",
+    "0": "redstonecg:block/smooth_stone_plate"
+  },
+  "render_type": "solid"
+}

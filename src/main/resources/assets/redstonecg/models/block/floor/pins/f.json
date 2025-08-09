@@ -1,0 +1,9 @@
+{
+  "parent": "redstonecg:custom/sides",
+  "textures": {
+    "all": "redstonecg:block/pins/f",
+    "particle": "redstonecg:block/pins/f",
+    "0": "redstonecg:block/pins/f"
+  },
+  "render_type": "cutout_mipped"
+}

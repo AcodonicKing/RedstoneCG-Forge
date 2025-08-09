@@ -1,0 +1,9 @@
+{
+  "parent": "redstonecg:custom/floor_component",
+  "textures": {
+    "all": "redstonecg:block/parallel/digital/and_on",
+    "particle": "redstonecg:block/parallel/digital/and_on",
+    "0": "redstonecg:block/parallel/digital/and_on"
+  },
+  "render_type": "solid"
+}

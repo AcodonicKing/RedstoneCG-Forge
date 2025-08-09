@@ -1,0 +1,9 @@
+{
+  "parent": "redstonecg:custom/floor_component",
+  "textures": {
+    "all": "redstonecg:block/parallel/hybrid/one_way_path_selector/off_a",
+    "particle": "redstonecg:block/parallel/hybrid/one_way_path_selector/off_a",
+    "0": "redstonecg:block/parallel/hybrid/one_way_path_selector/off_a"
+  },
+  "render_type": "solid"
+}

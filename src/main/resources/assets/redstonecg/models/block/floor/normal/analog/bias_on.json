@@ -1,0 +1,9 @@
+{
+  "parent": "redstonecg:custom/floor_component",
+  "textures": {
+    "all": "redstonecg:block/normal/analog/bias_on",
+    "particle": "redstonecg:block/normal/analog/bias_on",
+    "0": "redstonecg:block/normal/analog/bias_on"
+  },
+  "render_type": "solid"
+}

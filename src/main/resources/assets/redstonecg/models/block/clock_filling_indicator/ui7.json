@@ -1,0 +1,9 @@
+{
+  "parent": "redstonecg:custom/floor_component",
+  "textures": {
+    "all": "redstonecg:block/clock_filling_indicator/ui7",
+    "particle": "redstonecg:block/clock_filling_indicator/ui7",
+    "0": "redstonecg:block/clock_filling_indicator/ui7"
+  },
+  "render_type": "solid"
+}

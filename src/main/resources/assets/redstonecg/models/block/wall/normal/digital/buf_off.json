@@ -1,0 +1,9 @@
+{
+  "parent": "redstonecg:custom/wall_component",
+  "textures": {
+    "all": "redstonecg:block/normal/digital/buf_off",
+    "particle": "redstonecg:block/normal/digital/buf_off",
+    "0": "redstonecg:block/normal/digital/buf_off"
+  },
+  "render_type": "solid"
+}

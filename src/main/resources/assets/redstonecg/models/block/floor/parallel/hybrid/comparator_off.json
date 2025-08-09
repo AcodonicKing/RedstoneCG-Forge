@@ -1,0 +1,9 @@
+{
+  "parent": "redstonecg:custom/floor_component",
+  "textures": {
+    "all": "redstonecg:block/parallel/hybrid/comparator_off",
+    "particle": "redstonecg:block/parallel/hybrid/comparator_off",
+    "0": "redstonecg:block/parallel/hybrid/comparator_off"
+  },
+  "render_type": "solid"
+}

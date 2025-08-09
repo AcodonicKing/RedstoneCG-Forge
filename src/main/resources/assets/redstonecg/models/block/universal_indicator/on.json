@@ -1,0 +1,9 @@
+{
+  "parent": "redstonecg:custom/universalindicatorlamp",
+  "textures": {
+    "all": "redstonecg:block/redstone_lamp_on",
+    "particle": "redstonecg:block/redstone_lamp_on",
+    "1": "redstonecg:block/redstone_lamp_on"
+  },
+  "render_type": "solid"
+}
