@@ -54,12 +54,14 @@ public class RedstonecgModBlocks {
 	public static final RegistryObject<Block> NORMAL_ANALOG_MAX = REGISTRY.register("normal_analog_max", AnalogMaxBlock::new);
 	public static final RegistryObject<Block> NORMAL_ANALOG_MIN = REGISTRY.register("normal_analog_min", AnalogMinBlock::new);
 	//Hybrid
-	public static final RegistryObject<Block> NORMAL_COMPARATOR = REGISTRY.register("normal_comparator", ComparatorBlock::new);
+	public static final RegistryObject<Block> NORMAL_COMPARATOR = REGISTRY.register("normal_comparator", DComparatorBlock::new);
 	public static final RegistryObject<Block> NORMAL_N_COMPARATOR = REGISTRY.register("normal_n_comparator", NComparatorBlock::new);
 	public static final RegistryObject<Block> NORMAL_FORWARD_PATH_SELECTOR = REGISTRY.register("normal_forward_path_selector", ForwardPathSelectorBlock::new);
 	public static final RegistryObject<Block> NORMAL_REVERSED_PATH_SELECTOR = REGISTRY.register("normal_reversed_path_selector", ReversedPathSelectorBlock::new);
 	public static final RegistryObject<Block> NORMAL_ONE_WAY_THROUGH_GATE = REGISTRY.register("normal_one_way_through_gate", OneWayThroughGateBlock::new);
 	public static final RegistryObject<Block> NORMAL_ONE_WAY_THROUGH_NOT_GATE = REGISTRY.register("normal_one_way_through_not_gate", OneWayThroughNotGateBlock::new);
+	public static final RegistryObject<Block> NORMAL_DELAYER = REGISTRY.register("normal_delayer", DelayerBlock::new);
+	public static final RegistryObject<Block> NORMAL_BLOCK_READER = REGISTRY.register("normal_block_reader", BlockReaderBlock::new);
 	//Indicator
 	public static final RegistryObject<Block> UNIVERSAL_INDICATOR = REGISTRY.register("universal_indicator", UniversalIndicatorBlock::new);
 	public static final RegistryObject<Block> SEVEN_SEGMENT_INDICATOR = REGISTRY.register("seven_segment_indicator", SevenSegmentIndicatorBlock::new);
@@ -89,6 +91,7 @@ public class RedstonecgModBlocks {
 	public static final RegistryObject<Block> PARALLEL_ONE_WAY_PATH_SELECTOR = REGISTRY.register("parallel_one_way_path_selector", ParallelPathSelectorBlock::new);
 	public static final RegistryObject<Block> PARALLEL_ONE_WAY_THROUGH_GATE = REGISTRY.register("parallel_one_way_through_gate", ParallelOneWayThroughGateBlock::new);
 	public static final RegistryObject<Block> PARALLEL_ONE_WAY_THROUGH_NOT_GATE = REGISTRY.register("parallel_one_way_through_not_gate", ParallelOneWayThroughNotGateBlock::new);
+	public static final RegistryObject<Block> PARALLEL_DELAYER = REGISTRY.register("parallel_delayer", ParallelDelayerBlock::new);
 	//Wire
 	public static final RegistryObject<Block> REDCU_WIRE = REGISTRY.register("redcu_wire", RedCuWireBlock::new);
 	public static final RegistryObject<Block> REDSTONE_TO_REDCU_CONVERTER = REGISTRY.register("redstone_to_redcu_converter", RedstoneToRedCuConverterBlock::new);

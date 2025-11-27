@@ -2,6 +2,8 @@ package net.acodonic_king.redstonecg.procedures;
 
 import net.minecraft.core.Direction;
 
+// 0b0000wsen
+
 public class RedCuWireCanConnectRedstoneProcedure {
 	public static int wireConnectionFilter(int connection){
 		if(connection == 10) {

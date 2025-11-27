@@ -1,6 +1,7 @@
 package net.acodonic_king.redstonecg.init;
 
 import net.acodonic_king.redstonecg.RedstonecgMod;
+import net.acodonic_king.redstonecg.block.gui.delayer.DelayerGUIButtonMessage;
 import net.acodonic_king.redstonecg.block.gui.redcu_crafter.RedCuCrafterGUIButtonMessage;
 import net.acodonic_king.redstonecg.block.gui.redcu_crafter.RedCuCrafterGUISlotMessage;
 import net.acodonic_king.redstonecg.block.gui.redcu_wire_transition.RedCuWireTransitionGUIButtonMessage;
@@ -36,6 +37,7 @@ public class RedstonecgModNetworking {
     private static void onCommonSetup(FMLCommonSetupEvent event){
         addNetworkMessage(AnalogSourceGUIButtonMessage.class, AnalogSourceGUIButtonMessage::buffer, AnalogSourceGUIButtonMessage::new, AnalogSourceGUIButtonMessage::handleData);
         addNetworkMessage(RedCuCrafterGUIButtonMessage.class, RedCuCrafterGUIButtonMessage::buffer, RedCuCrafterGUIButtonMessage::new, RedCuCrafterGUIButtonMessage::handleData);
+        addNetworkMessage(DelayerGUIButtonMessage.class, DelayerGUIButtonMessage::buffer, DelayerGUIButtonMessage::new, DelayerGUIButtonMessage::handleData);
         addNetworkMessage(RedCuCrafterGUISlotMessage.class, RedCuCrafterGUISlotMessage::buffer, RedCuCrafterGUISlotMessage::new, RedCuCrafterGUISlotMessage::handleData);
         addNetworkMessage(RedCuWireTransitionGUIButtonMessage.class, RedCuWireTransitionGUIButtonMessage::buffer, RedCuWireTransitionGUIButtonMessage::new, RedCuWireTransitionGUIButtonMessage::handleData);
         addNetworkMessage(RedstonecgModVariables.SavedDataSyncMessage.class, RedstonecgModVariables.SavedDataSyncMessage::buffer, RedstonecgModVariables.SavedDataSyncMessage::new, RedstonecgModVariables.SavedDataSyncMessage::handleData);

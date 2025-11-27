@@ -7,6 +7,6 @@
         { "item": "redstonecg:redcu_wire"}
     ],
     "outputs": [
-        { "id": "redstonecg:redstone_to_redcu_converter", "Count": 1 }
+        { "id": "redstonecg:redstone_to_redcu_converter", "Count": 1, "count": 1 }
     ]
 }

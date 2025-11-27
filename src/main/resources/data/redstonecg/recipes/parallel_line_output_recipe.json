@@ -6,6 +6,6 @@
         { "item": "minecraft:redstone" }
     ],
     "outputs": [
-        { "id": "redstonecg:parallel_line_output", "Count": 1 }
+        { "id": "redstonecg:parallel_line_output", "Count": 1, "count": 1 }
     ]
 }

@@ -5,6 +5,6 @@
         { "item": "redstonecg:redcu_ingot" }
     ],
     "outputs": [
-        { "id": "redstonecg:redcu_wire", "Count": 4 }
+        { "id": "redstonecg:redcu_wire", "Count": 4, "count": 4}
     ]
 }

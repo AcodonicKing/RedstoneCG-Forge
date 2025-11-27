@@ -3,8 +3,8 @@ package net.acodonic_king.redstonecg.block.normal.hybrid;
 
 import net.acodonic_king.redstonecg.block.defaults.DefaultDigitalInteractable2ABGate;
 
-public class ComparatorBlock extends DefaultDigitalInteractable2ABGate {
-	public ComparatorBlock() {
+public class DComparatorBlock extends DefaultDigitalInteractable2ABGate {
+	public DComparatorBlock() {
 		super();
 	}
 	@Override

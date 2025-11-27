@@ -62,6 +62,8 @@ public class RedstonecgModItems {
 	public static final RegistryObject<Item> NORMAL_REVERSED_PATH_SELECTOR = block(RedstonecgModBlocks.NORMAL_REVERSED_PATH_SELECTOR);
 	public static final RegistryObject<Item> NORMAL_ONE_WAY_THROUGH_GATE = block(RedstonecgModBlocks.NORMAL_ONE_WAY_THROUGH_GATE);
 	public static final RegistryObject<Item> NORMAL_ONE_WAY_THROUGH_NOT_GATE = block(RedstonecgModBlocks.NORMAL_ONE_WAY_THROUGH_NOT_GATE);
+	public static final RegistryObject<Item> NORMAL_DELAYER = block(RedstonecgModBlocks.NORMAL_DELAYER);
+	public static final RegistryObject<Item> NORMAL_BLOCK_READER = block(RedstonecgModBlocks.NORMAL_BLOCK_READER);
 	//Indicator
 	public static final RegistryObject<Item> UNIVERSAL_INDICATOR = block(RedstonecgModBlocks.UNIVERSAL_INDICATOR);
 	public static final RegistryObject<Item> SEVEN_SEGMENT_INDICATOR = block(RedstonecgModBlocks.SEVEN_SEGMENT_INDICATOR);
@@ -91,6 +93,7 @@ public class RedstonecgModItems {
 	public static final RegistryObject<Item> PARALLEL_ONE_WAY_PATH_SELECTOR = block(RedstonecgModBlocks.PARALLEL_ONE_WAY_PATH_SELECTOR);
 	public static final RegistryObject<Item> PARALLEL_ONE_WAY_THROUGH_GATE = block(RedstonecgModBlocks.PARALLEL_ONE_WAY_THROUGH_GATE);
 	public static final RegistryObject<Item> PARALLEL_ONE_WAY_THROUGH_NOT_GATE = block(RedstonecgModBlocks.PARALLEL_ONE_WAY_THROUGH_NOT_GATE);
+	public static final RegistryObject<Item> PARALLEL_DELAYER = block(RedstonecgModBlocks.PARALLEL_DELAYER);
 	//Wire
 	public static final RegistryObject<Item> REDCU_WIRE = block(RedstonecgModBlocks.REDCU_WIRE);
 	public static final RegistryObject<Item> REDSTONE_TO_REDCU_CONVERTER = block(RedstonecgModBlocks.REDSTONE_TO_REDCU_CONVERTER);

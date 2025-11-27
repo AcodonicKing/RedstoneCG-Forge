@@ -6,6 +6,6 @@
     { "item": "redstonecg:redcu_wire"}
   ],
   "outputs": [
-    { "id": "redstonecg:redcu_wire_transition", "Count": 1 }
+    { "id": "redstonecg:redcu_wire_transition", "Count": 1, "count": 1 }
   ]
 }

@@ -50,6 +50,14 @@ public class ParallelLineOutputBlock extends DefaultParallelGate implements Enti
 	}
 
 	@Override
+	public int getAnalogOutputSignal(BlockState state, Level world, BlockPos pos){
+		if(world.getBlockEntity(pos) instanceof DefaultAnalogGateBlockEntity be){
+			return be.POWER;
+		}
+		return 0;
+	}
+
+	@Override
 	public ConnectionFace getOutputConnectionFace(LevelAccessor world, BlockPos pos, ConnectionFace requesterFace) {
 		BlockState blockState = world.getBlockState(pos);
 		ConnectionFace connectionFaceA = requesterFace.getConnectable();

@@ -29,6 +29,8 @@
   "block.redstonecg.normal_reversed_path_selector": "Reversed Path Selector",
   "block.redstonecg.normal_one_way_through_gate": "One Way Through Gate",
   "block.redstonecg.normal_one_way_through_not_gate": "One Way Through Not Gate",
+  "block.redstonecg.normal_delayer": "Delayer",
+  "block.redstonecg.normal_block_reader": "Block Reader",
 
   "block.redstonecg.universal_indicator": "Universal Indicator",
   "block.redstonecg.orb_indicator": "Orb Indicator",
@@ -59,6 +61,7 @@
   "block.redstonecg.parallel_one_way_through_gate": "Parallel One Way Through Gate",
   "block.redstonecg.parallel_one_way_through_not_gate": "Parallel One Way Through Not Gate",
   "block.redstonecg.parallel_one_way_path_selector": "Parallel One Way Path Selector",
+  "block.redstonecg.parallel_delayer": "Parallel Delayer",
 
   "block.redstonecg.redcu_wire": "RedCu Wire",
   "block.redstonecg.redcu_wire_intersection": "RedCu Wire Intersection",
@@ -68,9 +71,9 @@
 
   "block.redstonecg.smooth_stone_plate": "Smooth Stone Plate",
   "block.redstonecg.redcu_crafter": "RedCu Crafter",
-  "item.redstonecg.red_cu_meter": "RedCu Meter",
-  "item.redstonecg.red_cu_mixture": "RedCu Mixture",
-  "item.redstonecg.red_cu_ingot": "RedCu Ingot",
+  "item.redstonecg.redcu_meter": "RedCu Meter",
+  "item.redstonecg.redcu_mixture": "RedCu Mixture",
+  "item.redstonecg.redcu_ingot": "RedCu Ingot",
   "item.redstonecg.rotation_bracket": "Rotation Bracket",
 
   "itemGroup.tab_redstone_cg_creative_tab": "Redstone CG Creative Tab",
@@ -79,6 +82,10 @@
   "gui.redstonecg.analog_source_gui.button_add": "+",
   "gui.redstonecg.analog_source_gui.button_sub": "-",
   "gui.redstonecg.analog_source_gui.button_change": "Change",
+
+  "gui.redstonecg.delayer_gui.button_add": "+",
+  "gui.redstonecg.delayer_gui.button_sub": "-",
+  "gui.redstonecg.delayer_gui.button_change": "Change",
 
   "tooltip.redstonecg.rotation_bracket": "Right click to rotate a block clockwise.\nShift + right click to rotate counterclockwise."
 

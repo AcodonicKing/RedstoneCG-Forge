@@ -7,14 +7,14 @@
         { "item": "minecraft:quartz" }
     ],
     "outputs": [
-        { "id": "redstonecg:parallel_analog_bias", "Count": 1 },
-        { "id": "redstonecg:parallel_analog_gain", "Count": 1 },
-        { "id": "redstonecg:parallel_analog_pass", "Count": 1 },
-        { "id": "redstonecg:parallel_analog_memory", "Count": 1 },
-        { "id": "redstonecg:parallel_analog_subtractor", "Count": 1 },
-        { "id": "redstonecg:parallel_analog_differential", "Count": 1 },
-        { "id": "redstonecg:parallel_analog_min", "Count": 1 },
-        { "id": "redstonecg:parallel_analog_max", "Count": 1 }
+        { "id": "redstonecg:parallel_analog_bias", "Count": 1, "count": 1 },
+        { "id": "redstonecg:parallel_analog_gain", "Count": 1, "count": 1 },
+        { "id": "redstonecg:parallel_analog_pass", "Count": 1, "count": 1 },
+        { "id": "redstonecg:parallel_analog_memory", "Count": 1, "count": 1 },
+        { "id": "redstonecg:parallel_analog_subtractor", "Count": 1, "count": 1 },
+        { "id": "redstonecg:parallel_analog_differential", "Count": 1, "count": 1 },
+        { "id": "redstonecg:parallel_analog_min", "Count": 1, "count": 1 },
+        { "id": "redstonecg:parallel_analog_max", "Count": 1, "count": 1 }
 
     ]
 }

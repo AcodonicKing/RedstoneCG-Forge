@@ -104,4 +104,11 @@ public class DefaultDigitalInteractibleTriggerGate extends DefaultRedstoneAction
         }
         return 0;
     }
+    @Override
+    public int getAnalogOutputSignal(BlockState state, Level world, BlockPos pos){
+        if(world.getBlockEntity(pos) instanceof DefaultDigitalTriggerGateBlockEntity be){
+            return be.OUTPUT ? 15 : 0;
+        }
+        return 0;
+    }
 }

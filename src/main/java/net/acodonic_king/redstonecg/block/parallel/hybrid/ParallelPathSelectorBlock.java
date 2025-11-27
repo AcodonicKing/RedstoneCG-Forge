@@ -184,4 +184,11 @@ public class ParallelPathSelectorBlock extends DefaultParallelGateWithAlternate 
 		}
 		return "";
 	}
+	@Override
+	public int getAnalogOutputSignal(BlockState state, Level world, BlockPos pos){
+		if(world.getBlockEntity(pos) instanceof DefaultAnalogGateBlockEntity be){
+			return be.POWER;
+		}
+		return 0;
+	}
 }

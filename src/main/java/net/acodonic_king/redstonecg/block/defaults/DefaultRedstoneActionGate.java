@@ -62,6 +62,10 @@ public class DefaultRedstoneActionGate extends DefaultConnectableGate implements
     }
     public void sendRedstoneUpdateInDirection(LevelAccessor level, Block thisBlock, BlockPos thisPos, Direction direction){
         Level world = (Level) level;
+        if(direction == null) {
+            world.blockUpdated(thisPos, thisBlock);
+            return;
+        }
         BlockPos neighborPos = thisPos.relative(direction);
         //RedstonecgMod.LOGGER.debug("Sending update to {}",neighborPos);
         BlockState bs = world.getBlockState(neighborPos);
@@ -102,4 +106,6 @@ public class DefaultRedstoneActionGate extends DefaultConnectableGate implements
         Direction localDirection = BlockFrameTransformUtils.getLocalDirectionFromWorld(blockState,requesterFace.FACE.getOpposite());
         return BlockFrameTransformUtils.getConnectionFace(blockState,localDirection);
     }
+
+
 }

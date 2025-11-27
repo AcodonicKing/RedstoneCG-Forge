@@ -1,0 +1,10 @@
+{
+  "type": "redstonecg:redcu_crafting",
+  "designation": "hybrid/normal",
+  "ingredients": [
+    { "item": "minecraft:comparator"}
+  ],
+  "outputs": [
+    { "id": "redstonecg:normal_block_reader", "Count": 2, "count": 2}
+  ]
+}

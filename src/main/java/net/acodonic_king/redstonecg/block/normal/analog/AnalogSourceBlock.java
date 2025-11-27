@@ -3,9 +3,11 @@ package net.acodonic_king.redstonecg.block.normal.analog;
 
 import net.acodonic_king.redstonecg.ModLoaderRider;
 import net.acodonic_king.redstonecg.block.defaults.DefaultEmitting1_4Gate;
+import net.acodonic_king.redstonecg.init.RedstonecgModItems;
 import net.acodonic_king.redstonecg.procedures.AdventureProcedure;
 import net.acodonic_king.redstonecg.procedures.CanConnectWallGateProcedure;
 import net.acodonic_king.redstonecg.procedures.ConnectionFace;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.LevelAccessor;
 
 import net.minecraft.world.phys.BlockHitResult;
@@ -39,6 +41,28 @@ public class AnalogSourceBlock extends DefaultEmitting1_4Gate implements EntityB
 	public InteractionResult use(BlockState blockstate, Level world, BlockPos pos, Player entity, InteractionHand hand, BlockHitResult hit) {
 		InteractionResult interactionResult = super.use(blockstate, world, pos, entity, hand, hit);
 		if(interactionResult == InteractionResult.FAIL){return interactionResult;}
+		ItemStack itemStack = entity.getItemInHand(hand);
+		if(!itemStack.isEmpty()){
+			if(itemStack.is(RedstonecgModItems.ROTATION_BRACKET.get())){return InteractionResult.FAIL;}
+			if(itemStack.is(RedstonecgModItems.NORMAL_ANALOG_SOURCE.get())){
+				if(AdventureProcedure.valueConfig(world, entity)){
+					int power = getPower(world, pos) + 1;
+					if(power > 15)
+						power = 0;
+					setPower(world, blockstate, pos, power);
+					return InteractionResult.SUCCESS;
+				}
+			}
+		}
+		if(entity.isCrouching()){
+			if(AdventureProcedure.pinConfig(world, entity)){
+				int connection = blockstate.getValue(CONNECTION) + 1;
+				if(connection > 14)
+					connection = 0;
+				world.setBlock(pos, blockstate.setValue(CONNECTION, connection), 2);
+				return InteractionResult.SUCCESS;
+			}
+		}
 		if(AdventureProcedure.gateGUI(world, entity))
 			if (entity instanceof ServerPlayer player) {
 				ModLoaderRider.openMenu(player, new MenuProvider() {

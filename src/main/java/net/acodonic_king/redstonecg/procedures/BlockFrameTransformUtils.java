@@ -1,5 +1,6 @@
 package net.acodonic_king.redstonecg.procedures;
 
+import net.acodonic_king.redstonecg.block.defaults.CustomBlockPrimarySecondaryDirectionInterface;
 import net.acodonic_king.redstonecg.block.defaults.RedstoneSignalInterface;
 import net.acodonic_king.redstonecg.init.RedstonecgModVersionRides;
 import net.minecraft.core.BlockPos;
@@ -41,6 +42,15 @@ public class BlockFrameTransformUtils {
 
         return Pair.of(primary, secondary);
     }
+    public static Pair<Direction, Direction> getPrimarySecondaryDirections(LevelAccessor world, BlockPos pos) {
+        BlockState blockState = world.getBlockState(pos);
+        if(blockState.getBlock() instanceof CustomBlockPrimarySecondaryDirectionInterface b)
+            return b.getPrimarySecondaryDirections(world, pos);
+        return getPrimarySecondaryDirections(blockState);
+    }
+    public static Pair<Direction, Direction> getDefaultPrimarySecondaryDirections(){
+        return Pair.of(Direction.NORTH, Direction.DOWN);
+    }
 
 
     /**
@@ -59,6 +69,18 @@ public class BlockFrameTransformUtils {
         return getGenericTargetBlockConnectionFace(requesterState, direction);
     }
 
+    public static ConnectionFace getConnectionFace(LevelAccessor world, BlockPos pos, Direction localDir){
+        BlockState blockState = world.getBlockState(pos);
+        if(blockState.getBlock() instanceof CustomBlockPrimarySecondaryDirectionInterface b)
+            return getConnectionFace(
+                    b.getPrimarySecondaryDirections(world, pos),
+                    localDir
+            );
+        return getConnectionFace(blockState, localDir);
+    }
+    public static ConnectionFace getConnectionFace(Pair<Direction, Direction> dirs, Direction localDir){
+        return getConnectionFace(dirs.getLeft(),dirs.getRight(),localDir);
+    }
     /**
      * Returns the ConnectionFace for a given local direction of the block.
      * Converts the local frame direction (Forward/Right/Back/Left) into world direction using primary rotation.
@@ -76,11 +98,6 @@ public class BlockFrameTransformUtils {
     public static ConnectionFace getConnectionFace(BlockState blockState, Direction localDir){
         Pair<Direction, Direction> dirs = getPrimarySecondaryDirections(blockState);
         return getConnectionFace(dirs.getLeft(),dirs.getRight(),localDir);
-    }
-
-    public static ConnectionFace getConnectionFaceWorldSide(BlockState blockState, Direction worldDir){
-        Pair<Direction, Direction> dirs = getPrimarySecondaryDirections(blockState);
-        return getConnectionFaceWorldSide(dirs.getLeft(),dirs.getRight(),worldDir);
     }
 
     /**
@@ -103,6 +120,22 @@ public class BlockFrameTransformUtils {
         return new ConnectionFace(localDir,secondary);
     }
 
+    public static ConnectionFace getConnectionFaceWorldSide(LevelAccessor world, BlockPos pos, Direction worldDir){
+        BlockState blockState = world.getBlockState(pos);
+        if(blockState.getBlock() instanceof CustomBlockPrimarySecondaryDirectionInterface b)
+            return getConnectionFaceWorldSide(
+                    b.getPrimarySecondaryDirections(world, pos),
+                    worldDir
+            );
+        return getConnectionFaceWorldSide(blockState, worldDir);
+    }
+    public static ConnectionFace getConnectionFaceWorldSide(BlockState blockState, Direction worldDir){
+        Pair<Direction, Direction> dirs = getPrimarySecondaryDirections(blockState);
+        return getConnectionFaceWorldSide(dirs.getLeft(),dirs.getRight(),worldDir);
+    }
+    public static ConnectionFace getConnectionFaceWorldSide(Pair<Direction, Direction> dirs, Direction worldDir){
+        return getConnectionFaceWorldSide(dirs.getLeft(),dirs.getRight(),worldDir);
+    }
     public static ConnectionFace getConnectionFaceWorldSide(Direction primary, Direction secondary, Direction worldDir){
         Direction localDir = getLocalDirectionFromWorld(primary, secondary, worldDir);
         return getConnectionFace(primary, secondary, localDir);
@@ -215,6 +248,8 @@ public class BlockFrameTransformUtils {
      * @return The rotated direction.
      */
     public static Direction rotateDirectionClockwiseY(Direction base, Direction rotation){
+        if(base == null)
+            return rotation;
         return switch (rotation){
             case NORTH -> base;
             case EAST -> base.getClockWise(Direction.Axis.Y);
@@ -237,6 +272,8 @@ public class BlockFrameTransformUtils {
      * @return The rotated direction.
      */
     public static Direction rotateDirectionCounterClockwiseY(Direction base, Direction rotation){
+        if(base == null)
+            return rotation;
         return switch (rotation){
             case NORTH -> base;
             case EAST -> base.getCounterClockWise(Direction.Axis.Y);
@@ -245,15 +282,7 @@ public class BlockFrameTransformUtils {
             default -> rotation;
         };
     }
-    /**
-     * Transforms a local direction (from the block’s frame) into world-space.
-     *
-     * @param blockState The block state containing rotation properties.
-     * @param localDir The direction in the block’s local frame (NORTH = forward).
-     * @return The corresponding direction in the world frame.
-     */
-    public static Direction getWorldDirectionFromLocal(BlockState blockState, Direction localDir) {
-        Pair<Direction, Direction> dirs = getPrimarySecondaryDirections(blockState);
+    public static Direction getWorldDirectionFromLocal(Pair<Direction,Direction> dirs, Direction localDir) {
         Direction primary = dirs.getLeft();
         Direction secondary = dirs.getRight();
         Direction rotated = rotateDirectionClockwiseY(primary, localDir);
@@ -271,6 +300,17 @@ public class BlockFrameTransformUtils {
         }
     }
     /**
+     * Transforms a local direction (from the block’s frame) into world-space.
+     *
+     * @param blockState The block state containing rotation properties.
+     * @param localDir The direction in the block’s local frame (NORTH = forward).
+     * @return The corresponding direction in the world frame.
+     */
+    public static Direction getWorldDirectionFromLocal(BlockState blockState, Direction localDir) {
+        Pair<Direction, Direction> dirs = getPrimarySecondaryDirections(blockState);
+        return getWorldDirectionFromLocal(dirs, localDir);
+    }
+    /**
      * Shortcut for getting the world-facing direction of the block’s local forward direction.
      * Equivalent to calling {@code getWorldDirectionFromLocal(state, Direction.NORTH)}.
      *
@@ -279,6 +319,9 @@ public class BlockFrameTransformUtils {
      */
     public static Direction getWorldDirectionFromLocalForward(BlockState blockState){
         return getWorldDirectionFromLocal(blockState, Direction.NORTH);
+    }
+    public static Direction getWorldDirectionFromLocalForward(Pair<Direction,Direction> dirs){
+        return getWorldDirectionFromLocal(dirs, Direction.NORTH);
     }
     /**
      * Converts a world-space direction to the corresponding local frame direction
@@ -290,13 +333,22 @@ public class BlockFrameTransformUtils {
      */
     public static Direction getLocalDirectionFromWorld(BlockState blockState, Direction worldDir){
         Pair<Direction, Direction> dirs = getPrimarySecondaryDirections(blockState);
+        return getLocalDirectionFromWorld(dirs, worldDir);
+    }
+    public static Direction getLocalDirectionFromWorld(LevelAccessor world, BlockPos pos, Direction worldDir){
+        Pair<Direction, Direction> dirs = getPrimarySecondaryDirections(world, pos);
+        return getLocalDirectionFromWorld(dirs, worldDir);
+    }
+    public static Direction getLocalDirectionFromWorld(Pair<Direction,Direction> dirs, Direction worldDir){
         return getLocalDirectionFromWorld(dirs.getLeft(), dirs.getRight(), worldDir);
     }
     public static Direction getLocalDirectionFromWorld(Direction primary, Direction secondary, Direction worldDir){
         if(secondary == Direction.DOWN){
             return rotateDirectionCounterClockwiseY(worldDir,primary);
         } else if (secondary == Direction.UP){
-            return rotateDirectionCounterClockwiseY(worldDir,primary.getOpposite());
+            if (worldDir == Direction.NORTH || worldDir == Direction.SOUTH)
+                primary = primary.getOpposite();
+            return rotateDirectionCounterClockwiseY(worldDir,primary);
         } else {
             Direction rotated = rotateDirectionCounterClockwiseY(worldDir, secondary);
             rotated = rotated.getClockWise(Direction.Axis.X);

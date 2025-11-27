@@ -10,7 +10,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 
 public class ParallelOneWayThroughNotGateBlock extends ParallelOneWayThroughGateBlock {
-	public static final BooleanProperty ENABLED = BooleanProperty.create("enabled");
 	public ParallelOneWayThroughNotGateBlock() {
 		super();
 	}

@@ -1,0 +1,138 @@
+{
+	"multipart":[
+        {
+            "when":{"delay": 1, "powered": "false", "locked": "false"},
+			"apply":{"model":"redstonecg:block/floor/parallel/hybrid/delayer/1_off_unlocked"}
+        },
+        {
+            "when":{"delay": 2, "powered": "false", "locked": "false"},
+			"apply":{"model":"redstonecg:block/floor/parallel/hybrid/delayer/2_off_unlocked"}
+        },
+        {
+            "when":{"delay": 3, "powered": "false", "locked": "false"},
+			"apply":{"model":"redstonecg:block/floor/parallel/hybrid/delayer/3_off_unlocked"}
+        },
+        {
+            "when":{"delay": 4, "powered": "false", "locked": "false"},
+			"apply":{"model":"redstonecg:block/floor/parallel/hybrid/delayer/4_off_unlocked"}
+        },
+        {
+            "when":{"delay": 5, "powered": "false", "locked": "false"},
+			"apply":{"model":"redstonecg:block/floor/parallel/hybrid/delayer/5_off_unlocked"}
+        },
+        {
+            "when":{"delay": 6, "powered": "false", "locked": "false"},
+			"apply":{"model":"redstonecg:block/floor/parallel/hybrid/delayer/6_off_unlocked"}
+        },
+        {
+            "when":{"delay": 7, "powered": "false", "locked": "false"},
+			"apply":{"model":"redstonecg:block/floor/parallel/hybrid/delayer/7_off_unlocked"}
+        },
+        {
+            "when":{"delay": 8, "powered": "false", "locked": "false"},
+			"apply":{"model":"redstonecg:block/floor/parallel/hybrid/delayer/8_off_unlocked"}
+        },
+
+        {
+            "when":{"delay": 1, "powered": "true", "locked": "false"},
+			"apply":{"model":"redstonecg:block/floor/parallel/hybrid/delayer/1_on_unlocked"}
+        },
+        {
+            "when":{"delay": 2, "powered": "true", "locked": "false"},
+			"apply":{"model":"redstonecg:block/floor/parallel/hybrid/delayer/2_on_unlocked"}
+        },
+        {
+            "when":{"delay": 3, "powered": "true", "locked": "false"},
+			"apply":{"model":"redstonecg:block/floor/parallel/hybrid/delayer/3_on_unlocked"}
+        },
+        {
+            "when":{"delay": 4, "powered": "true", "locked": "false"},
+			"apply":{"model":"redstonecg:block/floor/parallel/hybrid/delayer/4_on_unlocked"}
+        },
+        {
+            "when":{"delay": 5, "powered": "true", "locked": "false"},
+			"apply":{"model":"redstonecg:block/floor/parallel/hybrid/delayer/5_on_unlocked"}
+        },
+        {
+            "when":{"delay": 6, "powered": "true", "locked": "false"},
+			"apply":{"model":"redstonecg:block/floor/parallel/hybrid/delayer/6_on_unlocked"}
+        },
+        {
+            "when":{"delay": 7, "powered": "true", "locked": "false"},
+			"apply":{"model":"redstonecg:block/floor/parallel/hybrid/delayer/7_on_unlocked"}
+        },
+        {
+            "when":{"delay": 8, "powered": "true", "locked": "false"},
+			"apply":{"model":"redstonecg:block/floor/parallel/hybrid/delayer/8_on_unlocked"}
+        },
+
+        {
+            "when":{"delay": 1, "powered": "false", "locked": "true"},
+			"apply":{"model":"redstonecg:block/floor/parallel/hybrid/delayer/1_off_locked"}
+        },
+        {
+            "when":{"delay": 2, "powered": "false", "locked": "true"},
+			"apply":{"model":"redstonecg:block/floor/parallel/hybrid/delayer/2_off_locked"}
+        },
+        {
+            "when":{"delay": 3, "powered": "false", "locked": "true"},
+			"apply":{"model":"redstonecg:block/floor/parallel/hybrid/delayer/3_off_locked"}
+        },
+        {
+            "when":{"delay": 4, "powered": "false", "locked": "true"},
+			"apply":{"model":"redstonecg:block/floor/parallel/hybrid/delayer/4_off_locked"}
+        },
+        {
+            "when":{"delay": 5, "powered": "false", "locked": "true"},
+			"apply":{"model":"redstonecg:block/floor/parallel/hybrid/delayer/5_off_locked"}
+        },
+        {
+            "when":{"delay": 6, "powered": "false", "locked": "true"},
+			"apply":{"model":"redstonecg:block/floor/parallel/hybrid/delayer/6_off_locked"}
+        },
+        {
+            "when":{"delay": 7, "powered": "false", "locked": "true"},
+			"apply":{"model":"redstonecg:block/floor/parallel/hybrid/delayer/7_off_locked"}
+        },
+        {
+            "when":{"delay": 8, "powered": "false", "locked": "true"},
+			"apply":{"model":"redstonecg:block/floor/parallel/hybrid/delayer/8_off_locked"}
+        },
+
+        {
+            "when":{"delay": 1, "powered": "true", "locked": "true"},
+			"apply":{"model":"redstonecg:block/floor/parallel/hybrid/delayer/1_on_locked"}
+        },
+        {
+            "when":{"delay": 2, "powered": "true", "locked": "true"},
+			"apply":{"model":"redstonecg:block/floor/parallel/hybrid/delayer/2_on_locked"}
+        },
+        {
+            "when":{"delay": 3, "powered": "true", "locked": "true"},
+			"apply":{"model":"redstonecg:block/floor/parallel/hybrid/delayer/3_on_locked"}
+        },
+        {
+            "when":{"delay": 4, "powered": "true", "locked": "true"},
+			"apply":{"model":"redstonecg:block/floor/parallel/hybrid/delayer/4_on_locked"}
+        },
+        {
+            "when":{"delay": 5, "powered": "true", "locked": "true"},
+			"apply":{"model":"redstonecg:block/floor/parallel/hybrid/delayer/5_on_locked"}
+        },
+        {
+            "when":{"delay": 6, "powered": "true", "locked": "true"},
+			"apply":{"model":"redstonecg:block/floor/parallel/hybrid/delayer/6_on_locked"}
+        },
+        {
+            "when":{"delay": 7, "powered": "true", "locked": "true"},
+			"apply":{"model":"redstonecg:block/floor/parallel/hybrid/delayer/7_on_locked"}
+        },
+        {
+            "when":{"delay": 8, "powered": "true", "locked": "true"},
+			"apply":{"model":"redstonecg:block/floor/parallel/hybrid/delayer/8_on_locked"}
+        },
+
+        {"when": {"connection": 0}, "apply": {"model":"redstonecg:block/floor/pins/b_ss_alt"}},
+        {"when": {"connection": 1}, "apply": {"model":"redstonecg:block/floor/pins/ss_b_alt"}}
+    ]
+}

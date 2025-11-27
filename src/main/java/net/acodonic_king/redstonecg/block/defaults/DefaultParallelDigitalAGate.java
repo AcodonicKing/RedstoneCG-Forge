@@ -87,4 +87,12 @@ public class DefaultParallelDigitalAGate extends DefaultParallelGate implements 
         }
         return "";
     }
+
+    @Override
+    public int getAnalogOutputSignal(BlockState state, Level world, BlockPos pos){
+        if(world.getBlockEntity(pos) instanceof DefaultDigitalGateBlockEntity be){
+            return be.OUTPUT ? 15 : 0;
+        }
+        return 0;
+    }
 }

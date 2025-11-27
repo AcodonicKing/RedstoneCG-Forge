@@ -1,6 +1,7 @@
 package net.acodonic_king.redstonecg.block.defaults;
 
 import net.acodonic_king.redstonecg.block.entity.DefaultAnalogGateBlockEntity;
+import net.acodonic_king.redstonecg.block.entity.DefaultDigitalGateBlockEntity;
 import net.acodonic_king.redstonecg.procedures.*;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -92,6 +93,13 @@ public class DefaultAnalogInteractibleGate extends DefaultRedstoneActionGate imp
             if(world.getBlockEntity(pos) instanceof DefaultAnalogGateBlockEntity be){
                 return be.POWER;
             }
+        }
+        return 0;
+    }
+    @Override
+    public int getAnalogOutputSignal(BlockState state, Level world, BlockPos pos){
+        if(world.getBlockEntity(pos) instanceof DefaultAnalogGateBlockEntity be){
+            return be.POWER;
         }
         return 0;
     }

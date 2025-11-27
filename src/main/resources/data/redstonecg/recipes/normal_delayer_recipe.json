@@ -1,0 +1,11 @@
+{
+  "type": "redstonecg:redcu_crafting",
+  "designation": "hybrid/normal",
+  "ingredients": [
+    { "item": "redstonecg:normal_analog_memory"},
+    { "item": "minecraft:repeater"}
+  ],
+  "outputs": [
+    { "id": "redstonecg:normal_delayer", "Count": 2, "count": 2}
+  ]
+}

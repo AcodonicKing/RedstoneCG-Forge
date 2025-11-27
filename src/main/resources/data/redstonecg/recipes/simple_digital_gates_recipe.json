@@ -6,11 +6,11 @@
         { "item": "minecraft:redstone" }
     ],
     "outputs": [
-        { "id": "redstonecg:normal_and", "Count": 1 },
-        { "id": "redstonecg:normal_or", "Count": 1 },
-        { "id": "redstonecg:normal_nand", "Count": 1 },
-        { "id": "redstonecg:normal_nor", "Count": 1 },
-        { "id": "redstonecg:normal_buf", "Count": 1 },
-        { "id": "redstonecg:normal_not", "Count": 1 }
+        { "id": "redstonecg:normal_and", "Count": 1, "count": 1 },
+        { "id": "redstonecg:normal_or", "Count": 1, "count": 1 },
+        { "id": "redstonecg:normal_nand", "Count": 1, "count": 1 },
+        { "id": "redstonecg:normal_nor", "Count": 1, "count": 1 },
+        { "id": "redstonecg:normal_buf", "Count": 1, "count": 1 },
+        { "id": "redstonecg:normal_not", "Count": 1, "count": 1 }
     ]
 }

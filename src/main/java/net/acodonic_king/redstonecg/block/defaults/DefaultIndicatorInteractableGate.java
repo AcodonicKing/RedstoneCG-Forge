@@ -1,6 +1,7 @@
 package net.acodonic_king.redstonecg.block.defaults;
 
 import net.acodonic_king.redstonecg.block.entity.DefaultAnalogIndicatorBlockEntity;
+import net.acodonic_king.redstonecg.block.entity.DefaultDigitalTriggerGateBlockEntity;
 import net.acodonic_king.redstonecg.init.RedstonecgModItems;
 import net.acodonic_king.redstonecg.init.RedstonecgModVersionRides;
 import net.acodonic_king.redstonecg.network.RedstonecgModVariables;
@@ -268,5 +269,15 @@ public class DefaultIndicatorInteractableGate extends SuperBlock implements Simp
         connection &= 0b0101;
         connection |= c2 | c8;
         return state.setValue(CONNECTION, connection);
+    }
+
+    @Override
+    public int getAnalogOutputSignal(BlockState state, Level world, BlockPos pos){
+        return state.getValue(POWER);
+    } // Doesn't update Comparator
+
+    @Override
+    public boolean hasAnalogOutputSignal(BlockState state) {
+        return true;
     }
 }

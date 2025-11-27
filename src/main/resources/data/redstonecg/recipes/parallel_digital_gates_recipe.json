@@ -7,9 +7,9 @@
         { "item": "minecraft:quartz" }
     ],
     "outputs": [
-        { "id": "redstonecg:parallel_xor", "Count": 1 },
-        { "id": "redstonecg:parallel_nxor", "Count": 1 },
-        { "id": "redstonecg:parallel_sr_latch", "Count": 1 },
-        { "id": "redstonecg:parallel_d_latch", "Count": 1 }
+        { "id": "redstonecg:parallel_xor", "Count": 1, "count": 1 },
+        { "id": "redstonecg:parallel_nxor", "Count": 1, "count": 1 },
+        { "id": "redstonecg:parallel_sr_latch", "Count": 1, "count": 1 },
+        { "id": "redstonecg:parallel_d_latch", "Count": 1, "count": 1 }
     ]
 }

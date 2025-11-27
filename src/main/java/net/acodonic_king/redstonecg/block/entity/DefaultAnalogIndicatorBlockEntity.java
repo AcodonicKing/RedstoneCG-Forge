@@ -17,7 +17,9 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import org.apache.commons.lang3.tuple.Pair;
 
 public class DefaultAnalogIndicatorBlockEntity extends SuperBlockEntity {
     public RCGQuaternion rotation = RCGQuaternion.Vector3F.rotateYP(0);
@@ -28,6 +30,13 @@ public class DefaultAnalogIndicatorBlockEntity extends SuperBlockEntity {
     public DefaultAnalogIndicatorBlockEntity(BlockPos pos, BlockState state){
         super(RedstonecgModBlockEntities.DEFAULT_ANALOG_INDICATOR.get(), pos, state);
         //modelUpdate();
+    }
+    public DefaultAnalogIndicatorBlockEntity(BlockEntityType blockEntityType, BlockPos pos, BlockState state){
+        super(blockEntityType, pos, state);
+    }
+
+    public Pair<Direction, Direction> getPrimarySecondaryDirections(){
+        return Pair.of(ROTATION, FACING);
     }
 
     @Override

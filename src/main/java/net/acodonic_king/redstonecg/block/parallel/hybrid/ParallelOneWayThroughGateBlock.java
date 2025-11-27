@@ -68,4 +68,13 @@ public class ParallelOneWayThroughGateBlock extends DefaultParallelAnalogInterac
 		return dir == Direction.SOUTH;
 	}
 
+	@Override
+	public int getAnalogOutputSignal(BlockState state, Level world, BlockPos pos){
+		if(world.getBlockEntity(pos) instanceof DefaultAnalogGateBlockEntity be){
+			if (state.getValue(ENABLED))
+				return be.POWER;
+		}
+		return 0;
+	}
+
 }

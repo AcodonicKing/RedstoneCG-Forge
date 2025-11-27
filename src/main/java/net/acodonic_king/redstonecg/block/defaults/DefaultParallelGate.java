@@ -9,7 +9,7 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 
-public class DefaultParallelGate extends DefaultRedstoneActionGate{
+public class DefaultParallelGate extends DefaultRedstoneActionGate implements ParallelGateInterface{
     public DefaultParallelGate() {
         super();
     }
@@ -27,9 +27,11 @@ public class DefaultParallelGate extends DefaultRedstoneActionGate{
         }
         return onRedstoneUpdate(world, thisState, thisPos);
     }
+    @Override
     public boolean breakParallelLine(LevelAccessor world, BlockState thisState, BlockPos thisPos, Direction directedTo, boolean readOut){
         return false;
     }
+    @Override
     public int breakParallelLineSignal(LevelAccessor world, BlockState thisState, BlockPos thisPos, Direction directedTo){
         return 0;
     }

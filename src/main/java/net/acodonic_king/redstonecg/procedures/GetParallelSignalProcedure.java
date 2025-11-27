@@ -1,6 +1,7 @@
 package net.acodonic_king.redstonecg.procedures;
 
 import net.acodonic_king.redstonecg.block.defaults.DefaultParallelGate;
+import net.acodonic_king.redstonecg.block.defaults.ParallelGateInterface;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.core.Direction;
@@ -38,9 +39,14 @@ public class GetParallelSignalProcedure {
 		if(thisPairPS.getRight() != targetPairPS.getRight()){return false;}
 		return getParallelAxis(thisPairPS) == getParallelAxis(targetPairPS);
 	}
-	public static int getParallelLinePower(LevelAccessor world, BlockPos pos){
-		BlockState thisState = world.getBlockState(pos);
-		Direction.Axis axis = getParallelAxis(thisState);
+	public static boolean onSameParallelLine(LevelAccessor world, BlockPos thisPos, BlockPos targetPos){
+		Pair<Direction,Direction> thisPairPS = BlockFrameTransformUtils.getPrimarySecondaryDirections(world, thisPos);
+		Pair<Direction,Direction> targetPairPS = BlockFrameTransformUtils.getPrimarySecondaryDirections(world, targetPos);
+		if(thisPairPS.getRight() != targetPairPS.getRight()){return false;}
+		return getParallelAxis(thisPairPS) == getParallelAxis(targetPairPS);
+	}
+	public static int getParallelLinePower(LevelAccessor world, BlockPos pos, Pair<Direction,Direction> pairPS){
+		Direction.Axis axis = getParallelAxis(pairPS);
 		int power = 0;
 		for(Direction.AxisDirection axisDirection: Direction.AxisDirection.values()){
 			Direction direction = Direction.fromAxisAndDirection(axis, axisDirection);
@@ -50,16 +56,19 @@ public class GetParallelSignalProcedure {
 		}
 		return power;
 	}
+	public static int getParallelLinePower(LevelAccessor world, BlockPos pos){
+		return getParallelLinePower(world, pos, BlockFrameTransformUtils.getPrimarySecondaryDirections(world, pos));
+	}
 	public static int getParallelLinePowerInDirection(LevelAccessor world, BlockPos pos, Direction direction){
 		BlockState thisState = world.getBlockState(pos);
-		if(thisState.getBlock() instanceof DefaultParallelGate){
+		if(thisState.getBlock() instanceof ParallelGateInterface){
 			BlockPos targetPos = pos.relative(direction);
 			BlockState targetState = world.getBlockState(targetPos);
-			if(targetState.getBlock() instanceof DefaultParallelGate ts){
+			if(targetState.getBlock() instanceof ParallelGateInterface ts){
 				if(ts.breakParallelLine(world, targetState, targetPos, direction, true)){
 					return ts.breakParallelLineSignal(world, targetState, targetPos, direction);
 				}
-				if(onSameParallelLine(thisState,targetState)){
+				if(onSameParallelLine(world, pos, targetPos)){
 					return getParallelLinePowerInDirection(world, targetPos, direction);
 				}
 			}

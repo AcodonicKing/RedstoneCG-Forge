@@ -7,6 +7,6 @@
         { "item": "minecraft:redstone_lamp" }
     ],
     "outputs": [
-        { "id": "redstonecg:universal_indicator", "Count": 1 }
+        { "id": "redstonecg:universal_indicator", "Count": 1, "count": 1 }
     ]
 }

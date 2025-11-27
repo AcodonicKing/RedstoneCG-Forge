@@ -201,4 +201,9 @@ public class DefaultGate extends SuperBlock implements SimpleWaterloggedBlock, F
         //level.sendBlockUpdated(pos, blockState, blockState, 2);
         return 1;
     }
+
+    @Override
+    public boolean hasAnalogOutputSignal(BlockState state) {
+        return true;
+    }
 }

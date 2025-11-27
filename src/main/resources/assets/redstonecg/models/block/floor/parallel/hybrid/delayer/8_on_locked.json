@@ -1,0 +1,8 @@
+{
+  "parent": "redstonecg:custom/delayer/8",
+  "textures": {
+    "particle": "redstonecg:block/parallel/hybrid/delayer/on_locked",
+    "1": "redstonecg:block/parallel/hybrid/delayer/on_locked",
+    "2": "minecraft:block/redstone_torch"
+  }
+}

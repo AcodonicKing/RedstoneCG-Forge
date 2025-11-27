@@ -35,6 +35,7 @@ public class RedstonecgModBlockEntities {
 			RedstonecgModBlocks.NORMAL_REVERSED_PATH_SELECTOR.get(),
 			RedstonecgModBlocks.NORMAL_ONE_WAY_THROUGH_GATE.get(),
 			RedstonecgModBlocks.NORMAL_ONE_WAY_THROUGH_NOT_GATE.get(),
+			RedstonecgModBlocks.NORMAL_BLOCK_READER.get(),
 
 			RedstonecgModBlocks.PARALLEL_ANALOG_BIAS.get(),
 			RedstonecgModBlocks.PARALLEL_ANALOG_DIFFERENTIAL.get(),
@@ -92,6 +93,11 @@ public class RedstonecgModBlockEntities {
 			RedCuWireBlockEntity::new,
 			RedstonecgModBlocks.REDCU_WIRE.get(),
 			RedstonecgModBlocks.REDSTONE_TO_REDCU_CONVERTER.get()
+	).build(null));
+	public static final RegistryObject<BlockEntityType<DelayerBlockEntity>> DELAYER = REGISTRY.register("delayer", () -> BlockEntityType.Builder.of(
+			DelayerBlockEntity::new,
+			RedstonecgModBlocks.NORMAL_DELAYER.get(),
+			RedstonecgModBlocks.PARALLEL_DELAYER.get()
 	).build(null));
 
 	private static RegistryObject<BlockEntityType<?>> register(String registryname, RegistryObject<Block> block, BlockEntityType.BlockEntitySupplier<?> supplier) {

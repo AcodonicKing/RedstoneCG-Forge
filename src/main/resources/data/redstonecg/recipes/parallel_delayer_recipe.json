@@ -1,0 +1,11 @@
+{
+  "type": "redstonecg:redcu_crafting",
+  "designation": "hybrid/parallel",
+  "ingredients": [
+    { "item": "redstonecg:parallel_analog_memory"},
+    { "item": "minecraft:repeater"}
+  ],
+  "outputs": [
+    { "id": "redstonecg:parallel_delayer", "Count": 2, "count": 2}
+  ]
+}

@@ -1,0 +1,57 @@
+{
+	"credit": "Made with Blockbench",
+	"textures": {
+		"0": "redstonecg:block/smooth_stone_plate",
+		"1": "redstonecg:block/normal/hybrid/delayer/off_unlocked",
+		"2": "minecraft:block/redstone_torch_off",
+		"particle": "redstonecg:block/smooth_stone_plate"
+	},
+	"render_type": "cutout_mipped",
+	"elements": [
+		{
+			"name": "base",
+			"from": [0, 0, 0],
+			"to": [16, 2, 16],
+			"faces": {
+				"north": {"uv": [0, 0, 16, 2], "texture": "#0"},
+				"east": {"uv": [0, 0, 16, 2], "texture": "#0"},
+				"south": {"uv": [0, 0, 16, 2], "texture": "#0"},
+				"west": {"uv": [0, 0, 16, 2], "texture": "#0"},
+				"up": {"uv": [0, 0, 16, 16], "texture": "#1"},
+				"down": {"uv": [0, 0, 16, 16], "texture": "#0"}
+			}
+		},
+		{
+			"name": "torch_X_face",
+			"from": [7, 2, 4],
+			"to": [9, 8, 8],
+			"shade": false,
+			"rotation": {"angle": 0, "axis": "y", "origin": [7, 2, 4]},
+			"faces": {
+				"east": {"uv": [6, 5, 10, 11], "texture": "#2"},
+				"west": {"uv": [6, 5, 10, 11], "texture": "#2"}
+			}
+		},
+		{
+			"name": "torch_Z_face",
+			"from": [6, 2, 5],
+			"to": [10, 8, 7],
+			"shade": false,
+			"rotation": {"angle": 0, "axis": "y", "origin": [6, 2, 5]},
+			"faces": {
+				"north": {"uv": [6, 5, 10, 11], "texture": "#2"},
+				"south": {"uv": [6, 5, 10, 11], "texture": "#2"}
+			}
+		},
+		{
+			"name": "torch_top",
+			"from": [7, 7, 5],
+			"to": [9, 7, 7],
+			"shade": false,
+			"rotation": {"angle": 0, "axis": "y", "origin": [7, 7, 5]},
+			"faces": {
+				"up": {"uv": [7, 6, 9, 8], "texture": "#2"}
+			}
+		}
+	]
+}

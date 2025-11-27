@@ -43,7 +43,7 @@ public class GetRedstoneSignalProcedure {
 	 * @return
 	 */
 	public static int execute(LevelAccessor world, BlockPos requesterPos, Direction requesterLocalDirection){
-		ConnectionFace sourceFace = BlockFrameTransformUtils.getConnectionFace(world.getBlockState(requesterPos), requesterLocalDirection);
+		ConnectionFace sourceFace = BlockFrameTransformUtils.getConnectionFace(world, requesterPos, requesterLocalDirection);
 		return execute(world, requesterPos, sourceFace);
 	}
 
@@ -55,7 +55,7 @@ public class GetRedstoneSignalProcedure {
 	 * @return
 	 */
 	public static int executeWorldDirection(LevelAccessor world, BlockPos requesterPos, Direction requesterWorldDirection){
-		ConnectionFace sourceFace = BlockFrameTransformUtils.getConnectionFaceWorldSide(world.getBlockState(requesterPos), requesterWorldDirection);
+		ConnectionFace sourceFace = BlockFrameTransformUtils.getConnectionFaceWorldSide(world, requesterPos, requesterWorldDirection);
 		return execute(world, requesterPos, sourceFace);
 	}
 
