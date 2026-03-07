@@ -1,6 +1,13 @@
 package net.acodonic_king.redstonecg.block.normal.hybrid;
 
+import net.acodonic_king.redstonecg.RedstonecgMod;
+import net.acodonic_king.redstonecg.block.defaults.PinMarkConnectionInterface;
+import net.acodonic_king.redstonecg.init.RedstonecgModItems;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.decoration.ItemFrame;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.ComparatorBlock;
 import net.acodonic_king.redstonecg.block.defaults.DefaultAnalogInteractibleGate;
 import net.acodonic_king.redstonecg.block.entity.DefaultAnalogGateBlockEntity;
@@ -14,21 +21,24 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.phys.AABB;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraft.world.phys.BlockHitResult;
 
 import java.util.List;
 
-public class BlockReaderBlock extends DefaultAnalogInteractibleGate {
+public class BlockReaderBlock extends DefaultAnalogInteractibleGate implements PinMarkConnectionInterface {
     public static final IntegerProperty CONNECTION = IntegerProperty.create("connection",0,6);
+    public static final BooleanProperty BASE_READ = BooleanProperty.create("base_read");
     public BlockReaderBlock(){
         super();
+        this.registerDefaultState(this.stateDefinition.any().setValue(WATERLOGGED, false).setValue(BASE_READ, false));
     }
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         super.createBlockStateDefinition(builder);
-        builder.add(CONNECTION);
+        builder.add(CONNECTION,BASE_READ);
     }
     @Override
     public boolean canConnectRedstone(BlockState state, BlockGetter world, BlockPos pos, Direction side) {
@@ -50,7 +60,11 @@ public class BlockReaderBlock extends DefaultAnalogInteractibleGate {
     }
     @Override
     public int onRedstoneUpdate(LevelAccessor world, BlockState blockState, BlockPos pos){
-        Direction side = BlockFrameTransformUtils.getWorldDirectionFromLocalForward(blockState);
+        Direction side = Direction.UP;
+        if(blockState.getValue(BASE_READ))
+            side = BlockFrameTransformUtils.getWorldDirectionFromLocal(blockState, Direction.DOWN);
+        else
+            side = BlockFrameTransformUtils.getWorldDirectionFromLocalForward(blockState);
         int power = getInputSignal((Level) world, pos, side);
         if (power == 0) {
             ConnectionFace thisFace = BlockFrameTransformUtils.getConnectionFace(blockState, side);
@@ -103,4 +117,32 @@ public class BlockReaderBlock extends DefaultAnalogInteractibleGate {
         return var4;
     }
 
+    @Override
+    public InteractionResult use(BlockState blockstate, Level world, BlockPos pos, Player entity, InteractionHand hand, BlockHitResult hit) {
+        if(AdventureProcedure.pinConfig(world, entity)){
+            ItemStack itemStack = entity.getItemInHand(hand);
+            if(!itemStack.isEmpty()){
+                if(itemStack.is(RedstonecgModItems.ROTATION_BRACKET.get())){return super.use(blockstate, world, pos, entity, hand, hit);}
+                if(itemStack.is(blockstate.getBlock().asItem()) && AdventureProcedure.pinConfig(world, entity)){
+                    blockstate = blockstate.setValue(BASE_READ, !blockstate.getValue(BASE_READ));
+                    world.scheduleTick(pos, blockstate.getBlock(), 1);
+                    world.setBlock(pos, blockstate, 3);
+                    return InteractionResult.SUCCESS;
+                }
+            }
+            OnBlockRightClickedProcedure.execute(world, pos, blockstate);
+            return InteractionResult.SUCCESS;
+        }
+        return super.use(blockstate, world, pos, entity, hand, hit);
+    }
+
+    @Override
+    public int getConnection(BlockState bs) {
+        return bs.getValue(CONNECTION);
+    }
+
+    @Override
+    public int connectionFilter(int connection) {
+        return CanConnectWallGateProcedure.To1_3GateConnectionFilter(connection);
+    }
 }

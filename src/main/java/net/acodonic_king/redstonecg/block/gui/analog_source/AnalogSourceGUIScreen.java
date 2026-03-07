@@ -61,7 +61,6 @@ public class AnalogSourceGUIScreen extends AbstractContainerScreenRide<AnalogSou
 		ScreenTools.blitTexture(this, ms, this.leftPos, this.topPos, this.imageWidth, this.imageHeight, background_texture);
 		//ScreenTools.blitTexture(this, ms, this.leftPos + 7, this.topPos + 7, 32, 32, block_textures);
 		int connection = this.world.getBlockState(this.pos).getValue(AnalogSourceBlock.CONNECTION);
-		//int connection = LittleTools.getIntegerProperty(this.world.getBlockState(this.pos),"connection");
 		int sz = 64;
 		int lp = this.leftPos + 65 - (sz / 2);
 		int tp = this.topPos + ((this.imageHeight - sz) / 2);

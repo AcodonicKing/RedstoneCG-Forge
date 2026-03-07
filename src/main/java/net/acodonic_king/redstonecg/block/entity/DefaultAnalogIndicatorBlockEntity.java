@@ -8,14 +8,17 @@ import net.acodonic_king.redstonecg.procedures.RCGQuaternion;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.block.ModelBlockRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -27,6 +30,7 @@ public class DefaultAnalogIndicatorBlockEntity extends SuperBlockEntity {
     public RCGQuaternion facing = RCGQuaternion.Vector3F.rotateYP(0);
     public Direction FACING = Direction.DOWN;
     public Direction ROTATION = Direction.NORTH;
+    public boolean BASE_READ = false;
     public DefaultAnalogIndicatorBlockEntity(BlockPos pos, BlockState state){
         super(RedstonecgModBlockEntities.DEFAULT_ANALOG_INDICATOR.get(), pos, state);
         //modelUpdate();
@@ -46,16 +50,21 @@ public class DefaultAnalogIndicatorBlockEntity extends SuperBlockEntity {
         state <<= 3;
         state |= (byte) BlockFrameTransformUtils.encodeDirectionToInt(this.ROTATION);
         tag.putByte("state", state);
+        tag.putBoolean("base_read", BASE_READ);
     }
 
     @Override
     public void load(CompoundTag tag) {
         super.load(tag);
-        int state = (int) tag.getByte("state");
-        this.ROTATION = BlockFrameTransformUtils.decodeIntToDirection(state & 7);
-        state >>= 3;
-        this.FACING = BlockFrameTransformUtils.decodeIntToDirection(state & 7);
+        if (tag.contains("state")) {
+            int state = (int) tag.getByte("state");
+            this.ROTATION = BlockFrameTransformUtils.decodeIntToDirection(state & 7);
+            state >>= 3;
+            this.FACING = BlockFrameTransformUtils.decodeIntToDirection(state & 7);
+        }
         modelUpdate();
+        if (tag.contains("base_read"))
+            BASE_READ = tag.getBoolean("base_read");
     }
 
     @Override
@@ -82,6 +91,7 @@ public class DefaultAnalogIndicatorBlockEntity extends SuperBlockEntity {
     }
 
     public static class DefaultAnalogIndicatorBlockEntityRenderer implements BlockEntityRenderer<DefaultAnalogIndicatorBlockEntity> {
+        public static final ModelResourceLocation BASE_READ_MODEL = new ModelResourceLocation(new ResourceLocation("redstonecg", "arrow_indicator"), "connection=12,waterlogged=false");
         BlockEntityRendererProvider.Context context;
         public DefaultAnalogIndicatorBlockEntityRenderer(BlockEntityRendererProvider.Context context) {
             super();
@@ -109,7 +119,8 @@ public class DefaultAnalogIndicatorBlockEntity extends SuperBlockEntity {
 
             poseStack.translate(-0.5, -0.5, -0.5);
             VertexConsumer vc = bufferSource.getBuffer(RenderType.cutoutMipped());
-            Minecraft.getInstance().getBlockRenderer().getModelRenderer().renderModel(
+            ModelBlockRenderer modelRenderer = Minecraft.getInstance().getBlockRenderer().getModelRenderer();
+            modelRenderer.renderModel(
                     poseStack.last(),
                     vc,
                     blockState,
@@ -118,7 +129,18 @@ public class DefaultAnalogIndicatorBlockEntity extends SuperBlockEntity {
                     packedLight,
                     packedOverlay
             );
-
+            if(blockEntity.BASE_READ){
+                model = Minecraft.getInstance().getModelManager().getModel(BASE_READ_MODEL);
+                modelRenderer.renderModel(
+                        poseStack.last(),
+                        vc,
+                        blockState,
+                        model,
+                        1.0f, 1.0f, 1.0f,
+                        packedLight,
+                        packedOverlay
+                );
+            }
             poseStack.popPose();
         }
     }

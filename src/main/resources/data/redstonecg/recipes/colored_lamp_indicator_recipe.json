@@ -1,0 +1,22 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "#RT"
+    ],
+    "key": {
+        "#": {
+            "item": "minecraft:glass_pane"
+        },
+        "R": {
+            "item": "minecraft:redstone_lamp"
+        },
+        "T": {
+            "item": "minecraft:tinted_glass"
+        }
+    },
+    "result": {
+        "item": "redstonecg:colored_lamp_indicator",
+        "count": 2,
+        "Count": 2
+    }
+}

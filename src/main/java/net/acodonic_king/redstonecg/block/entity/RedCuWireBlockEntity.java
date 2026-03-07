@@ -5,12 +5,16 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 
 import net.acodonic_king.redstonecg.init.RedstonecgModBlockEntities;
 
 public class RedCuWireBlockEntity extends SuperBlockEntity {
 	public int POWER = 0;
+	public RedCuWireBlockEntity(BlockEntityType blockEntityType, BlockPos position, BlockState state){
+		super(blockEntityType, position, state);
+	}
 	public RedCuWireBlockEntity(BlockPos position, BlockState state) {
 		super(RedstonecgModBlockEntities.RED_CU_WIRE.get(), position, state);
 	}

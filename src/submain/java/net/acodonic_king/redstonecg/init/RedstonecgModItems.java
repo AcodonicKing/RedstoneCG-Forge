@@ -1,13 +1,11 @@
 package net.acodonic_king.redstonecg.init;
 
 import net.acodonic_king.redstonecg.RedstonecgMod;
-import net.acodonic_king.redstonecg.item.RedCuIngotItem;
-import net.acodonic_king.redstonecg.item.RedCuMeterItem;
-import net.acodonic_king.redstonecg.item.RedCuMixtureItem;
-import net.acodonic_king.redstonecg.item.RotationBracket;
+import net.acodonic_king.redstonecg.item.*;
 import net.acodonic_king.redstonecg.procedures.RedCuMeterMeasuringProcedure;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.api.distmarker.Dist;
@@ -69,6 +67,19 @@ public class RedstonecgModItems {
 	public static final RegistryObject<Item> SEVEN_SEGMENT_INDICATOR = block(RedstonecgModBlocks.SEVEN_SEGMENT_INDICATOR);
 	public static final RegistryObject<Item> CLOCK_FILLING_INDICATOR = block(RedstonecgModBlocks.CLOCK_FILLING_INDICATOR);
 	public static final RegistryObject<Item> ORB_INDICATOR = block(RedstonecgModBlocks.ORB_INDICATOR);
+	public static final RegistryObject<Item> FLAT_LAMP_INDICATOR = block(RedstonecgModBlocks.FLAT_LAMP_INDICATOR);
+	public static final RegistryObject<Item> COLORED_FLAT_LAMP_INDICATOR = block(RedstonecgModBlocks.COLORED_FLAT_LAMP_INDICATOR);
+	public static final RegistryObject<Item> COLORFUL_FLAT_LAMP_INDICATOR = block(RedstonecgModBlocks.COLORFUL_FLAT_LAMP_INDICATOR);
+	public static final RegistryObject<Item> ARROW_INDICATOR = itemBlock(
+			RedstonecgModBlocks.ARROW_INDICATOR,
+			() -> new ArrowIndicatorItem(
+					RedstonecgModBlocks.ARROW_INDICATOR.get(),
+					RedstonecgModVersionRides.defaultItemProperties
+			)
+	);
+	public static final RegistryObject<Item> BAR_INDICATOR = block(RedstonecgModBlocks.BAR_INDICATOR);
+	public static final RegistryObject<Item> COLORED_LAMP_BLOCK = block(RedstonecgModBlocks.COLORED_LAMP_BLOCK);
+	public static final RegistryObject<Item> COLORFUL_LAMP_BLOCK = block(RedstonecgModBlocks.COLORFUL_LAMP_BLOCK);
 	//Parallel Digital
 	public static final RegistryObject<Item> PARALLEL_AND = block(RedstonecgModBlocks.PARALLEL_AND);
 	public static final RegistryObject<Item> PARALLEL_OR = block(RedstonecgModBlocks.PARALLEL_OR);
@@ -100,6 +111,13 @@ public class RedstonecgModItems {
 	public static final RegistryObject<Item> REDCU_WIRE_INTERSECTION = block(RedstonecgModBlocks.REDCU_WIRE_INTERSECTION);
 	public static final RegistryObject<Item> PARALLEL_LINE_OUTPUT = block(RedstonecgModBlocks.PARALLEL_LINE_OUTPUT);
 	public static final RegistryObject<Item> REDCU_WIRE_TRANSITION = block(RedstonecgModBlocks.REDCU_WIRE_TRANSITION);
+	public static final RegistryObject<Item> HANGING_REDCU_WIRE_CONNECTOR = itemBlock(
+			RedstonecgModBlocks.HANGING_REDCU_WIRE_CONNECTOR,
+			() -> new HangingRedCuWireConnectorItem(
+					RedstonecgModBlocks.HANGING_REDCU_WIRE_CONNECTOR.get(),
+					RedstonecgModVersionRides.defaultItemProperties
+			)
+	);
 
 
 
@@ -111,6 +129,10 @@ public class RedstonecgModItems {
 
 	private static RegistryObject<Item> item(String reg, Supplier<? extends Item> sup) {
 		return REGISTRY.register(reg, sup);
+	}
+
+	private static RegistryObject<Item> itemBlock(RegistryObject<Block> block, Supplier<? extends BlockItem> bi){
+		return REGISTRY.register(block.getId().getPath(), bi);
 	}
 
 	@SubscribeEvent

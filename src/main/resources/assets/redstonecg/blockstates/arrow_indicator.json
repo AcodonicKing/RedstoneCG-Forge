@@ -1,0 +1,42 @@
+{
+    "variants": {
+        "waterlogged=false,connection=0": { "model": "redstonecg:block/arrow_indicator/base_wide" },
+        "waterlogged=false,connection=1": { "model": "redstonecg:block/arrow_indicator/base_full" },
+        "waterlogged=false,connection=2": { "model": "redstonecg:block/arrow_indicator/base_corner" },
+        "waterlogged=false,connection=3": { "model": "redstonecg:block/arrow_indicator/base_glass_wide" },
+        "waterlogged=false,connection=4": { "model": "redstonecg:block/arrow_indicator/base_glass_full" },
+        "waterlogged=false,connection=5": { "model": "redstonecg:block/arrow_indicator/base_glass_corner" },
+        "waterlogged=false,connection=6": { "model": "redstonecg:custom/arrow_indicator/h_arrow" },
+        "waterlogged=false,connection=7": { "model": "redstonecg:custom/arrow_indicator/f_arrow" },
+
+        "waterlogged=false,connection=8": { "model": "redstonecg:block/floor/pins/f" },
+        "waterlogged=false,connection=9": { "model": "redstonecg:block/floor/pins/r" },
+        "waterlogged=false,connection=10": { "model": "redstonecg:block/floor/pins/b" },
+        "waterlogged=false,connection=11": { "model": "redstonecg:block/floor/pins/l" },
+        "waterlogged=false,connection=12": { "model": "redstonecg:block/floor/pins/base" },
+
+        "waterlogged=false,connection=13": { "model": "redstonecg:block/arrow_indicator/base_wide" },
+        "waterlogged=false,connection=14": { "model": "redstonecg:block/arrow_indicator/base_full" },
+        "waterlogged=false,connection=15": { "model": "redstonecg:block/arrow_indicator/base_corner" },
+
+
+        "waterlogged=true,connection=0": { "model": "redstonecg:block/arrow_indicator/base_wide" },
+        "waterlogged=true,connection=1": { "model": "redstonecg:block/arrow_indicator/base_full" },
+        "waterlogged=true,connection=2": { "model": "redstonecg:block/arrow_indicator/base_corner" },
+        "waterlogged=true,connection=3": { "model": "redstonecg:block/arrow_indicator/base_glass_wide" },
+        "waterlogged=true,connection=4": { "model": "redstonecg:block/arrow_indicator/base_glass_full" },
+        "waterlogged=true,connection=5": { "model": "redstonecg:block/arrow_indicator/base_glass_corner" },
+        "waterlogged=true,connection=6": { "model": "redstonecg:custom/arrow_indicator/h_arrow" },
+        "waterlogged=true,connection=7": { "model": "redstonecg:custom/arrow_indicator/f_arrow" },
+
+        "waterlogged=true,connection=8": { "model": "redstonecg:block/floor/pins/f" },
+        "waterlogged=true,connection=9": { "model": "redstonecg:block/floor/pins/r" },
+        "waterlogged=true,connection=10": { "model": "redstonecg:block/floor/pins/b" },
+        "waterlogged=true,connection=11": { "model": "redstonecg:block/floor/pins/l" },
+        "waterlogged=true,connection=12": { "model": "redstonecg:block/floor/pins/base" },
+
+        "waterlogged=true,connection=13": { "model": "redstonecg:block/arrow_indicator/base_wide" },
+        "waterlogged=true,connection=14": { "model": "redstonecg:block/arrow_indicator/base_full" },
+        "waterlogged=true,connection=15": { "model": "redstonecg:block/arrow_indicator/base_corner" }
+    }
+}

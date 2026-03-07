@@ -12,7 +12,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 
-public class DefaultEmitting1_4Gate extends DefaultRedstoneActionGate {
+public class DefaultEmitting1_4Gate extends DefaultRedstoneActionGate implements PinMarkConnectionInterface {
     public static final IntegerProperty CONNECTION = IntegerProperty.create("connection",0,14);
     //public static final IntegerProperty POWER = IntegerProperty.create("power",0,15);
     public DefaultEmitting1_4Gate(){
@@ -36,6 +36,16 @@ public class DefaultEmitting1_4Gate extends DefaultRedstoneActionGate {
         if(!CanConnectWallGateProcedure.To1_4Gate(blockState, requesterFace))
             connectionFaceA.CHANNEL = 5;
         return connectionFaceA;
+    }
+
+    @Override
+    public int getConnection(BlockState bs) {
+        return bs.getValue(CONNECTION);
+    }
+
+    @Override
+    public int connectionFilter(int connection) {
+        return CanConnectWallGateProcedure.To1_4GateConnectionFilter(connection);
     }
 
     /*@Override

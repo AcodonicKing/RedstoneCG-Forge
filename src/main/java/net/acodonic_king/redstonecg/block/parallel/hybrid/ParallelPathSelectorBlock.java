@@ -3,6 +3,7 @@ package net.acodonic_king.redstonecg.block.parallel.hybrid;
 
 import net.acodonic_king.redstonecg.block.defaults.DefaultParallelGateWithAlternate;
 import net.acodonic_king.redstonecg.block.defaults.DefaultRedstoneActionGate;
+import net.acodonic_king.redstonecg.block.defaults.PinMarkConnectionInterface;
 import net.acodonic_king.redstonecg.block.entity.DefaultAnalogGateBlockEntity;
 import net.acodonic_king.redstonecg.procedures.*;
 import net.minecraft.world.InteractionHand;
@@ -25,7 +26,7 @@ import net.minecraft.world.phys.BlockHitResult;
 
 import javax.annotation.Nullable;
 
-public class ParallelPathSelectorBlock extends DefaultParallelGateWithAlternate implements EntityBlock {
+public class ParallelPathSelectorBlock extends DefaultParallelGateWithAlternate implements EntityBlock, PinMarkConnectionInterface {
 	public static final BooleanProperty VISIBLE_STATE = BooleanProperty.create("visible_state");
 	public static final IntegerProperty CONNECTION = IntegerProperty.create("connection",0,3);
 	public static final BooleanProperty DIRECTION = BooleanProperty.create("direction");
@@ -190,5 +191,15 @@ public class ParallelPathSelectorBlock extends DefaultParallelGateWithAlternate 
 			return be.POWER;
 		}
 		return 0;
+	}
+
+	@Override
+	public int getConnection(BlockState bs) {
+		return bs.getValue(CONNECTION);
+	}
+
+	@Override
+	public int connectionFilter(int connection) {
+		return 0b1111;
 	}
 }

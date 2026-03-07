@@ -1,0 +1,16 @@
+{
+    "multipart": [
+        {"when":{"state":"false"},
+            "apply":{"model":"redstonecg:block/flat_lamp_indicator/redstone_lamp_off"}},
+        {"when":{"state":"true"},
+            "apply":{"model":"redstonecg:block/flat_lamp_indicator/redstone_lamp_on"}},
+        {"when":{"connection":"0|2|4|6|8|10|12|14"},
+            "apply": {"model": "redstonecg:block/floor/pins/f"}},
+        {"when":{"connection":"1|2|5|6|9|10|13|14"},
+            "apply": {"model": "redstonecg:block/floor/pins/r"}},
+        {"when":{"connection":"3|4|5|6|11|12|13|14"},
+            "apply": {"model": "redstonecg:block/floor/pins/b"}},
+        {"when":{"connection":"7|8|9|10|11|12|13|14"},
+            "apply": {"model": "redstonecg:block/floor/pins/l"}}
+    ]
+}

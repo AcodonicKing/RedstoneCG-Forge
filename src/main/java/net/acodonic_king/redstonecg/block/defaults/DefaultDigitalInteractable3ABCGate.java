@@ -11,7 +11,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 
-public class DefaultDigitalInteractable3ABCGate extends DefaultDigitalInteractableGate {
+public class DefaultDigitalInteractable3ABCGate extends DefaultDigitalInteractableGate implements PinMarkConnectionInterface {
     public static final IntegerProperty CONNECTION = IntegerProperty.create("connection",0,5);
     public DefaultDigitalInteractable3ABCGate(){super();}
 
@@ -44,6 +44,16 @@ public class DefaultDigitalInteractable3ABCGate extends DefaultDigitalInteractab
         setOutput(world, blockState, pos, output);
         if (output) {return 15;}
         return 0;
+    }
+
+    @Override
+    public int getConnection(BlockState bs) {
+        return bs.getValue(CONNECTION);
+    }
+
+    @Override
+    public int connectionFilter(int connection) {
+        return 0b1111;
     }
 
     /*@Override

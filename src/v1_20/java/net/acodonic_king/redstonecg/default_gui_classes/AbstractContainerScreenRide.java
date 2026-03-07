@@ -1,7 +1,7 @@
 package net.acodonic_king.redstonecg.default_gui_classes;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
@@ -49,5 +49,9 @@ public class AbstractContainerScreenRide<T extends AbstractContainerMenu> extend
         public ScreenStack(GuiGraphics guiGraphics){
             this.stack = guiGraphics;
         }
+    }
+
+    public static void setBoxFocused(EditBox box, boolean focus){
+        box.setFocused(focus);
     }
 }

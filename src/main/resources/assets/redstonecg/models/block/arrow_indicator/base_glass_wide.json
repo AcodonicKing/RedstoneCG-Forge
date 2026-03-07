@@ -1,0 +1,7 @@
+{
+    "parent": "redstonecg:custom/arrow_indicator/base_glassed",
+    "textures": {
+        "1": "redstonecg:block/arrow_indicator/wide"
+    },
+    "render_type": "cutout_mipped"
+}

@@ -1,0 +1,28 @@
+{
+    "type": "minecraft:crafting_shapeless",
+    "ingredients": [
+        {
+            "item": "redstonecg:colored_lamp_indicator"
+        },
+        {
+            "item": "redstonecg:colored_lamp_indicator"
+        },
+        {
+            "item": "redstonecg:colored_lamp_indicator"
+        },
+        {
+            "item": "minecraft:red_stained_glass_pane"
+        },
+        {
+            "item": "minecraft:green_stained_glass_pane"
+        },
+        {
+            "item": "minecraft:blue_stained_glass_pane"
+        }
+    ],
+    "result": {
+        "item": "redstonecg:colorful_lamp_indicator",
+        "count": 3,
+        "Count": 3
+    }
+}

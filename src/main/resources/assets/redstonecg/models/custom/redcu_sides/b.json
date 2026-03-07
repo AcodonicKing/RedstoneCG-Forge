@@ -1,0 +1,23 @@
+{
+	"textures": {
+		"0": "redstonecg:block/redcu_pins/pin_a",
+		"particle": "redstonecg:block/redcu_pins/pin_a"
+	},
+	"elements": [
+		{
+			"from": [6, 1.0625, 16.0625],
+			"to": [10, 3.0625, 16.0625],
+			"faces": {
+				"north": {"uv": [6, 14, 10, 16], "texture": "#0"},
+				"south": {"uv": [6, 14, 10, 16], "texture": "#0"}
+			}
+		},
+		{
+			"from": [6, 2.0625, 14.0625],
+			"to": [10, 2.0625, 16.0625],
+			"faces": {
+				"up": {"uv": [6, 14, 10, 16], "texture": "#0"}
+			}
+		}
+	]
+}

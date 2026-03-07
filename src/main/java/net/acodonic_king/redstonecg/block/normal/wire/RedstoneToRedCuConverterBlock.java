@@ -1,10 +1,7 @@
 
 package net.acodonic_king.redstonecg.block.normal.wire;
 
-import net.acodonic_king.redstonecg.block.defaults.DefaultRedstoneActionGate;
-import net.acodonic_king.redstonecg.block.defaults.DefaultWire;
-import net.acodonic_king.redstonecg.block.defaults.OldInterface;
-import net.acodonic_king.redstonecg.block.defaults.WireInterface;
+import net.acodonic_king.redstonecg.block.defaults.*;
 import net.acodonic_king.redstonecg.block.entity.RedCuWireBlockEntity;
 import net.acodonic_king.redstonecg.procedures.*;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -23,7 +20,7 @@ import net.minecraft.core.BlockPos;
 
 import java.util.List;
 
-public class RedstoneToRedCuConverterBlock extends DefaultWire implements OldInterface {
+public class RedstoneToRedCuConverterBlock extends DefaultWire implements OldInterface, PinMarkConnectionInterface {
 	public static final IntegerProperty CONNECTION = IntegerProperty.create("connection",0,12);
 	public static final DirectionProperty ROTATION = DirectionProperty.create("rotation", Direction.Plane.HORIZONTAL);
 
@@ -221,5 +218,15 @@ public class RedstoneToRedCuConverterBlock extends DefaultWire implements OldInt
 			facing = rot.rotate(facing);
 		}
 		return state.setValue(FACING, facing).setValue(ROTATION, rotation);
+	}
+
+	@Override
+	public int getConnection(BlockState bs) {
+		return bs.getValue(CONNECTION);
+	}
+
+	@Override
+	public int connectionFilter(int connection) {
+		return RedCuWireCanConnectRedstoneProcedure.redstoneToRedCu_AllFilter(connection);
 	}
 }

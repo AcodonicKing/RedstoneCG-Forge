@@ -43,7 +43,7 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-public class RedCuWireTransitionBlock extends SuperBlock implements EntityBlock, WireInterface, MeasurementProvider, RedstoneSignalInterface {
+public class RedCuWireTransitionBlock extends SuperBlock implements EntityBlock, WireInterface, MeasurementProvider, RedstoneSignalInterface, SupportingFaceInterface {
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
     public static final IntegerProperty MODEL = IntegerProperty.create("model", 0, 11);
     public RedCuWireTransitionBlock() {
@@ -352,6 +352,17 @@ public class RedCuWireTransitionBlock extends SuperBlock implements EntityBlock,
             }
             super.onRemove(state, level, pos, newState, isMoving);
         }
+    }
+
+    @Override
+    public boolean faceIsSupporting(LevelAccessor world, BlockPos blockPos, Direction face) {
+        if(world.getBlockEntity(blockPos) instanceof RedCuWireTransitionBlockEntity be){
+            if(be.WALLS != 0){
+                int dir = BlockFrameTransformUtils.encodeDirectionToInt(face);
+                return ((be.WALLS >> dir) & 1) > 0;
+            }
+        }
+        return false;
     }
 
     /*@Override

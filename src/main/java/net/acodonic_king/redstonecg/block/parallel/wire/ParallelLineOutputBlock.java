@@ -1,10 +1,7 @@
 
 package net.acodonic_king.redstonecg.block.parallel.wire;
 
-import net.acodonic_king.redstonecg.block.defaults.DefaultParallelGate;
-import net.acodonic_king.redstonecg.block.defaults.DefaultRedstoneActionGate;
-import net.acodonic_king.redstonecg.block.defaults.OldInterface;
-import net.acodonic_king.redstonecg.block.defaults.RedstoneSignalInterface;
+import net.acodonic_king.redstonecg.block.defaults.*;
 import net.acodonic_king.redstonecg.block.entity.DefaultAnalogGateBlockEntity;
 import net.acodonic_king.redstonecg.procedures.*;
 import net.minecraft.world.level.LevelAccessor;
@@ -25,7 +22,7 @@ import net.minecraft.core.BlockPos;
 
 import javax.annotation.Nullable;
 
-public class ParallelLineOutputBlock extends DefaultParallelGate implements EntityBlock, OldInterface {
+public class ParallelLineOutputBlock extends DefaultParallelGate implements EntityBlock, OldInterface, PinMarkConnectionInterface {
 	public static final IntegerProperty CONNECTION = IntegerProperty.create("connection",0,6);
 
 	public ParallelLineOutputBlock() {
@@ -167,4 +164,16 @@ public class ParallelLineOutputBlock extends DefaultParallelGate implements Enti
 		}
 		return 0;
 	}
+
+	@Override
+	public int getConnection(BlockState bs) {
+		return bs.getValue(CONNECTION);
+	}
+
+	@Override
+	public int connectionFilter(int connection) {
+		return CanConnectWallGateProcedure.To1_3GateConnectionFilter(connection);
+	}
+
+
 }

@@ -53,11 +53,20 @@ public class RedstonecgModTabs {
                 accept(tabData, RedstonecgModItems.NORMAL_REVERSED_PATH_SELECTOR);
                 accept(tabData, RedstonecgModItems.NORMAL_ONE_WAY_THROUGH_GATE);
                 accept(tabData, RedstonecgModItems.NORMAL_ONE_WAY_THROUGH_NOT_GATE);
+                accept(tabData, RedstonecgModItems.NORMAL_DELAYER);
+                accept(tabData, RedstonecgModItems.NORMAL_BLOCK_READER);
                 //Indicator
                 accept(tabData, RedstonecgModItems.UNIVERSAL_INDICATOR);
                 accept(tabData, RedstonecgModItems.SEVEN_SEGMENT_INDICATOR);
                 accept(tabData, RedstonecgModItems.CLOCK_FILLING_INDICATOR);
                 accept(tabData, RedstonecgModItems.ORB_INDICATOR);
+                accept(tabData, RedstonecgModItems.FLAT_LAMP_INDICATOR);
+                accept(tabData, RedstonecgModItems.COLORED_FLAT_LAMP_INDICATOR);
+                accept(tabData, RedstonecgModItems.COLORFUL_FLAT_LAMP_INDICATOR);
+                accept(tabData, RedstonecgModItems.ARROW_INDICATOR);
+                accept(tabData, RedstonecgModItems.BAR_INDICATOR);
+                accept(tabData, RedstonecgModItems.COLORED_LAMP_BLOCK);
+                accept(tabData, RedstonecgModItems.COLORFUL_LAMP_BLOCK);
                 //Parallel Digital
                 accept(tabData, RedstonecgModItems.PARALLEL_AND);
                 accept(tabData, RedstonecgModItems.PARALLEL_OR);
@@ -82,11 +91,13 @@ public class RedstonecgModTabs {
                 accept(tabData, RedstonecgModItems.PARALLEL_ONE_WAY_PATH_SELECTOR);
                 accept(tabData, RedstonecgModItems.PARALLEL_ONE_WAY_THROUGH_GATE);
                 accept(tabData, RedstonecgModItems.PARALLEL_ONE_WAY_THROUGH_NOT_GATE);
+                accept(tabData, RedstonecgModItems.PARALLEL_DELAYER);
                 //Wire
                 accept(tabData, RedstonecgModItems.REDCU_WIRE);
                 accept(tabData, RedstonecgModItems.REDSTONE_TO_REDCU_CONVERTER);
                 accept(tabData, RedstonecgModItems.REDCU_WIRE_INTERSECTION);
                 accept(tabData, RedstonecgModItems.REDCU_WIRE_TRANSITION);
+                accept(tabData, RedstonecgModItems.HANGING_REDCU_WIRE_CONNECTOR);
                 accept(tabData, RedstonecgModItems.PARALLEL_LINE_OUTPUT);
             }).build());
     private static void accept(CreativeModeTab.Output tabData, RegistryObject<Item> obj){

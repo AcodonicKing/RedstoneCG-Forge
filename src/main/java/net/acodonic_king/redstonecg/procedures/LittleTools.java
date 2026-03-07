@@ -4,6 +4,8 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
@@ -79,6 +81,29 @@ public class LittleTools {
                 _blockEntity.getPersistentData().putDouble(_name, _value);
             if (world instanceof Level _level)
                 _level.sendBlockUpdated(_pos, _bs, _bs, 3);
+        }
+    }
+    public static int hasItem(Player player, Item item){
+        int amount = 0;
+        for (int i = 0; i < player.getInventory().getContainerSize(); i++) {
+            ItemStack invStack = player.getInventory().getItem(i);
+            if (invStack.is(item))
+                amount += invStack.getCount();
+        }
+        return amount;
+    }
+    public static void removeItems(Player player, Item item, int amount) {
+        int remaining = amount;
+        for (int i = 0; i < player.getInventory().getContainerSize(); i++) {
+            ItemStack invStack = player.getInventory().getItem(i);
+            if (invStack.is(item)) {
+                int remove = Math.min(invStack.getCount(), remaining);
+                invStack.shrink(remove);
+                remaining -= remove;
+                if (remaining <= 0) {
+                    break;
+                }
+            }
         }
     }
     /*public static ItemStack getItemStackFromBlock(LevelAccessor world, BlockPos pos, int slotid) {

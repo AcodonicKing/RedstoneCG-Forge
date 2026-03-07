@@ -1073,6 +1073,49 @@
 				"x": 180,
 				"y": 90
 			}
+		},
+
+		{
+			"when": {"base_read": "true", "facing": "down"},
+			"apply": {
+				"model": "redstonecg:block/floor/pins/base_alt",
+				"x": 0, "y": 0
+			}
+		},
+		{
+			"when": {"base_read": "true", "facing": "north"},
+			"apply": {
+				"model": "redstonecg:block/wall/pins/base_alt",
+				"x": 0, "y": 90
+			}
+		},
+		{
+			"when": {"base_read": "true", "facing": "east"},
+			"apply": {
+				"model": "redstonecg:block/wall/pins/base_alt",
+				"x": 0, "y": 180
+			}
+		},
+		{
+			"when": {"base_read": "true", "facing": "south"},
+			"apply": {
+				"model": "redstonecg:block/wall/pins/base_alt",
+				"x": 0, "y": 270
+			}
+		},
+		{
+			"when": {"base_read": "true", "facing": "west"},
+			"apply": {
+				"model": "redstonecg:block/wall/pins/base_alt",
+				"x": 0, "y": 0
+			}
+		},
+		{
+			"when": {"base_read": "true", "facing": "up"},
+			"apply": {
+				"model": "redstonecg:block/floor/pins/base_alt",
+				"x": 180, "y": 0
+			}
 		}
-    ]
+	]
 }

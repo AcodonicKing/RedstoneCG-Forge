@@ -2,6 +2,7 @@
 package net.acodonic_king.redstonecg.block.normal.digital;
 
 import net.acodonic_king.redstonecg.block.defaults.DefaultDigitalInteractibleTriggerGate;
+import net.acodonic_king.redstonecg.block.defaults.PinMarkConnectionInterface;
 import net.acodonic_king.redstonecg.block.entity.DefaultDigitalTriggerGateBlockEntity;
 import net.acodonic_king.redstonecg.procedures.*;
 import net.minecraft.world.level.BlockGetter;
@@ -14,7 +15,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 
-public class TTriggerBlock extends DefaultDigitalInteractibleTriggerGate {
+public class TTriggerBlock extends DefaultDigitalInteractibleTriggerGate implements PinMarkConnectionInterface {
 	//public static final BooleanProperty UNLOCKED = BooleanProperty.create("unlocked");
 	public static final IntegerProperty CONNECTION = IntegerProperty.create("connection",0,2);
 
@@ -56,5 +57,15 @@ public class TTriggerBlock extends DefaultDigitalInteractibleTriggerGate {
 			if (output) {return 15;}
 		}
 		return 0;
+	}
+
+	@Override
+	public int getConnection(BlockState bs) {
+		return bs.getValue(CONNECTION);
+	}
+
+	@Override
+	public int connectionFilter(int connection) {
+		return CanConnectWallGateProcedure.To1GateConnectionFilter(connection);
 	}
 }

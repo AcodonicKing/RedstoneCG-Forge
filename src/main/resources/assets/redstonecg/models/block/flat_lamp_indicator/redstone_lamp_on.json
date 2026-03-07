@@ -1,0 +1,7 @@
+{
+    "parent": "redstonecg:custom/flat_lamp_indicator",
+    "textures": {
+        "1": "minecraft:block/redstone_lamp_on"
+    },
+    "render_type": "solid"
+}

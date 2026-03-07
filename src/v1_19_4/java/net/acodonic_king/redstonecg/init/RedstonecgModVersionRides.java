@@ -8,7 +8,10 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.core.Direction;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
@@ -25,24 +28,34 @@ import net.minecraftforge.items.IItemHandler;
 //1.19.4
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 
+import java.util.function.ToIntFunction;
+
 public class RedstonecgModVersionRides {
     public static Capability<IItemHandler> item_handler = ForgeCapabilities.ITEM_HANDLER;
     public static boolean chat_type = false;
+    public static BlockBehaviour.Properties defaultLampProperties = BlockBehaviour.Properties
+            .of(Material.STONE)
+            .sound(SoundType.GLASS)
+            .strength(1f, 10f)
+            .noOcclusion()
+            .isRedstoneConductor((bs, br, bp) -> false);
     public static BlockBehaviour.Properties defaultGateProperties = BlockBehaviour.Properties
             .of(Material.CLOTH_DECORATION)
             .sound(SoundType.STONE)
             .strength(1f, 10f)
             .noOcclusion()
             .isRedstoneConductor((bs, br, bp) -> false);
-    public static BlockBehaviour.Properties defaultIndicatorProperties = BlockBehaviour.Properties
-            .of(Material.CLOTH_DECORATION)
-            .sound(SoundType.STONE)
-            .strength(1f, 10f)
-            .noOcclusion()
-            .hasPostProcess((bs, br, bp) -> true)
-            .emissiveRendering(DefaultIndicatorInteractableGate::emissiveRendering)
-            .lightLevel(DefaultIndicatorInteractableGate::emittedLight)
-            .isRedstoneConductor((bs, br, bp) -> false);
+    public static BlockBehaviour.Properties indicatorLight(ToIntFunction<BlockState> emitter){
+        return BlockBehaviour.Properties
+                .of(Material.CLOTH_DECORATION)
+                .sound(SoundType.STONE)
+                .strength(1f, 10f)
+                .noOcclusion()
+                .hasPostProcess((bs, br, bp) -> true)
+                .emissiveRendering((bs, br, bp) -> true)
+                .lightLevel(emitter)
+                .isRedstoneConductor((bs, br, bp) -> false);
+    }
     public static boolean isBlockStateSoftSolid(BlockState bs){
         return !(bs.isAir() || bs.getMaterial().isLiquid() || bs.getMaterial().isReplaceable());
     }
@@ -64,11 +77,12 @@ public class RedstonecgModVersionRides {
     public static Button createButton(int x, int y, int w, int h, String text, Button.OnPress onPress) {
         return Button.builder(Component.translatable(text), onPress).pos(x, y).size(w, h).build();
     }
+    public static Item.Properties defaultItemProperties = new Item.Properties();
     public static BlockItem createBlockItem(RegistryObject<Block> block){
-        return new BlockItem(block.get(), new Item.Properties());
+        return new BlockItem(block.get(), defaultItemProperties);
     }
     public static Item.Properties newItemSuper(int stacksize){
-        return new Item.Properties().stacksTo(stacksize).rarity(Rarity.COMMON);
+        return defaultItemProperties.stacksTo(stacksize).rarity(Rarity.COMMON);
     }
     public static Level getPlayerLevel(Player player){
         return player.level;
@@ -84,5 +98,8 @@ public class RedstonecgModVersionRides {
     }
     public static Direction directionFromDelta(int dx, int dy, int dz){
         return Direction.fromNormal(dx, dy, dz);
+    }
+    public static TagKey<Item> getItemTag(String master, String name){
+        return TagKey.create(Registries.ITEM, new ResourceLocation(master, name));
     }
 }

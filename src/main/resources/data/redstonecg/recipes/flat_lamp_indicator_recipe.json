@@ -1,0 +1,11 @@
+{
+    "type": "redstonecg:redcu_crafting",
+    "designation": "indicators/normal",
+    "ingredients": [
+        { "item": "redstonecg:smooth_stone_plate"},
+        { "item": "minecraft:redstone_lamp" }
+    ],
+    "outputs": [
+        { "id": "redstonecg:flat_lamp_indicator", "Count": 1, "count": 1 }
+    ]
+}

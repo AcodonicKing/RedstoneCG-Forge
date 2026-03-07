@@ -3,6 +3,7 @@ package net.acodonic_king.redstonecg.block.normal.hybrid;
 
 import net.acodonic_king.redstonecg.block.defaults.DefaultConnectableGate;
 import net.acodonic_king.redstonecg.block.defaults.DefaultRedstoneActionGate;
+import net.acodonic_king.redstonecg.block.defaults.PinMarkConnectionInterface;
 import net.acodonic_king.redstonecg.block.defaults.RedstoneSignalInterface;
 import net.acodonic_king.redstonecg.block.entity.DefaultAnalogGateBlockEntity;
 import net.acodonic_king.redstonecg.procedures.*;
@@ -28,7 +29,7 @@ import net.minecraft.core.BlockPos;
 
 import javax.annotation.Nullable;
 
-public class ForwardPathSelectorBlock extends DefaultConnectableGate implements EntityBlock, RedstoneSignalInterface {
+public class ForwardPathSelectorBlock extends DefaultConnectableGate implements EntityBlock, RedstoneSignalInterface, PinMarkConnectionInterface {
 	public static final IntegerProperty CONNECTION = IntegerProperty.create("connection",0,5);
 	//public static final IntegerProperty POWER = IntegerProperty.create("power",0,15);
 	public static final BooleanProperty DIRECTION = BooleanProperty.create("direction");
@@ -200,5 +201,15 @@ public class ForwardPathSelectorBlock extends DefaultConnectableGate implements 
 		BlockState blockState = world.getBlockState(pos);
 		Direction localDirection = BlockFrameTransformUtils.getLocalDirectionFromWorld(blockState,requesterFace.FACE.getOpposite());
 		return BlockFrameTransformUtils.getConnectionFace(blockState,localDirection);
+	}
+
+	@Override
+	public int getConnection(BlockState bs) {
+		return bs.getValue(CONNECTION);
+	}
+
+	@Override
+	public int connectionFilter(int connection) {
+		return 0b1111;
 	}
 }

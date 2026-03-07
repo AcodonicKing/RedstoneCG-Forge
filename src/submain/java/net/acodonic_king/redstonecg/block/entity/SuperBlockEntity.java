@@ -15,7 +15,7 @@ public class SuperBlockEntity extends BlockEntity {
     @Override
     public CompoundTag getUpdateTag() {
         CompoundTag tag = super.getUpdateTag();
-        saveAdditional(tag); // or manually add fields
+        saveAdditional(tag);
         return tag;
     }
 

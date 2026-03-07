@@ -11,7 +11,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 
-public class DefaultDigitalInteractable1Gate extends DefaultDigitalInteractableGate {
+public class DefaultDigitalInteractable1Gate extends DefaultDigitalInteractableGate implements PinMarkConnectionInterface {
     public static final IntegerProperty CONNECTION = IntegerProperty.create("connection",0,2);
     public DefaultDigitalInteractable1Gate(){super();}
 
@@ -37,6 +37,16 @@ public class DefaultDigitalInteractable1Gate extends DefaultDigitalInteractableG
         setOutput(world, blockState, pos, output);
         if (output) {return 15;}
         return 0;
+    }
+
+    @Override
+    public int getConnection(BlockState bs) {
+        return bs.getValue(CONNECTION);
+    }
+
+    @Override
+    public int connectionFilter(int connection) {
+        return CanConnectWallGateProcedure.To1GateConnectionFilter(connection);
     }
 
     /*@Override

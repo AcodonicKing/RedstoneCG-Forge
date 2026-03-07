@@ -1,9 +1,9 @@
 package net.acodonic_king.redstonecg.procedures;
 
+import net.acodonic_king.redstonecg.block.defaults.SupportingFaceInterface;
 import net.acodonic_king.redstonecg.init.RedstonecgModVersionRides;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 
@@ -23,6 +23,9 @@ public class GateBlockValidPlacementConditionProcedure {
 	public static boolean execute(LevelAccessor world, BlockPos pos, Direction direction) {
 		BlockPos Npos = pos.relative(direction);
 		BlockState blockState = world.getBlockState(Npos);
+		if(blockState.getBlock() instanceof SupportingFaceInterface block){
+			return block.faceIsSupporting(world, Npos, direction.getOpposite());
+		}
 		return RedstonecgModVersionRides.isBlockStateHardSolid(blockState);
 	}
 }

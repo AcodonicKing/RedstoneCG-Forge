@@ -3,6 +3,7 @@ package net.acodonic_king.redstonecg.block.normal.wire;
 
 import net.acodonic_king.redstonecg.block.defaults.DefaultRedstoneActionGate;
 import net.acodonic_king.redstonecg.block.defaults.DefaultWire;
+import net.acodonic_king.redstonecg.block.defaults.PinMarkConnectionInterface;
 import net.acodonic_king.redstonecg.block.defaults.WireInterface;
 import net.acodonic_king.redstonecg.block.entity.RedCuWireIntersectionBlockEntity;
 import net.acodonic_king.redstonecg.procedures.*;
@@ -20,7 +21,7 @@ import net.minecraft.core.BlockPos;
 
 import java.util.List;
 
-public class RedCuWireIntersectionBlock extends DefaultWire {
+public class RedCuWireIntersectionBlock extends DefaultWire implements PinMarkConnectionInterface {
 	public static final IntegerProperty CONNECTION = IntegerProperty.create("connection",0,3);
 
 	public RedCuWireIntersectionBlock() {
@@ -181,5 +182,15 @@ public class RedCuWireIntersectionBlock extends DefaultWire {
 			out.CHANNEL = 5;
 		return out;
 		//int mask = RedCuWireCanConnectRedstoneProcedure.wireIntersectionConnectionMask(thisBlock.getValue(CONNECTION));
+	}
+
+	@Override
+	public int getConnection(BlockState bs) {
+		return bs.getValue(CONNECTION);
+	}
+
+	@Override
+	public int connectionFilter(int connection) {
+		return 0b1111;
 	}
 }

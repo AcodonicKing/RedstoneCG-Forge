@@ -89,6 +89,7 @@ public class RedstonecgModVariables {
 		public boolean adventureValueConfig = false;
 		public boolean adventureSurvival = false;
 		public boolean adventureGateGUI = false;
+		public int hangingRedCuWireMaxDistance = 16;
 
 		public static MapVariables load(CompoundTag tag) {
 			MapVariables data = new MapVariables();
@@ -103,6 +104,10 @@ public class RedstonecgModVariables {
 			adventureValueConfig = nbt.getBoolean("adventure_value_config");
 			adventureSurvival = nbt.getBoolean("adventure_survival");
 			adventureGateGUI = nbt.getBoolean("adventure_gate_gui");
+			if(nbt.contains("hanging_redcu_wire_max_distance"))
+				hangingRedCuWireMaxDistance = nbt.getInt("hanging_redcu_wire_max_distance");
+			else
+				hangingRedCuWireMaxDistance = 16;
 		}
 
 		@Override
@@ -113,6 +118,7 @@ public class RedstonecgModVariables {
 			nbt.putBoolean("adventure_value_config", adventureValueConfig);
 			nbt.putBoolean("adventure_survival", adventureSurvival);
 			nbt.putBoolean("adventure_gate_gui", adventureGateGUI);
+			nbt.putInt("hanging_redcu_wire_max_distance", hangingRedCuWireMaxDistance);
 			return nbt;
 		}
 

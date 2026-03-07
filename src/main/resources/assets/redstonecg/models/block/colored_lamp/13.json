@@ -1,0 +1,22 @@
+{
+    "parent": "block/cube_all",
+    "textures": {
+        "all": "redstonecg:block/colored_lamp/13",
+        "particle": "redstonecg:block/colored_lamp/13"
+    },
+    "render_type": "solid",
+    "elements": [
+        {
+            "from": [0, 0, 0],
+            "to": [16, 16, 16],
+            "faces": {
+                "north": { "texture": "#all", "tintindex": 0 },
+                "south": { "texture": "#all", "tintindex": 0 },
+                "east":  { "texture": "#all", "tintindex": 0 },
+                "west":  { "texture": "#all", "tintindex": 0 },
+                "up":    { "texture": "#all", "tintindex": 0 },
+                "down":  { "texture": "#all", "tintindex": 0 }
+            }
+        }
+    ]
+}

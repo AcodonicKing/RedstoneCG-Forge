@@ -1,10 +1,7 @@
 package net.acodonic_king.redstonecg.init;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
-import net.acodonic_king.redstonecg.command.AdventureCommand;
-import net.acodonic_king.redstonecg.command.RedCuTransitionModel;
-import net.acodonic_king.redstonecg.command.RedCuWireAutoConnectCommand;
-import net.acodonic_king.redstonecg.command.RepairCommand;
+import net.acodonic_king.redstonecg.command.*;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -24,5 +21,6 @@ public class RedstonecgModCommads {
         //add(event, RedCuTransitionModel.command());
         //add(event, RedCuWireAutoConnectCommand.command());
         add(event, RepairCommand.command());
+        add(event, RedstoneCGGameplayCommand.command());
     }
 }

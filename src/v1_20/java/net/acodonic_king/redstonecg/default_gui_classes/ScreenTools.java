@@ -66,6 +66,15 @@ public class ScreenTools {
         bufferbuilder.vertex(matrix4f.matrix, (float) OnScreenLeft,  (float) OnScreenTop,    (float) ScreenLayer).uv(OnImageLeft,  OnImageTop   ).endVertex();
         BufferUploader.drawWithShader(bufferbuilder.end());
     }
+    public static void blitSetTextureRectaroid(AbstractContainerScreenRide.ScreenStack ms, float[][] rectaroid_pos_uv, int ScreenLayer){
+        RCGMatrix.M4F matrix4f = new RCGMatrix.M4F(ms.stack.pose().last().pose());
+        RenderSystem.setShader(GameRenderer::getPositionTexShader);
+        BufferBuilder bufferbuilder = Tesselator.getInstance().getBuilder();
+        bufferbuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
+        for(float[] pos_uv : rectaroid_pos_uv)
+            bufferbuilder.vertex(matrix4f.matrix, pos_uv[0],  pos_uv[1], (float) ScreenLayer).uv(pos_uv[2],  pos_uv[3]).endVertex();
+        BufferUploader.drawWithShader(bufferbuilder.end());
+    }
     public static void playClickSound() {
         SoundManager soundManager = Minecraft.getInstance().getSoundManager();
         soundManager.play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));

@@ -243,12 +243,12 @@ public class DelayerBlockBase extends SuperBlock implements SimpleWaterloggedBlo
                 return InteractionResult.SUCCESS;
             }
         }
-        if(entity.isCrouching()){
+        /*if(entity.isCrouching()){
             if(AdventureProcedure.pinConfig(world, entity)){
                 OnBlockRightClickedProcedure.execute(world, pos, blockstate);
                 return InteractionResult.SUCCESS;
             }
-        }
+        }*/
         if(AdventureProcedure.gateGUI(world, entity)){
             if (entity instanceof ServerPlayer player) {
                 ModLoaderRider.openMenu(player, new MenuProvider() {

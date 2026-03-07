@@ -2,6 +2,7 @@ package net.acodonic_king.redstonecg.init;
 
 import net.acodonic_king.redstonecg.RedstonecgMod;
 import net.acodonic_king.redstonecg.block.entity.*;
+import net.acodonic_king.redstonecg.block.normal.indicator.ArrowIndicatorBlock;
 import net.minecraftforge.registries.RegistryObject;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.DeferredRegister;
@@ -87,12 +88,32 @@ public class RedstonecgModBlockEntities {
 			RedstonecgModBlocks.UNIVERSAL_INDICATOR.get(),
 			RedstonecgModBlocks.CLOCK_FILLING_INDICATOR.get(),
 			RedstonecgModBlocks.ORB_INDICATOR.get(),
-			RedstonecgModBlocks.SEVEN_SEGMENT_INDICATOR.get()
+			RedstonecgModBlocks.SEVEN_SEGMENT_INDICATOR.get(),
+			RedstonecgModBlocks.BAR_INDICATOR.get(),
+			RedstonecgModBlocks.FLAT_LAMP_INDICATOR.get()
+	).build(null));
+	public static final RegistryObject<BlockEntityType<DefaultColoredLampBlockEntity>> DEFAULT_COLORED_LAMP = REGISTRY.register("default_colored_lamp", () -> BlockEntityType.Builder.of(
+			DefaultColoredLampBlockEntity::new,
+			RedstonecgModBlocks.COLORED_LAMP_BLOCK.get(),
+			RedstonecgModBlocks.COLORFUL_LAMP_BLOCK.get()
+	).build(null));
+	public static final RegistryObject<BlockEntityType<ArrowIndicatorBlockEntity>> ARROW_INDICATOR = REGISTRY.register("arrow_indicator", () -> BlockEntityType.Builder.of(
+			ArrowIndicatorBlockEntity::new,
+			RedstonecgModBlocks.ARROW_INDICATOR.get()
+	).build(null));
+	public static final RegistryObject<BlockEntityType<DefaultColoredFlatLampBlockEntity>> DEFAULT_COLORED_FLAT_LAMP = REGISTRY.register("default_colored_flat_lamp", () -> BlockEntityType.Builder.of(
+			DefaultColoredFlatLampBlockEntity::new,
+			RedstonecgModBlocks.COLORED_FLAT_LAMP_INDICATOR.get(),
+			RedstonecgModBlocks.COLORFUL_FLAT_LAMP_INDICATOR.get()
 	).build(null));
 	public static final RegistryObject<BlockEntityType<RedCuWireBlockEntity>> RED_CU_WIRE = REGISTRY.register("red_cu_wire", () -> BlockEntityType.Builder.of(
 			RedCuWireBlockEntity::new,
 			RedstonecgModBlocks.REDCU_WIRE.get(),
 			RedstonecgModBlocks.REDSTONE_TO_REDCU_CONVERTER.get()
+	).build(null));
+	public static final RegistryObject<BlockEntityType<HangingRedCuWireConnectorBlockEntity>> HANGING_REDCU_WIRE_CONNECTOR = REGISTRY.register("hanging_redcu_wire_connector", () -> BlockEntityType.Builder.of(
+			HangingRedCuWireConnectorBlockEntity::new,
+			RedstonecgModBlocks.HANGING_REDCU_WIRE_CONNECTOR.get()
 	).build(null));
 	public static final RegistryObject<BlockEntityType<DelayerBlockEntity>> DELAYER = REGISTRY.register("delayer", () -> BlockEntityType.Builder.of(
 			DelayerBlockEntity::new,

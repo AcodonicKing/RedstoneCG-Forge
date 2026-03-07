@@ -15,7 +15,7 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.phys.BlockHitResult;
 
-public class DefaultParallelDigitalInteractableABGate extends DefaultParallelDigitalAGate {
+public class DefaultParallelDigitalInteractableABGate extends DefaultParallelDigitalAGate implements PinMarkConnectionInterface {
     public static final IntegerProperty CONNECTION = IntegerProperty.create("connection",0,1);
     public DefaultParallelDigitalInteractableABGate(){
         super();
@@ -56,5 +56,15 @@ public class DefaultParallelDigitalInteractableABGate extends DefaultParallelDig
             return InteractionResult.SUCCESS;
         }
         return InteractionResult.FAIL;
+    }
+
+    @Override
+    public int getConnection(BlockState bs) {
+        return bs.getValue(CONNECTION);
+    }
+
+    @Override
+    public int connectionFilter(int connection) {
+        return 0b1111;
     }
 }

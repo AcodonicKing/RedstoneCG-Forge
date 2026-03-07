@@ -11,7 +11,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 
-public class DefaultAnalogInteractible2ABGate extends DefaultAnalogInteractibleGate {
+public class DefaultAnalogInteractible2ABGate extends DefaultAnalogInteractibleGate implements PinMarkConnectionInterface {
     public static final IntegerProperty CONNECTION = IntegerProperty.create("connection",0,5);
     public DefaultAnalogInteractible2ABGate(){super();}
 
@@ -42,6 +42,16 @@ public class DefaultAnalogInteractible2ABGate extends DefaultAnalogInteractibleG
 
         setPower(world, blockState, pos, output);
         return output;
+    }
+
+    @Override
+    public int getConnection(BlockState bs) {
+        return bs.getValue(CONNECTION);
+    }
+
+    @Override
+    public int connectionFilter(int connection) {
+        return CanConnectWallGateProcedure.To2ABGateConnectionFilter(connection);
     }
 
     /*@Override

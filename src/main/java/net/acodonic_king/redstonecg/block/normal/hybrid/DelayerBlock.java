@@ -1,6 +1,7 @@
 package net.acodonic_king.redstonecg.block.normal.hybrid;
 
 import net.acodonic_king.redstonecg.block.defaults.DelayerBlockBase;
+import net.acodonic_king.redstonecg.block.defaults.PinMarkConnectionInterface;
 import net.acodonic_king.redstonecg.block.entity.DefaultAnalogGateBlockEntity;
 import net.acodonic_king.redstonecg.procedures.*;
 import net.minecraft.core.BlockPos;
@@ -14,7 +15,7 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import org.apache.commons.lang3.tuple.Pair;
 
-public class DelayerBlock extends DelayerBlockBase {
+public class DelayerBlock extends DelayerBlockBase implements PinMarkConnectionInterface {
     public static final IntegerProperty CONNECTION = IntegerProperty.create("connection",0,5);
     public DelayerBlock(){
         super();
@@ -44,5 +45,15 @@ public class DelayerBlock extends DelayerBlockBase {
             i++;
         }
         return power;
+    }
+
+    @Override
+    public int getConnection(BlockState bs) {
+        return bs.getValue(CONNECTION);
+    }
+
+    @Override
+    public int connectionFilter(int connection) {
+        return CanConnectWallGateProcedure.To2ABGateConnectionFilter(connection);
     }
 }

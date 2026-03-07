@@ -36,6 +36,13 @@
   "block.redstonecg.orb_indicator": "Orb Indicator",
   "block.redstonecg.clock_filling_indicator": "Clock Filling Indicator",
   "block.redstonecg.seven_segment_indicator": "Seven Segment Indicator",
+  "block.redstonecg.flat_lamp_indicator": "Flat Lamp Indicator",
+  "block.redstonecg.colored_flat_lamp_indicator": "Colored Flat Lamp",
+  "block.redstonecg.colorful_flat_lamp_indicator": "Colorful Flat Lamp",
+  "block.redstonecg.bar_indicator": "Bar Indicator",
+  "block.redstonecg.arrow_indicator": "Arrow Indicator",
+  "block.redstonecg.colored_lamp_indicator": "Colored Lamp",
+  "block.redstonecg.colorful_lamp_indicator": "Colorful Lamp",
 
   "block.redstonecg.parallel_and": "Parallel AND Gate",
   "block.redstonecg.parallel_or": "Parallel OR Gate",
@@ -68,6 +75,7 @@
   "block.redstonecg.redstone_to_redcu_converter": "Redstone To RedCu Converter",
   "block.redstonecg.parallel_line_output": "Parallel Line Output",
   "block.redstonecg.redcu_wire_transition": "RedCu Wire Transition",
+  "block.redstonecg.hanging_redcu_wire_connector": "Hanging RedCu Wire Connector",
 
   "block.redstonecg.smooth_stone_plate": "Smooth Stone Plate",
   "block.redstonecg.redcu_crafter": "RedCu Crafter",
@@ -86,6 +94,22 @@
   "gui.redstonecg.delayer_gui.button_add": "+",
   "gui.redstonecg.delayer_gui.button_sub": "-",
   "gui.redstonecg.delayer_gui.button_change": "Change",
+
+  "gui.redstonecg.arrow_indicator_gui.button_change": "Change",
+
+  "tooltip.redstonecg.arrow_indicator.placing": "Upon placing, the block will:",
+  "tooltip.redstonecg.arrow_indicator.glass_cover": "- be covered with glass;",
+  "tooltip.redstonecg.arrow_indicator.tq_base": "- 3/4 of a circle;",
+  "tooltip.redstonecg.arrow_indicator.qq_base": "- full circle;",
+  "tooltip.redstonecg.arrow_indicator.oq_base": "- 1/4 of a circle;",
+  "tooltip.redstonecg.arrow_indicator.range": "- range from %.4f to %.4f;",
+  "tooltip.redstonecg.arrow_indicator.reset": "Right-click on air to reset.",
+  "tooltip.redstonecg.arrow_indicator.set": "Place Arrow Indicator or\nright-click on Arrow Indicator to copy parameters.",
+
+  "tooltip.redstonecg.hanging_redcu_wire_connector.placing": "Upon placing, the block will",
+  "tooltip.redstonecg.hanging_redcu_wire_connector.connect": "connect to Hanging RedCu Wire Connector at %d %d %d",
+  "tooltip.redstonecg.hanging_redcu_wire_connector.distance": "if the distance is not more than %d.",
+  "tooltip.redstonecg.hanging_redcu_wire_connector.set": "Place Hanging RedCu Wire Connector or\nright-click on Hanging RedCu Wire Connector to copy it's position.",
 
   "tooltip.redstonecg.rotation_bracket": "Right click to rotate a block clockwise.\nShift + right click to rotate counterclockwise."
 

@@ -1,0 +1,42 @@
+{
+    "variants": {
+        "waterlogged=false,connection=0": { "model": "redstonecg:custom/hanging_redcu_wire/connector" },
+        "waterlogged=false,connection=1": { "model": "redstonecg:custom/hanging_redcu_wire/wire" },
+        "waterlogged=false,connection=2": { "model": "redstonecg:custom/hanging_redcu_wire/wire" },
+        "waterlogged=false,connection=3": { "model": "redstonecg:custom/hanging_redcu_wire/wire" },
+        "waterlogged=false,connection=4": { "model": "redstonecg:custom/hanging_redcu_wire/wire" },
+        "waterlogged=false,connection=5": { "model": "redstonecg:custom/hanging_redcu_wire/wire" },
+        "waterlogged=false,connection=6": { "model": "redstonecg:custom/hanging_redcu_wire/wire" },
+        "waterlogged=false,connection=7": { "model": "redstonecg:custom/hanging_redcu_wire/wire" },
+
+        "waterlogged=false,connection=8": { "model": "redstonecg:custom/redcu_sides/f" },
+        "waterlogged=false,connection=9": { "model": "redstonecg:custom/redcu_sides/r" },
+        "waterlogged=false,connection=10": { "model": "redstonecg:custom/redcu_sides/b" },
+        "waterlogged=false,connection=11": { "model": "redstonecg:custom/redcu_sides/l" },
+        "waterlogged=false,connection=12": { "model": "redstonecg:custom/redcu_sides/base" },
+
+        "waterlogged=false,connection=13": { "model": "redstonecg:custom/hanging_redcu_wire/wire" },
+        "waterlogged=false,connection=14": { "model": "redstonecg:custom/hanging_redcu_wire/wire" },
+        "waterlogged=false,connection=15": { "model": "redstonecg:custom/hanging_redcu_wire/wire" },
+
+
+        "waterlogged=true,connection=0": { "model": "redstonecg:custom/hanging_redcu_wire/connector" },
+        "waterlogged=true,connection=1": { "model": "redstonecg:custom/hanging_redcu_wire/wire" },
+        "waterlogged=true,connection=2": { "model": "redstonecg:custom/hanging_redcu_wire/wire" },
+        "waterlogged=true,connection=3": { "model": "redstonecg:custom/hanging_redcu_wire/wire" },
+        "waterlogged=true,connection=4": { "model": "redstonecg:custom/hanging_redcu_wire/wire" },
+        "waterlogged=true,connection=5": { "model": "redstonecg:custom/hanging_redcu_wire/wire" },
+        "waterlogged=true,connection=6": { "model": "redstonecg:custom/hanging_redcu_wire/wire" },
+        "waterlogged=true,connection=7": { "model": "redstonecg:custom/hanging_redcu_wire/wire" },
+
+        "waterlogged=true,connection=8": { "model": "redstonecg:custom/redcu_sides/f" },
+        "waterlogged=true,connection=9": { "model": "redstonecg:custom/redcu_sides/r" },
+        "waterlogged=true,connection=10": { "model": "redstonecg:custom/redcu_sides/b" },
+        "waterlogged=true,connection=11": { "model": "redstonecg:custom/redcu_sides/l" },
+        "waterlogged=true,connection=12": { "model": "redstonecg:custom/redcu_sides/base" },
+
+        "waterlogged=true,connection=13": { "model": "redstonecg:custom/hanging_redcu_wire/wire" },
+        "waterlogged=true,connection=14": { "model": "redstonecg:custom/hanging_redcu_wire/wire" },
+        "waterlogged=true,connection=15": { "model": "redstonecg:custom/hanging_redcu_wire/wire" }
+    }
+}

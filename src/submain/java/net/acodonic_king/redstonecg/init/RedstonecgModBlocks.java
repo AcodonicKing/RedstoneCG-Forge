@@ -5,14 +5,8 @@ import net.acodonic_king.redstonecg.block.*;
 import net.acodonic_king.redstonecg.block.normal.hybrid.*;
 import net.acodonic_king.redstonecg.block.normal.analog.*;
 import net.acodonic_king.redstonecg.block.normal.digital.*;
-import net.acodonic_king.redstonecg.block.normal.indicator.ClockFillingIndicatorBlock;
-import net.acodonic_king.redstonecg.block.normal.indicator.OrbIndicatorBlock;
-import net.acodonic_king.redstonecg.block.normal.indicator.SevenSegmentIndicatorBlock;
-import net.acodonic_king.redstonecg.block.normal.indicator.UniversalIndicatorBlock;
-import net.acodonic_king.redstonecg.block.normal.wire.RedCuWireIntersectionBlock;
-import net.acodonic_king.redstonecg.block.normal.wire.RedCuWireBlock;
-import net.acodonic_king.redstonecg.block.normal.wire.RedCuWireTransitionBlock;
-import net.acodonic_king.redstonecg.block.normal.wire.RedstoneToRedCuConverterBlock;
+import net.acodonic_king.redstonecg.block.normal.indicator.*;
+import net.acodonic_king.redstonecg.block.normal.wire.*;
 import net.acodonic_king.redstonecg.block.parallel.analog.*;
 import net.acodonic_king.redstonecg.block.parallel.digital.*;
 import net.acodonic_king.redstonecg.block.parallel.hybrid.*;
@@ -67,6 +61,13 @@ public class RedstonecgModBlocks {
 	public static final RegistryObject<Block> SEVEN_SEGMENT_INDICATOR = REGISTRY.register("seven_segment_indicator", SevenSegmentIndicatorBlock::new);
 	public static final RegistryObject<Block> CLOCK_FILLING_INDICATOR = REGISTRY.register("clock_filling_indicator", ClockFillingIndicatorBlock::new);
 	public static final RegistryObject<Block> ORB_INDICATOR = REGISTRY.register("orb_indicator", OrbIndicatorBlock::new);
+	public static final RegistryObject<Block> FLAT_LAMP_INDICATOR = REGISTRY.register("flat_lamp_indicator", FlatLampIndicatorBlock::new);
+	public static final RegistryObject<Block> COLORED_FLAT_LAMP_INDICATOR = REGISTRY.register("colored_flat_lamp_indicator", ColoredFlatLampIndicatorBlock::new);
+	public static final RegistryObject<Block> COLORFUL_FLAT_LAMP_INDICATOR = REGISTRY.register("colorful_flat_lamp_indicator", ColorfulFlatLampIndicatorBlock::new);
+	public static final RegistryObject<Block> ARROW_INDICATOR = REGISTRY.register("arrow_indicator", ArrowIndicatorBlock::new);
+	public static final RegistryObject<Block> BAR_INDICATOR = REGISTRY.register("bar_indicator", BarIndicatorBlock::new);
+	public static final RegistryObject<Block> COLORED_LAMP_BLOCK = REGISTRY.register("colored_lamp_indicator", ColoredLampBlock::new);
+	public static final RegistryObject<Block> COLORFUL_LAMP_BLOCK = REGISTRY.register("colorful_lamp_indicator", ColorfulLampBlock::new);
 	//Parallel Digital
 	public static final RegistryObject<Block> PARALLEL_AND = REGISTRY.register("parallel_and", ParallelAndBlock::new);
 	public static final RegistryObject<Block> PARALLEL_OR = REGISTRY.register("parallel_or", ParallelOrBlock::new);
@@ -98,4 +99,5 @@ public class RedstonecgModBlocks {
 	public static final RegistryObject<Block> REDCU_WIRE_INTERSECTION = REGISTRY.register("redcu_wire_intersection", RedCuWireIntersectionBlock::new);
 	public static final RegistryObject<Block> PARALLEL_LINE_OUTPUT = REGISTRY.register("parallel_line_output", ParallelLineOutputBlock::new);
 	public static final RegistryObject<Block> REDCU_WIRE_TRANSITION = REGISTRY.register("redcu_wire_transition", RedCuWireTransitionBlock::new);
+	public static final RegistryObject<Block> HANGING_REDCU_WIRE_CONNECTOR = REGISTRY.register("hanging_redcu_wire_connector", HangingRedCuWireConnectorBlock::new);
 }

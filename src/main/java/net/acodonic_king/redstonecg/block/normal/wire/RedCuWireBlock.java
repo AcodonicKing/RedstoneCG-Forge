@@ -20,7 +20,7 @@ import net.minecraft.core.BlockPos;
 
 import java.util.List;
 
-public class RedCuWireBlock extends DefaultWire implements OldInterface {
+public class RedCuWireBlock extends DefaultWire implements OldInterface, PinMarkConnectionInterface {
 	public static final IntegerProperty CONNECTION = IntegerProperty.create("connection",0,10);
 
 	public RedCuWireBlock() {
@@ -269,5 +269,15 @@ public class RedCuWireBlock extends DefaultWire implements OldInterface {
 			};
 		}
 		return state.setValue(FACING, facing).setValue(CONNECTION, connection);
+	}
+
+	@Override
+	public int getConnection(BlockState bs) {
+		return bs.getValue(CONNECTION);
+	}
+
+	@Override
+	public int connectionFilter(int connection) {
+		return RedCuWireCanConnectRedstoneProcedure.wireConnectionFilter(connection);
 	}
 }

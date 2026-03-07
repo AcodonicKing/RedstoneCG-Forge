@@ -12,7 +12,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 
-public class DefaultAnalogInteractible2Gate extends DefaultAnalogInteractibleGate {
+public class DefaultAnalogInteractible2Gate extends DefaultAnalogInteractibleGate implements PinMarkConnectionInterface {
     public static final IntegerProperty CONNECTION = IntegerProperty.create("connection",0,2);
     public DefaultAnalogInteractible2Gate(){super();}
 
@@ -42,6 +42,16 @@ public class DefaultAnalogInteractible2Gate extends DefaultAnalogInteractibleGat
         int output = this.redstonePowerOperation(power[0], power[1]);
         setPower(world, blockState, pos, output);
         return output;
+    }
+
+    @Override
+    public int getConnection(BlockState bs) {
+        return bs.getValue(CONNECTION);
+    }
+
+    @Override
+    public int connectionFilter(int connection) {
+        return CanConnectWallGateProcedure.To2GateConnectionFilter(connection);
     }
 
     /*@Override

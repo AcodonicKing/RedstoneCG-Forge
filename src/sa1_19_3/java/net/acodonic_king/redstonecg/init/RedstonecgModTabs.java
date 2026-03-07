@@ -53,11 +53,20 @@ public class RedstonecgModTabs {
             event.accept(RedstonecgModItems.NORMAL_REVERSED_PATH_SELECTOR);
             event.accept(RedstonecgModItems.NORMAL_ONE_WAY_THROUGH_GATE);
             event.accept(RedstonecgModItems.NORMAL_ONE_WAY_THROUGH_NOT_GATE);
+            event.accept(RedstonecgModItems.NORMAL_DELAYER);
+            event.accept(RedstonecgModItems.NORMAL_BLOCK_READER);
             //Indicator
             event.accept(RedstonecgModItems.UNIVERSAL_INDICATOR);
             event.accept(RedstonecgModItems.SEVEN_SEGMENT_INDICATOR);
             event.accept(RedstonecgModItems.CLOCK_FILLING_INDICATOR);
             event.accept(RedstonecgModItems.ORB_INDICATOR);
+            event.accept(RedstonecgModItems.FLAT_LAMP_INDICATOR);
+            event.accept(RedstonecgModItems.COLORED_FLAT_LAMP_INDICATOR);
+            event.accept(RedstonecgModItems.COLORFUL_FLAT_LAMP_INDICATOR);
+            event.accept(RedstonecgModItems.ARROW_INDICATOR);
+            event.accept(RedstonecgModItems.BAR_INDICATOR);
+            event.accept(RedstonecgModItems.COLORED_LAMP_BLOCK);
+            event.accept(RedstonecgModItems.COLORFUL_LAMP_BLOCK);
             //Parallel Digital
             event.accept(RedstonecgModItems.PARALLEL_AND);
             event.accept(RedstonecgModItems.PARALLEL_OR);
@@ -82,11 +91,13 @@ public class RedstonecgModTabs {
             event.accept(RedstonecgModItems.PARALLEL_ONE_WAY_PATH_SELECTOR);
             event.accept(RedstonecgModItems.PARALLEL_ONE_WAY_THROUGH_GATE);
             event.accept(RedstonecgModItems.PARALLEL_ONE_WAY_THROUGH_NOT_GATE);
+            event.accept(RedstonecgModItems.PARALLEL_DELAYER);
             //Wire
             event.accept(RedstonecgModItems.REDCU_WIRE);
             event.accept(RedstonecgModItems.REDSTONE_TO_REDCU_CONVERTER);
             event.accept(RedstonecgModItems.REDCU_WIRE_INTERSECTION);
             event.accept(RedstonecgModItems.REDCU_WIRE_TRANSITION);
+            event.accept(RedstonecgModItems.HANGING_REDCU_WIRE_CONNECTOR);
             event.accept(RedstonecgModItems.PARALLEL_LINE_OUTPUT);
         }
     }

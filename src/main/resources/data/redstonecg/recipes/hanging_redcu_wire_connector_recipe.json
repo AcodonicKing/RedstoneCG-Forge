@@ -1,0 +1,12 @@
+{
+    "type": "redstonecg:redcu_crafting",
+    "designation": "wires/normal",
+    "ingredients": [
+        { "item": "redstonecg:smooth_stone_plate"},
+        { "item": "redstonecg:redcu_wire"},
+        { "item": "redstonecg:redcu_wire"}
+    ],
+    "outputs": [
+        { "id": "redstonecg:hanging_redcu_wire_connector", "Count": 1, "count": 1 }
+    ]
+}

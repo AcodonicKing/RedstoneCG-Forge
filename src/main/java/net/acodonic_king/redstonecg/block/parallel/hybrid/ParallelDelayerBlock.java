@@ -2,6 +2,7 @@ package net.acodonic_king.redstonecg.block.parallel.hybrid;
 
 import net.acodonic_king.redstonecg.block.defaults.DelayerBlockBase;
 import net.acodonic_king.redstonecg.block.defaults.ParallelGateInterface;
+import net.acodonic_king.redstonecg.block.defaults.PinMarkConnectionInterface;
 import net.acodonic_king.redstonecg.procedures.*;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -14,7 +15,7 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import org.apache.commons.lang3.tuple.Pair;
 
-public class ParallelDelayerBlock extends DelayerBlockBase implements ParallelGateInterface {
+public class ParallelDelayerBlock extends DelayerBlockBase implements ParallelGateInterface, PinMarkConnectionInterface {
     public static final IntegerProperty CONNECTION = IntegerProperty.create("connection",0,1);
     public ParallelDelayerBlock(){
         super();
@@ -63,5 +64,15 @@ public class ParallelDelayerBlock extends DelayerBlockBase implements ParallelGa
     @Override
     public int breakParallelLineSignal(LevelAccessor world, BlockState thisState, BlockPos thisPos, Direction directedTo) {
         return 0;
+    }
+
+    @Override
+    public int getConnection(BlockState bs) {
+        return bs.getValue(CONNECTION);
+    }
+
+    @Override
+    public int connectionFilter(int connection) {
+        return 0b1111;
     }
 }

@@ -1,13 +1,15 @@
 package net.acodonic_king.redstonecg.init;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.acodonic_king.redstonecg.block.defaults.DefaultIndicatorInteractableGate;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Registry;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
@@ -30,24 +32,34 @@ import net.minecraft.network.chat.ChatType;
 import net.minecraft.resources.ResourceKey;
 import net.minecraftforge.items.CapabilityItemHandler;
 
+import java.util.function.ToIntFunction;
+
 public class RedstonecgModVersionRides {
     public static Capability<IItemHandler> item_handler = CapabilityItemHandler.ITEM_HANDLER_CAPABILITY;
     public static ResourceKey<ChatType> chat_type = ChatType.CHAT;
+    public static BlockBehaviour.Properties defaultLampProperties = BlockBehaviour.Properties
+            .of(Material.STONE)
+            .sound(SoundType.GLASS)
+            .strength(1f, 10f)
+            .noOcclusion()
+            .isRedstoneConductor((bs, br, bp) -> false);
     public static BlockBehaviour.Properties defaultGateProperties = BlockBehaviour.Properties
             .of(Material.CLOTH_DECORATION)
             .sound(SoundType.STONE)
             .strength(1f, 10f)
             .noOcclusion()
             .isRedstoneConductor((bs, br, bp) -> false);
-    public static BlockBehaviour.Properties defaultIndicatorProperties = BlockBehaviour.Properties
-            .of(Material.CLOTH_DECORATION)
-            .sound(SoundType.STONE)
-            .strength(1f, 10f)
-            .noOcclusion()
-            .hasPostProcess((bs, br, bp) -> true)
-            .emissiveRendering(DefaultIndicatorInteractableGate::emissiveRendering)
-            .lightLevel(DefaultIndicatorInteractableGate::emittedLight)
-            .isRedstoneConductor((bs, br, bp) -> false);
+    public static BlockBehaviour.Properties indicatorLight(ToIntFunction<BlockState> emitter){
+        return BlockBehaviour.Properties
+                .of(Material.CLOTH_DECORATION)
+                .sound(SoundType.STONE)
+                .strength(1f, 10f)
+                .noOcclusion()
+                .hasPostProcess((bs, br, bp) -> true)
+                .emissiveRendering((bs, br, bp) -> true)
+                .lightLevel(emitter)
+                .isRedstoneConductor((bs, br, bp) -> false);
+    }
     public static boolean isBlockStateSoftSolid(BlockState bs){
         return !(bs.isAir() || bs.getMaterial().isLiquid() || bs.getMaterial().isReplaceable());
     }
@@ -68,11 +80,12 @@ public class RedstonecgModVersionRides {
     public static Button createButton(int x, int y, int w, int h, String text, Button.OnPress onPress) {
         return new Button(x, y, w, h, Component.translatable(text), onPress);
     }
+    public static Item.Properties defaultItemProperties = new Item.Properties().tab(RedstonecgModTabs.TAB_REDSTONE_CG_CREATIVE_TAB);
     public static BlockItem createBlockItem(RegistryObject<Block> block){
-        return new BlockItem(block.get(), new Item.Properties().tab(RedstonecgModTabs.TAB_REDSTONE_CG_CREATIVE_TAB));
+        return new BlockItem(block.get(), defaultItemProperties);
     }
     public static Item.Properties newItemSuper(int stacksize){
-        return new Item.Properties().tab(RedstonecgModTabs.TAB_REDSTONE_CG_CREATIVE_TAB).stacksTo(stacksize).rarity(Rarity.COMMON);
+        return defaultItemProperties.stacksTo(stacksize).rarity(Rarity.COMMON);
     }
     public static Level getPlayerLevel(Player player){
         return player.level;
@@ -88,5 +101,8 @@ public class RedstonecgModVersionRides {
     }
     public static Direction directionFromDelta(int dx, int dy, int dz){
         return Direction.fromNormal(dx, dy, dz);
+    }
+    public static TagKey<Item> getItemTag(String master, String name){
+        return TagKey.create(Registry.ITEM_REGISTRY, new ResourceLocation(master, name));
     }
 }

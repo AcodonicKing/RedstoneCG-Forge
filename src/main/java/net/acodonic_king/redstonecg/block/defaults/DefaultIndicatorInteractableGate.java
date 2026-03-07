@@ -34,22 +34,33 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 import javax.annotation.Nullable;
+import java.util.function.ToIntFunction;
 
-public class DefaultIndicatorInteractableGate extends SuperBlock implements SimpleWaterloggedBlock, EntityBlock, FlooringInterface, RedstoneSignalInterface {
+public class DefaultIndicatorInteractableGate extends SuperBlock implements SimpleWaterloggedBlock, EntityBlock, FlooringInterface, RedstoneSignalInterface, PinMarkConnectionInterface {
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
-    public static final IntegerProperty CONNECTION = IntegerProperty.create("connection",0,14);
-    public static final IntegerProperty POWER = IntegerProperty.create("power",0,15);
+    public static final IntegerProperty CONNECTION = IntegerProperty.create("connection",0,15);
+    //public static final IntegerProperty POWER = IntegerProperty.create("power",0,15);
     public DefaultIndicatorInteractableGate() {
-        super(RedstonecgModVersionRides.defaultIndicatorProperties);
+        super(RedstonecgModVersionRides.indicatorLight(DefaultIndicatorInteractableGate::emittedLight));
         this.registerDefaultState(this.stateDefinition.any().setValue(WATERLOGGED, false));
     }
-
+    public DefaultIndicatorInteractableGate(ToIntFunction<BlockState> emitter) {
+        super(RedstonecgModVersionRides.indicatorLight(emitter));
+        this.registerDefaultState(this.stateDefinition.any().setValue(WATERLOGGED, false));
+    }
     public static int emittedLight(BlockState state){
-        if (state.getValue(DefaultIndicatorInteractableGate.POWER) > 0){return 5;}
+        if(state.getBlock() instanceof DefaultIndicatorInteractableGate block)
+            if (block.powerIsTrue(state)){return 5;}
         return 0;
     }
     public static boolean emissiveRendering(BlockState state, BlockGetter bg, BlockPos bp){
-        return (state.getValue(DefaultIndicatorInteractableGate.POWER) > 0);
+        if(state.getBlock() instanceof DefaultIndicatorInteractableGate block)
+            return block.powerIsTrue(state);
+        return false;
+    }
+    public boolean powerIsTrue(BlockState blockState){
+        return false;
+        //return (blockState.getValue(DefaultIndicatorInteractableGate.POWER) > 0);
     }
 
     @Override
@@ -90,7 +101,7 @@ public class DefaultIndicatorInteractableGate extends SuperBlock implements Simp
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(WATERLOGGED, POWER, CONNECTION);
+        builder.add(WATERLOGGED, CONNECTION);
     }
 
     @Override
@@ -167,6 +178,8 @@ public class DefaultIndicatorInteractableGate extends SuperBlock implements Simp
         return false;
     }
 
+    public void setPower(LevelAccessor world, BlockState state, BlockPos pos, int power){}
+
     public void redstoneUpdate(LevelAccessor world, BlockPos pos){
         if (world.getBlockEntity(pos) instanceof DefaultAnalogIndicatorBlockEntity be) {
             //RedstonecgMod.LOGGER.debug("{} {} {} {} {}",be.FACING,be.ROTATION,be.facing,be.rotation,be.facingMode);
@@ -176,7 +189,13 @@ public class DefaultIndicatorInteractableGate extends SuperBlock implements Simp
                 ConnectionFace connectionFaceA = BlockFrameTransformUtils.getConnectionFace(be.ROTATION,be.FACING,side);
                 power = Math.max(power, GetRedstoneSignalProcedure.execute(world, pos, connectionFaceA));
             }
-            LittleTools.setIntegerProperty(world, pos, power, "power", 2);
+            if(be.BASE_READ){
+                ConnectionFace connectionFaceA = BlockFrameTransformUtils.getConnectionFace(be.ROTATION,be.FACING,Direction.DOWN);
+                connectionFaceA.CHANNEL = 4;
+                power = Math.max(power, GetRedstoneSignalProcedure.execute(world, pos, connectionFaceA));
+            }
+            setPower(world, ThisBlock, pos, power);
+            //LittleTools.setIntegerProperty(world, pos, power, "power", 2);
         }
     }
 
@@ -197,13 +216,26 @@ public class DefaultIndicatorInteractableGate extends SuperBlock implements Simp
         super.use(blockstate, world, pos, entity, hand, hit);
         ItemStack itemStack = entity.getItemInHand(hand);
         if(!itemStack.isEmpty()){
-            if(itemStack.is(RedstonecgModItems.ROTATION_BRACKET.get())){return InteractionResult.FAIL;}
+            if(itemStack.is(RedstonecgModItems.ROTATION_BRACKET.get())){return InteractionResult.PASS;}
+            if(itemStack.is(blockstate.getBlock().asItem()) && AdventureProcedure.pinConfig(world, entity)){
+                if(world.getBlockEntity(pos) instanceof DefaultAnalogIndicatorBlockEntity be){
+                    be.BASE_READ = !be.BASE_READ;
+                    be.setChanged();
+                    world.sendBlockUpdated(pos, blockstate, blockstate, 3);
+                    return InteractionResult.SUCCESS;
+                }
+            }
         }
         if(AdventureProcedure.pinConfig(world, entity)){
+            if(world.getBlockEntity(pos) instanceof DefaultAnalogIndicatorBlockEntity be)
+                if (blockstate.getValue(CONNECTION) == 14) {
+                    be.BASE_READ = !be.BASE_READ;
+                    be.setChanged();
+                }
             OnBlockRightClickedProcedure.execute(world, pos, blockstate);
             return InteractionResult.SUCCESS;
         }
-        return InteractionResult.FAIL;
+        return InteractionResult.PASS;
     }
 
     @Nullable
@@ -266,18 +298,28 @@ public class DefaultIndicatorInteractableGate extends SuperBlock implements Simp
         connection++;
         int c2 = (connection & 2) << 2;
         int c8 = (connection & 8) >> 2;
-        connection &= 0b0101;
+        connection &= 0b10101;
         connection |= c2 | c8;
         return state.setValue(CONNECTION, connection);
     }
 
     @Override
     public int getAnalogOutputSignal(BlockState state, Level world, BlockPos pos){
-        return state.getValue(POWER);
+        return 0;
     } // Doesn't update Comparator
 
     @Override
     public boolean hasAnalogOutputSignal(BlockState state) {
         return true;
+    }
+
+    @Override
+    public int getConnection(BlockState bs) {
+        return bs.getValue(CONNECTION);
+    }
+
+    @Override
+    public int connectionFilter(int connection) {
+        return CanConnectWallGateProcedure.To1_4GateConnectionFilter(connection);
     }
 }

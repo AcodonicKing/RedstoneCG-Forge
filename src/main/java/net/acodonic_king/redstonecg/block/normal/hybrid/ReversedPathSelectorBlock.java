@@ -2,6 +2,7 @@
 package net.acodonic_king.redstonecg.block.normal.hybrid;
 
 import net.acodonic_king.redstonecg.block.defaults.DefaultRedstoneActionGate;
+import net.acodonic_king.redstonecg.block.defaults.PinMarkConnectionInterface;
 import net.acodonic_king.redstonecg.block.entity.DefaultAnalogGateBlockEntity;
 import net.acodonic_king.redstonecg.block.entity.DefaultDigitalGateBlockEntity;
 import net.acodonic_king.redstonecg.procedures.*;
@@ -27,7 +28,7 @@ import net.minecraft.core.BlockPos;
 
 import javax.annotation.Nullable;
 
-public class ReversedPathSelectorBlock extends DefaultRedstoneActionGate implements EntityBlock {
+public class ReversedPathSelectorBlock extends DefaultRedstoneActionGate implements EntityBlock, PinMarkConnectionInterface {
 	public static final IntegerProperty CONNECTION = IntegerProperty.create("connection",0,5);
 	public static final BooleanProperty DIRECTION = BooleanProperty.create("direction");
 	public static final BooleanProperty VISIBLE_STATE = BooleanProperty.create("visible_state");
@@ -131,4 +132,13 @@ public class ReversedPathSelectorBlock extends DefaultRedstoneActionGate impleme
 		return 0;
 	}
 
+	@Override
+	public int getConnection(BlockState bs) {
+		return bs.getValue(CONNECTION);
+	}
+
+	@Override
+	public int connectionFilter(int connection) {
+		return 0b1111;
+	}
 }

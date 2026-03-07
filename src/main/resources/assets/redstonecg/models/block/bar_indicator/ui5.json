@@ -1,0 +1,9 @@
+{
+  "parent": "redstonecg:custom/bar_indicator",
+  "textures": {
+    "all": "redstonecg:block/bar_indicator/ui5",
+    "particle": "redstonecg:block/bar_indicator/ui5",
+    "0": "redstonecg:block/bar_indicator/ui5"
+  },
+  "render_type": "solid"
+}

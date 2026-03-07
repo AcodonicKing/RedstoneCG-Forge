@@ -1,0 +1,20 @@
+{
+    "variants":{
+        "power=0": {"model": "redstonecg:block/colored_lamp/15"},
+        "power=1": {"model": "redstonecg:block/colored_lamp/15"},
+        "power=2": {"model": "redstonecg:block/colored_lamp/15"},
+        "power=3": {"model": "redstonecg:block/colored_lamp/15"},
+        "power=4": {"model": "redstonecg:block/colored_lamp/15"},
+        "power=5": {"model": "redstonecg:block/colored_lamp/15"},
+        "power=6": {"model": "redstonecg:block/colored_lamp/15"},
+        "power=7": {"model": "redstonecg:block/colored_lamp/15"},
+        "power=8": {"model": "redstonecg:block/colored_lamp/15"},
+        "power=9": {"model": "redstonecg:block/colored_lamp/15"},
+        "power=10": {"model": "redstonecg:block/colored_lamp/15"},
+        "power=11": {"model": "redstonecg:block/colored_lamp/15"},
+        "power=12": {"model": "redstonecg:block/colored_lamp/15"},
+        "power=13": {"model": "redstonecg:block/colored_lamp/15"},
+        "power=14": {"model": "redstonecg:block/colored_lamp/15"},
+        "power=15": {"model": "redstonecg:block/colored_lamp/0"}
+    }
+}
