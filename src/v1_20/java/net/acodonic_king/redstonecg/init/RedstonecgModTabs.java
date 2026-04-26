@@ -55,11 +55,14 @@ public class RedstonecgModTabs {
                 accept(tabData, RedstonecgModItems.NORMAL_ONE_WAY_THROUGH_NOT_GATE);
                 accept(tabData, RedstonecgModItems.NORMAL_DELAYER);
                 accept(tabData, RedstonecgModItems.NORMAL_BLOCK_READER);
+                accept(tabData, RedstonecgModItems.NORMAL_BINARY_ENCODER);
+                accept(tabData, RedstonecgModItems.NORMAL_BINARY_DECODER);
                 //Indicator
                 accept(tabData, RedstonecgModItems.UNIVERSAL_INDICATOR);
                 accept(tabData, RedstonecgModItems.SEVEN_SEGMENT_INDICATOR);
                 accept(tabData, RedstonecgModItems.CLOCK_FILLING_INDICATOR);
                 accept(tabData, RedstonecgModItems.ORB_INDICATOR);
+                accept(tabData, RedstonecgModItems.HEXADECIMAL_INDICATOR);
                 accept(tabData, RedstonecgModItems.FLAT_LAMP_INDICATOR);
                 accept(tabData, RedstonecgModItems.COLORED_FLAT_LAMP_INDICATOR);
                 accept(tabData, RedstonecgModItems.COLORFUL_FLAT_LAMP_INDICATOR);

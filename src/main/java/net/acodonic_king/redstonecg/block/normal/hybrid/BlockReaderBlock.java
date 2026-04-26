@@ -1,6 +1,5 @@
 package net.acodonic_king.redstonecg.block.normal.hybrid;
 
-import net.acodonic_king.redstonecg.RedstonecgMod;
 import net.acodonic_king.redstonecg.block.defaults.PinMarkConnectionInterface;
 import net.acodonic_king.redstonecg.init.RedstonecgModItems;
 import net.minecraft.world.InteractionHand;
@@ -8,11 +7,9 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.decoration.ItemFrame;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.ComparatorBlock;
-import net.acodonic_king.redstonecg.block.defaults.DefaultAnalogInteractibleGate;
+import net.acodonic_king.redstonecg.block.defaults.DefaultAnalogInteractableGate;
 import net.acodonic_king.redstonecg.block.entity.DefaultAnalogGateBlockEntity;
 import net.acodonic_king.redstonecg.procedures.*;
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.BlockGetter;
@@ -28,7 +25,7 @@ import net.minecraft.world.phys.BlockHitResult;
 
 import java.util.List;
 
-public class BlockReaderBlock extends DefaultAnalogInteractibleGate implements PinMarkConnectionInterface {
+public class BlockReaderBlock extends DefaultAnalogInteractableGate implements PinMarkConnectionInterface {
     public static final IntegerProperty CONNECTION = IntegerProperty.create("connection",0,6);
     public static final BooleanProperty BASE_READ = BooleanProperty.create("base_read");
     public BlockReaderBlock(){

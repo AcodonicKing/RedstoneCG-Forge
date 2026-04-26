@@ -1,7 +1,6 @@
 package net.acodonic_king.redstonecg.block.defaults;
 
-import net.acodonic_king.redstonecg.block.entity.DefaultDigitalGateBlockEntity;
-import net.acodonic_king.redstonecg.block.entity.DefaultDigitalTriggerGateBlockEntity;
+import net.acodonic_king.redstonecg.block.entity.DefaultAnalogGateBlockEntity;
 import net.acodonic_king.redstonecg.procedures.*;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -21,11 +20,10 @@ import net.minecraft.world.phys.BlockHitResult;
 
 import javax.annotation.Nullable;
 
-public class DefaultDigitalInteractibleTriggerGate extends DefaultRedstoneActionGate implements EntityBlock {
+public class DefaultAnalogInteractableGate extends DefaultRedstoneActionGate implements EntityBlock {
+    //public static final IntegerProperty POWER = IntegerProperty.create("power",0,15);
     public static final BooleanProperty VISIBLE_STATE = BooleanProperty.create("visible_state");
-    public DefaultDigitalInteractibleTriggerGate(){
-        super();
-    }
+    public DefaultAnalogInteractableGate(){super();}
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         super.createBlockStateDefinition(builder);
@@ -56,58 +54,51 @@ public class DefaultDigitalInteractibleTriggerGate extends DefaultRedstoneAction
     @Nullable
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-        return new DefaultDigitalTriggerGateBlockEntity(pos, state);
+        return new DefaultAnalogGateBlockEntity(pos, state);
     }
-    public void setOutput(LevelAccessor level, BlockState state, BlockPos pos, boolean output){
+    public void setPower(LevelAccessor level, BlockState state, BlockPos pos, int power){
+        power = Math.max(0, Math.min(power, 15));
         Level world = (Level) level;
-        if (world.getBlockEntity(pos) instanceof DefaultDigitalTriggerGateBlockEntity be){
-            if(be.OUTPUT != output){
-                be.OUTPUT = output;
+        if (world.getBlockEntity(pos) instanceof DefaultAnalogGateBlockEntity be){
+            if(be.POWER != power){
+                be.POWER = power;
                 be.setChanged();
-                LittleTools.setBooleanProperty(world, pos, output, "visible_state",2);
+                LittleTools.setBooleanProperty(world, pos, power > 0, "visible_state", 2);
+                //if (world.isClientSide) return;
+                //RedstonecgMod.LOGGER.debug("Client? {}",world.isClientSide);
                 Direction direction = BlockFrameTransformUtils.getWorldDirectionFromLocalForward(state);
                 this.sendRedstoneUpdateInDirection(level,state.getBlock(),pos,direction);
             }
         }
     }
-    public boolean getOutput(LevelAccessor level, BlockPos pos){
+    public int getPower(LevelAccessor level, BlockPos pos){
         Level world = (Level) level;
-        if (world.getBlockEntity(pos) instanceof DefaultDigitalGateBlockEntity be){
-            return be.OUTPUT;
+        if (world.getBlockEntity(pos) instanceof DefaultAnalogGateBlockEntity be){
+            return be.POWER;
         }
-        return false;
+        return 0;
     }
-    public void setUnlocked(LevelAccessor level, BlockPos pos, boolean unlocked){
-        Level world = (Level) level;
-        if (world.getBlockEntity(pos) instanceof DefaultDigitalTriggerGateBlockEntity be){
-            if(be.UNLOCKED != unlocked){
-                be.UNLOCKED = unlocked;
-                be.setChanged();
-                //world.setBlockEntity(be);
-            }
+    @Override
+    public String getMeasurement(LevelAccessor world, BlockState blockState, BlockPos pos){
+        if(world.getBlockEntity(pos) instanceof DefaultAnalogGateBlockEntity blockEntity){
+            return String.format("%1d",blockEntity.POWER);
         }
-    }
-    public boolean getUnlocked(LevelAccessor level, BlockPos pos){
-        Level world = (Level) level;
-        if (world.getBlockEntity(pos) instanceof DefaultDigitalTriggerGateBlockEntity be){
-            return be.UNLOCKED;
-        }
-        return false;
+        return "";
     }
     @Override
     public int getRedstonePower(LevelAccessor world, BlockPos pos, ConnectionFace sourceFace) {
         ConnectionFace thisFace = getOutputConnectionFace(world, pos, sourceFace);
         if(thisFace.canConnect(sourceFace)){
-            if(world.getBlockEntity(pos) instanceof DefaultDigitalTriggerGateBlockEntity be){
-                return be.OUTPUT ? 15 : 0;
+            if(world.getBlockEntity(pos) instanceof DefaultAnalogGateBlockEntity be){
+                return be.POWER;
             }
         }
         return 0;
     }
     @Override
     public int getAnalogOutputSignal(BlockState state, Level world, BlockPos pos){
-        if(world.getBlockEntity(pos) instanceof DefaultDigitalTriggerGateBlockEntity be){
-            return be.OUTPUT ? 15 : 0;
+        if(world.getBlockEntity(pos) instanceof DefaultAnalogGateBlockEntity be){
+            return be.POWER;
         }
         return 0;
     }

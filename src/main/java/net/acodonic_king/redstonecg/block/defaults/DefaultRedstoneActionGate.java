@@ -27,7 +27,7 @@ public class DefaultRedstoneActionGate extends DefaultConnectableGate implements
     public BlockState getStateForPlacementDirect(BlockPlaceContext context) {
         BlockState blockState = super.getStateForPlacementDirect(context);
         if(blockState == null){return null;}
-        context.getLevel().scheduleTick(context.getClickedPos(),blockState.getBlock(),1);
+        context.getLevel().scheduleTick(context.getClickedPos(),this,1);
         //emittedRedstonePower(context.getLevel(),blockState,context.getClickedPos());
         return blockState;
     }

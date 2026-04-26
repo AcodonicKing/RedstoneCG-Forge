@@ -1,6 +1,6 @@
 package net.acodonic_king.redstonecg.block.normal.analog;
 
-import net.acodonic_king.redstonecg.block.defaults.DefaultAnalogInteractible2ABGate;
+import net.acodonic_king.redstonecg.block.defaults.DefaultAnalogInteractable2ABGate;
 import net.acodonic_king.redstonecg.procedures.BlockFrameTransformUtils;
 import net.acodonic_king.redstonecg.procedures.ConnectionFace;
 import net.acodonic_king.redstonecg.procedures.GetGateInputSidesProcedure;
@@ -10,7 +10,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 
-public class AnalogMemoryBlock extends DefaultAnalogInteractible2ABGate {
+public class AnalogMemoryBlock extends DefaultAnalogInteractable2ABGate {
     public AnalogMemoryBlock() {
         super();
     }

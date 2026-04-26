@@ -26,7 +26,8 @@ public class RedCuWireBlockEntity extends SuperBlockEntity {
 	@Override
 	public void load(CompoundTag tag) {
 		super.load(tag);
-		POWER = tag.getByte("power") & 0xFF;
+		if(tag.contains("power"))
+			POWER = tag.getByte("power") & 0xFF;
 	}
 	/*@Override
 	public CompoundTag getUpdateTag() {

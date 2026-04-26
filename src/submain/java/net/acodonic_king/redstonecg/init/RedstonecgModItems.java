@@ -62,11 +62,14 @@ public class RedstonecgModItems {
 	public static final RegistryObject<Item> NORMAL_ONE_WAY_THROUGH_NOT_GATE = block(RedstonecgModBlocks.NORMAL_ONE_WAY_THROUGH_NOT_GATE);
 	public static final RegistryObject<Item> NORMAL_DELAYER = block(RedstonecgModBlocks.NORMAL_DELAYER);
 	public static final RegistryObject<Item> NORMAL_BLOCK_READER = block(RedstonecgModBlocks.NORMAL_BLOCK_READER);
+	public static final RegistryObject<Item> NORMAL_BINARY_ENCODER = block(RedstonecgModBlocks.NORMAL_BINARY_ENCODER);
+	public static final RegistryObject<Item> NORMAL_BINARY_DECODER = block(RedstonecgModBlocks.NORMAL_BINARY_DECODER);
 	//Indicator
 	public static final RegistryObject<Item> UNIVERSAL_INDICATOR = block(RedstonecgModBlocks.UNIVERSAL_INDICATOR);
 	public static final RegistryObject<Item> SEVEN_SEGMENT_INDICATOR = block(RedstonecgModBlocks.SEVEN_SEGMENT_INDICATOR);
 	public static final RegistryObject<Item> CLOCK_FILLING_INDICATOR = block(RedstonecgModBlocks.CLOCK_FILLING_INDICATOR);
 	public static final RegistryObject<Item> ORB_INDICATOR = block(RedstonecgModBlocks.ORB_INDICATOR);
+	public static final RegistryObject<Item> HEXADECIMAL_INDICATOR = block(RedstonecgModBlocks.HEXADECIMAL_INDICATOR);
 	public static final RegistryObject<Item> FLAT_LAMP_INDICATOR = block(RedstonecgModBlocks.FLAT_LAMP_INDICATOR);
 	public static final RegistryObject<Item> COLORED_FLAT_LAMP_INDICATOR = block(RedstonecgModBlocks.COLORED_FLAT_LAMP_INDICATOR);
 	public static final RegistryObject<Item> COLORFUL_FLAT_LAMP_INDICATOR = block(RedstonecgModBlocks.COLORFUL_FLAT_LAMP_INDICATOR);
@@ -74,7 +77,7 @@ public class RedstonecgModItems {
 			RedstonecgModBlocks.ARROW_INDICATOR,
 			() -> new ArrowIndicatorItem(
 					RedstonecgModBlocks.ARROW_INDICATOR.get(),
-					RedstonecgModVersionRides.defaultItemProperties
+					RedstonecgModVersionRides.getDefaultItemProperties()
 			)
 	);
 	public static final RegistryObject<Item> BAR_INDICATOR = block(RedstonecgModBlocks.BAR_INDICATOR);
@@ -115,7 +118,7 @@ public class RedstonecgModItems {
 			RedstonecgModBlocks.HANGING_REDCU_WIRE_CONNECTOR,
 			() -> new HangingRedCuWireConnectorItem(
 					RedstonecgModBlocks.HANGING_REDCU_WIRE_CONNECTOR.get(),
-					RedstonecgModVersionRides.defaultItemProperties
+					RedstonecgModVersionRides.getDefaultItemProperties()
 			)
 	);
 

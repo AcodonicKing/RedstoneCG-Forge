@@ -1,9 +1,9 @@
 
 package net.acodonic_king.redstonecg.block.normal.analog;
 
-import net.acodonic_king.redstonecg.block.defaults.DefaultAnalogInteractible2ABGate;
+import net.acodonic_king.redstonecg.block.defaults.DefaultAnalogInteractable2ABGate;
 
-public class AnalogSubtractorBlock extends DefaultAnalogInteractible2ABGate {
+public class AnalogSubtractorBlock extends DefaultAnalogInteractable2ABGate {
 	public AnalogSubtractorBlock() {
 		super();
 	}

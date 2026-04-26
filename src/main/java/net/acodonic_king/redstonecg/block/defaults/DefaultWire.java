@@ -82,6 +82,7 @@ public class DefaultWire extends SuperBlock implements EntityBlock, WireInterfac
         BlockPos pos = context.getClickedPos();
         if(!GateBlockValidPlacementConditionProcedure.execute(world, pos, clickedFace)){return null;}
         boolean flag = context.getLevel().getFluidState(context.getClickedPos()).getType() == Fluids.WATER;
+        world.scheduleTick(pos,this,1);
         return this.defaultBlockState().setValue(FACING, clickedFace).setValue(WATERLOGGED, flag);
     }
 

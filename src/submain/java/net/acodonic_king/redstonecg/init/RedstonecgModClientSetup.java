@@ -18,5 +18,6 @@ public class RedstonecgModClientSetup {
         BlockEntityRenderers.register(RedstonecgModBlockEntities.ARROW_INDICATOR.get(), ArrowIndicatorBlockEntity.ArrowIndicatorBlockEntityRenderer::new);
         BlockEntityRenderers.register(RedstonecgModBlockEntities.DEFAULT_COLORED_FLAT_LAMP.get(), DefaultColoredFlatLampBlockEntity.DefaultColoredFlatLampBlockEntityRenderer::new);
         BlockEntityRenderers.register(RedstonecgModBlockEntities.HANGING_REDCU_WIRE_CONNECTOR.get(), HangingRedCuWireConnectorBlockEntity.HangingRedCuWireConnectorBlockEntityRenderer::new);
+        BlockEntityRenderers.register(RedstonecgModBlockEntities.ANALOG_SOURCE.get(), AnalogSourceBlockEntity.AnalogSourceBlockEntityRenderer::new);
     }
 }

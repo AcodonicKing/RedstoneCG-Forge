@@ -56,11 +56,14 @@ public class RedstonecgModBlocks {
 	public static final RegistryObject<Block> NORMAL_ONE_WAY_THROUGH_NOT_GATE = REGISTRY.register("normal_one_way_through_not_gate", OneWayThroughNotGateBlock::new);
 	public static final RegistryObject<Block> NORMAL_DELAYER = REGISTRY.register("normal_delayer", DelayerBlock::new);
 	public static final RegistryObject<Block> NORMAL_BLOCK_READER = REGISTRY.register("normal_block_reader", BlockReaderBlock::new);
+	public static final RegistryObject<Block> NORMAL_BINARY_ENCODER = REGISTRY.register("normal_binary_encoder", BinaryEncoderBlock::new);
+	public static final RegistryObject<Block> NORMAL_BINARY_DECODER = REGISTRY.register("normal_binary_decoder", BinaryDecoderBlock::new);
 	//Indicator
 	public static final RegistryObject<Block> UNIVERSAL_INDICATOR = REGISTRY.register("universal_indicator", UniversalIndicatorBlock::new);
 	public static final RegistryObject<Block> SEVEN_SEGMENT_INDICATOR = REGISTRY.register("seven_segment_indicator", SevenSegmentIndicatorBlock::new);
 	public static final RegistryObject<Block> CLOCK_FILLING_INDICATOR = REGISTRY.register("clock_filling_indicator", ClockFillingIndicatorBlock::new);
 	public static final RegistryObject<Block> ORB_INDICATOR = REGISTRY.register("orb_indicator", OrbIndicatorBlock::new);
+	public static final RegistryObject<Block> HEXADECIMAL_INDICATOR = REGISTRY.register("hexadecimal_indicator", HexadecimalIndicatorBlock::new);
 	public static final RegistryObject<Block> FLAT_LAMP_INDICATOR = REGISTRY.register("flat_lamp_indicator", FlatLampIndicatorBlock::new);
 	public static final RegistryObject<Block> COLORED_FLAT_LAMP_INDICATOR = REGISTRY.register("colored_flat_lamp_indicator", ColoredFlatLampIndicatorBlock::new);
 	public static final RegistryObject<Block> COLORFUL_FLAT_LAMP_INDICATOR = REGISTRY.register("colorful_flat_lamp_indicator", ColorfulFlatLampIndicatorBlock::new);
@@ -100,4 +103,6 @@ public class RedstonecgModBlocks {
 	public static final RegistryObject<Block> PARALLEL_LINE_OUTPUT = REGISTRY.register("parallel_line_output", ParallelLineOutputBlock::new);
 	public static final RegistryObject<Block> REDCU_WIRE_TRANSITION = REGISTRY.register("redcu_wire_transition", RedCuWireTransitionBlock::new);
 	public static final RegistryObject<Block> HANGING_REDCU_WIRE_CONNECTOR = REGISTRY.register("hanging_redcu_wire_connector", HangingRedCuWireConnectorBlock::new);
+
+	public static final RegistryObject<Block> RENDER_OBJECT_BLOCK = REGISTRY.register("render_object_block", RenderObjectBlock::new);
 }

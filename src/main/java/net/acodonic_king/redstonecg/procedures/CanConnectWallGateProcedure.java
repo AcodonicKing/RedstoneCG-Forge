@@ -46,6 +46,16 @@ public class CanConnectWallGateProcedure {
         };
         return connection;
     }
+    public static int To2TGateConnectionFilter(int connection){
+        connection = switch (connection) {
+            case (0) -> 0b1011;
+            case (1) -> 0b1101;
+            case (2) -> 0b0111;
+            case (3) -> 0b1111;
+            default -> 0b0000;
+        };
+        return connection;
+    }
     public static int To2ABGateConnectionFilter(int connection){
         connection = (connection > 2) ? (connection - 3) : connection;
         connection = switch (connection) {
@@ -55,6 +65,12 @@ public class CanConnectWallGateProcedure {
             default -> 0b0000;
         };
         return connection;
+    }
+    public static int To3GateConnectionFilter(int connection){
+        return 0b1111;
+    }
+    public static int To3ABCGateConnectionFilter(int connection){
+        return 0b1111;
     }
     public static int To1_4GateConnectionFilter(int connection){
         connection ++;
@@ -73,8 +89,20 @@ public class CanConnectWallGateProcedure {
         int connection = To2GateConnectionFilter(LittleTools.getIntegerProperty(blockstate, "connection"));
         return execute(blockstate, connection, callConnectionFace);
     }
+    public static boolean To2TGate(BlockState blockstate, ConnectionFace callConnectionFace){
+        int connection = To2TGateConnectionFilter(LittleTools.getIntegerProperty(blockstate, "connection"));
+        return execute(blockstate, connection, callConnectionFace);
+    }
     public static boolean To2ABGate(BlockState blockstate, ConnectionFace callConnectionFace){
         int connection = To2ABGateConnectionFilter(LittleTools.getIntegerProperty(blockstate, "connection"));
+        return execute(blockstate, connection, callConnectionFace);
+    }
+    public static boolean To3Gate(BlockState blockstate, ConnectionFace callConnectionFace){
+        int connection = To3GateConnectionFilter(0);
+        return execute(blockstate, connection, callConnectionFace);
+    }
+    public static boolean To3ABCGate(BlockState blockstate, ConnectionFace callConnectionFace){
+        int connection = To3ABCGateConnectionFilter(LittleTools.getIntegerProperty(blockstate, "connection"));
         return execute(blockstate, connection, callConnectionFace);
     }
     public static boolean To4Gate(Direction Secondary, ConnectionFace callConnectionFace){

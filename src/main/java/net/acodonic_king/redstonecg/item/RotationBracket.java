@@ -51,12 +51,14 @@ public class RotationBracket extends SuperItem {
                 }
             } else if (block instanceof WireInterface) {
                 ((WireInterface) block).rotationBracket(world, pos, !player.isCrouching());
+                world.scheduleTick(pos, block, 1);
                 return InteractionResult.SUCCESS;
             } else if (world.getBlockEntity(pos) instanceof DefaultAnalogIndicatorBlockEntity be){
                 be.ROTATION = rotateBlockDirection(be.ROTATION, player);
                 be.modelUpdate();
                 be.setChanged();
                 world.sendBlockUpdated(pos, blockState, blockState, 3);
+                world.scheduleTick(pos, block, 1);
                 return InteractionResult.SUCCESS;
             }
         }
@@ -72,6 +74,7 @@ public class RotationBracket extends SuperItem {
         }
         if(_dp.getPossibleValues().contains(direction)){
             world.setBlock(pos, blockState.setValue(_dp, direction), 3);
+            world.scheduleTick(pos, blockState.getBlock(), 1);
             return InteractionResult.SUCCESS;
         }
         return InteractionResult.FAIL;

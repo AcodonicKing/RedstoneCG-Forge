@@ -16,10 +16,12 @@ public class OnBlockRightClickedProcedure {
 			if (_integerProp.getPossibleValues().contains(connection))
 			{
 				world.setBlock(pos, blockstate.setValue(_integerProp, connection), flags);
+				world.scheduleTick(pos, blockstate.getBlock(), 1);
 				return connection;
 			} else {
 				world.setBlock(pos, blockstate.setValue(_integerProp, 0), flags);
 			}
+			world.scheduleTick(pos, blockstate.getBlock(), 1);
 		}
 		return 0;
 	}

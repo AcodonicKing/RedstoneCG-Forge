@@ -12,7 +12,11 @@ import net.minecraft.world.level.block.Block;
 
 public class RedstonecgModBlockEntities {
 	public static final DeferredRegister<BlockEntityType<?>> REGISTRY = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, RedstonecgMod.MODID);
-	public static final RegistryObject<BlockEntityType<?>> ANALOG_SOURCE = register("analog_source", RedstonecgModBlocks.NORMAL_ANALOG_SOURCE, AnalogSourceBlockEntity::new);
+	//public static final RegistryObject<BlockEntityType<?>> ANALOG_SOURCE = register("analog_source", RedstonecgModBlocks.NORMAL_ANALOG_SOURCE, AnalogSourceBlockEntity::new);
+	public static final RegistryObject<BlockEntityType<AnalogSourceBlockEntity>> ANALOG_SOURCE = REGISTRY.register("analog_source", () -> BlockEntityType.Builder.of(
+			AnalogSourceBlockEntity::new,
+			RedstonecgModBlocks.NORMAL_ANALOG_SOURCE.get()
+	).build(null));
 	public static final RegistryObject<BlockEntityType<?>> RED_CU_INTERSECTION = register("red_cu_intersection", RedstonecgModBlocks.REDCU_WIRE_INTERSECTION, RedCuWireIntersectionBlockEntity::new);
 	public static final RegistryObject<BlockEntityType<RedCuWireTransitionBlockEntity>> REDCU_WIRE_TRANSITION = REGISTRY.register("redcu_wire_transition", () -> BlockEntityType.Builder.of(
 			RedCuWireTransitionBlockEntity::new,
@@ -21,7 +25,7 @@ public class RedstonecgModBlockEntities {
 	public static final RegistryObject<BlockEntityType<?>> RED_CU_CRAFTER = register("red_cu_crafter", RedstonecgModBlocks.REDCU_CRAFTER, RedCuCrafterBlockEntity::new);
 	public static final RegistryObject<BlockEntityType<DefaultAnalogGateBlockEntity>> DEFAULT_ANALOG_GATE = REGISTRY.register("default_analog_gate", () -> BlockEntityType.Builder.of(
 			DefaultAnalogGateBlockEntity::new,
-			RedstonecgModBlocks.NORMAL_ANALOG_SOURCE.get(),
+			//RedstonecgModBlocks.NORMAL_ANALOG_SOURCE.get(),
 			RedstonecgModBlocks.NORMAL_ANALOG_BIAS.get(),
 			RedstonecgModBlocks.NORMAL_ANALOG_GAIN.get(),
 			RedstonecgModBlocks.NORMAL_ANALOG_PASS.get(),
@@ -30,6 +34,7 @@ public class RedstonecgModBlockEntities {
 			RedstonecgModBlocks.NORMAL_ANALOG_SUBTRACTOR.get(),
 			RedstonecgModBlocks.NORMAL_ANALOG_MAX.get(),
 			RedstonecgModBlocks.NORMAL_ANALOG_MIN.get(),
+
 			RedstonecgModBlocks.NORMAL_COMPARATOR.get(),
 			RedstonecgModBlocks.NORMAL_N_COMPARATOR.get(),
 			RedstonecgModBlocks.NORMAL_FORWARD_PATH_SELECTOR.get(),
@@ -37,6 +42,8 @@ public class RedstonecgModBlockEntities {
 			RedstonecgModBlocks.NORMAL_ONE_WAY_THROUGH_GATE.get(),
 			RedstonecgModBlocks.NORMAL_ONE_WAY_THROUGH_NOT_GATE.get(),
 			RedstonecgModBlocks.NORMAL_BLOCK_READER.get(),
+			RedstonecgModBlocks.NORMAL_BINARY_ENCODER.get(),
+			RedstonecgModBlocks.NORMAL_BINARY_DECODER.get(),
 
 			RedstonecgModBlocks.PARALLEL_ANALOG_BIAS.get(),
 			RedstonecgModBlocks.PARALLEL_ANALOG_DIFFERENTIAL.get(),
@@ -89,6 +96,7 @@ public class RedstonecgModBlockEntities {
 			RedstonecgModBlocks.CLOCK_FILLING_INDICATOR.get(),
 			RedstonecgModBlocks.ORB_INDICATOR.get(),
 			RedstonecgModBlocks.SEVEN_SEGMENT_INDICATOR.get(),
+			RedstonecgModBlocks.HEXADECIMAL_INDICATOR.get(),
 			RedstonecgModBlocks.BAR_INDICATOR.get(),
 			RedstonecgModBlocks.FLAT_LAMP_INDICATOR.get()
 	).build(null));

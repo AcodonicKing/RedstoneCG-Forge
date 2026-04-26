@@ -55,11 +55,14 @@ public class RedstonecgModTabs {
             event.accept(RedstonecgModItems.NORMAL_ONE_WAY_THROUGH_NOT_GATE);
             event.accept(RedstonecgModItems.NORMAL_DELAYER);
             event.accept(RedstonecgModItems.NORMAL_BLOCK_READER);
+            event.accept(RedstonecgModItems.NORMAL_BINARY_ENCODER);
+            event.accept(RedstonecgModItems.NORMAL_BINARY_DECODER);
             //Indicator
             event.accept(RedstonecgModItems.UNIVERSAL_INDICATOR);
             event.accept(RedstonecgModItems.SEVEN_SEGMENT_INDICATOR);
             event.accept(RedstonecgModItems.CLOCK_FILLING_INDICATOR);
             event.accept(RedstonecgModItems.ORB_INDICATOR);
+            event.accept(RedstonecgModItems.HEXADECIMAL_INDICATOR);
             event.accept(RedstonecgModItems.FLAT_LAMP_INDICATOR);
             event.accept(RedstonecgModItems.COLORED_FLAT_LAMP_INDICATOR);
             event.accept(RedstonecgModItems.COLORFUL_FLAT_LAMP_INDICATOR);

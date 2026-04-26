@@ -35,7 +35,13 @@ import java.util.List;
 public class HangingRedCuWireConnectorBlockEntity extends RedCuWireBlockEntity{
     // public int ID;
     public ResourceLocation BLOCK;
-    public ModelResourceLocation[] PINMARK_MODELS;
+    public static final ModelResourceLocation[] PINMARK_MODELS = new ModelResourceLocation[]{
+            new ModelResourceLocation(new ResourceLocation("redstonecg", "hanging_redcu_wire_connector"), "connection=8,waterlogged=false"),
+            new ModelResourceLocation(new ResourceLocation("redstonecg", "hanging_redcu_wire_connector"), "connection=9,waterlogged=false"),
+            new ModelResourceLocation(new ResourceLocation("redstonecg", "hanging_redcu_wire_connector"), "connection=10,waterlogged=false"),
+            new ModelResourceLocation(new ResourceLocation("redstonecg", "hanging_redcu_wire_connector"), "connection=11,waterlogged=false"),
+            new ModelResourceLocation(new ResourceLocation("redstonecg", "hanging_redcu_wire_connector"), "connection=12,waterlogged=false"),
+    };
     public ModelResourceLocation CONNECTOR;
     public ModelResourceLocation WIRE;
     public List<HangingRedCuWireConnectorPosition> TARGETS = new ArrayList<>();
@@ -50,13 +56,6 @@ public class HangingRedCuWireConnectorBlockEntity extends RedCuWireBlockEntity{
         BLOCK = ModLoaderRider.getBlockRegistryName(state.getBlock());
         CONNECTOR = new ModelResourceLocation(BLOCK, "connection=0,waterlogged=false");
         WIRE = new ModelResourceLocation(BLOCK, "connection=1,waterlogged=false");
-        PINMARK_MODELS = new ModelResourceLocation[]{
-                new ModelResourceLocation(BLOCK, "connection=8,waterlogged=false"),
-                new ModelResourceLocation(BLOCK, "connection=9,waterlogged=false"),
-                new ModelResourceLocation(BLOCK, "connection=10,waterlogged=false"),
-                new ModelResourceLocation(BLOCK, "connection=11,waterlogged=false"),
-                new ModelResourceLocation(BLOCK, "connection=12,waterlogged=false"),
-        };
         makeRenderBoundingBox();
     }
 
@@ -105,20 +104,8 @@ public class HangingRedCuWireConnectorBlockEntity extends RedCuWireBlockEntity{
     }
 
     public void modelUpdate(){
-        switch (this.FACING){
-            case UP -> {
-                this.facingMode = 5;
-                this.facing = RCGQuaternion.Vector3F.rotateXP((float) Math.PI);
-            }
-            case DOWN -> this.facingMode = 0;
-            default -> {
-                this.facingMode = 1;
-                this.facing = switch (this.FACING){
-                    case NORTH, SOUTH -> RCGQuaternion.Vector3F.rotateYP((float) BlockFrameTransformUtils.getRadiansFromDirectionY(this.FACING));
-                    default -> RCGQuaternion.Vector3F.rotateYP((float) (Math.PI + BlockFrameTransformUtils.getRadiansFromDirectionY(this.FACING)));
-                };
-            }
-        }
+        this.facing = OrientationHolderBlockEntity.getFacing(this.FACING);
+        this.facingMode = OrientationHolderBlockEntity.getFacingMode(this.FACING);
     }
 
     public void addConnectorAsTarget(BlockPos targetPos){
@@ -337,36 +324,27 @@ public class HangingRedCuWireConnectorBlockEntity extends RedCuWireBlockEntity{
             renderPose(blockEntity, poseStack);
             model = modelManager.getModel(blockEntity.CONNECTOR);
             renderModel(blockEntity, modelRenderer, vc, blockState, model, poseStack, packedLight, packedOverlay);
-            if(blockEntity.PINMARK_MODELS.length != 0) {
-                int connection = 0;
-                if (blockState.getBlock() instanceof PinMarkConnectionInterface pmci) {
-                    connection = pmci.getConnection(blockState);
-                    connection = pmci.connectionFilter(connection);
-                }
-                if (blockEntity.BASE_READ)
-                    connection |= 16;
-                for (int i = 0; i < 5; i++) {
-                    boolean v = (connection & 1) == 0;
-                    connection >>= 1;
-                    if (v)
-                        continue;
-                    model = modelManager.getModel(blockEntity.PINMARK_MODELS[i]);
-                    renderModel(blockEntity, modelRenderer, vc, blockState, model, poseStack, packedLight, packedOverlay);
-                }
+            int connection = 0;
+            if (blockState.getBlock() instanceof PinMarkConnectionInterface pmci) {
+                connection = pmci.getConnection(blockState);
+                connection = pmci.connectionFilter(connection);
+            }
+            if (blockEntity.BASE_READ)
+                connection |= 16;
+            for (int i = 0; i < 5; i++) {
+                boolean v = (connection & 1) == 0;
+                connection >>= 1;
+                if (v)
+                    continue;
+                model = modelManager.getModel(HangingRedCuWireConnectorBlockEntity.PINMARK_MODELS[i]);
+                renderModel(blockEntity, modelRenderer, vc, blockState, model, poseStack, packedLight, packedOverlay);
             }
             poseStack.popPose();
         }
         private void renderPose(HangingRedCuWireConnectorBlockEntity blockEntity, PoseStack poseStack){
             poseStack.pushPose();
             poseStack.translate(0.5, 0.5, 0.5);
-            switch (blockEntity.facingMode){
-                case 5 -> poseStack.mulPose(blockEntity.facing.quaternion);
-                case 0 -> {}
-                default -> {
-                    poseStack.mulPose(blockEntity.facing.quaternion);
-                    poseStack.mulPose(RCGQuaternion.Vector3F.rotateXP((float) (Math.PI * 0.5)).quaternion);
-                }
-            }
+            OrientationHolderBlockEntity.setFacingPoseStack(poseStack, blockEntity.facingMode, blockEntity.facing);
             poseStack.translate(-0.5, -0.5, -0.5);
         }
         private void renderModel(

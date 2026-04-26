@@ -24,12 +24,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import org.apache.commons.lang3.tuple.Pair;
 
-public class DefaultAnalogIndicatorBlockEntity extends SuperBlockEntity {
-    public RCGQuaternion rotation = RCGQuaternion.Vector3F.rotateYP(0);
-    public byte facingMode = 0;
-    public RCGQuaternion facing = RCGQuaternion.Vector3F.rotateYP(0);
-    public Direction FACING = Direction.DOWN;
-    public Direction ROTATION = Direction.NORTH;
+public class DefaultAnalogIndicatorBlockEntity extends OrientationHolderBlockEntity {
     public boolean BASE_READ = false;
     public DefaultAnalogIndicatorBlockEntity(BlockPos pos, BlockState state){
         super(RedstonecgModBlockEntities.DEFAULT_ANALOG_INDICATOR.get(), pos, state);
@@ -39,30 +34,15 @@ public class DefaultAnalogIndicatorBlockEntity extends SuperBlockEntity {
         super(blockEntityType, pos, state);
     }
 
-    public Pair<Direction, Direction> getPrimarySecondaryDirections(){
-        return Pair.of(ROTATION, FACING);
-    }
-
     @Override
     public void saveAdditional(CompoundTag tag) {
         super.saveAdditional(tag);
-        byte state = (byte) BlockFrameTransformUtils.encodeDirectionToInt(this.FACING);
-        state <<= 3;
-        state |= (byte) BlockFrameTransformUtils.encodeDirectionToInt(this.ROTATION);
-        tag.putByte("state", state);
         tag.putBoolean("base_read", BASE_READ);
     }
 
     @Override
     public void load(CompoundTag tag) {
         super.load(tag);
-        if (tag.contains("state")) {
-            int state = (int) tag.getByte("state");
-            this.ROTATION = BlockFrameTransformUtils.decodeIntToDirection(state & 7);
-            state >>= 3;
-            this.FACING = BlockFrameTransformUtils.decodeIntToDirection(state & 7);
-        }
-        modelUpdate();
         if (tag.contains("base_read"))
             BASE_READ = tag.getBoolean("base_read");
     }
@@ -72,26 +52,8 @@ public class DefaultAnalogIndicatorBlockEntity extends SuperBlockEntity {
         return ClientboundBlockEntityDataPacket.create(this);
     }
 
-    public void modelUpdate(){
-        this.rotation = RCGQuaternion.Vector3F.rotateYP((float) -BlockFrameTransformUtils.getRadiansFromDirectionY(this.ROTATION));
-        switch (this.FACING){
-            case UP -> {
-                this.facingMode = 5;
-                this.facing = RCGQuaternion.Vector3F.rotateXP((float) Math.PI);
-            }
-            case DOWN -> this.facingMode = 0;
-            default -> {
-                this.facingMode = 1;
-                this.facing = switch (this.FACING){
-                    case NORTH, SOUTH -> RCGQuaternion.Vector3F.rotateYP((float) BlockFrameTransformUtils.getRadiansFromDirectionY(this.FACING));
-                    default -> RCGQuaternion.Vector3F.rotateYP((float) (Math.PI + BlockFrameTransformUtils.getRadiansFromDirectionY(this.FACING)));
-                };
-            }
-        }
-    }
-
     public static class DefaultAnalogIndicatorBlockEntityRenderer implements BlockEntityRenderer<DefaultAnalogIndicatorBlockEntity> {
-        public static final ModelResourceLocation BASE_READ_MODEL = new ModelResourceLocation(new ResourceLocation("redstonecg", "arrow_indicator"), "connection=12,waterlogged=false");
+        public static final ModelResourceLocation BASE_READ_MODEL = ArrowIndicatorBlockEntity.PINMARK_MODELS[4];
         BlockEntityRendererProvider.Context context;
         public DefaultAnalogIndicatorBlockEntityRenderer(BlockEntityRendererProvider.Context context) {
             super();
@@ -106,16 +68,7 @@ public class DefaultAnalogIndicatorBlockEntity extends SuperBlockEntity {
             poseStack.pushPose();
             poseStack.translate(0.5, 0.5, 0.5);
 
-            //RedstonecgMod.LOGGER.debug("{} {} {} {} {}",blockEntity.FACING,blockEntity.ROTATION,blockEntity.facing,blockEntity.rotation,blockEntity.facingMode);
-            switch (blockEntity.facingMode){
-                case 5 -> poseStack.mulPose(blockEntity.facing.quaternion);
-                case 0 -> {}
-                default -> {
-                    poseStack.mulPose(blockEntity.facing.quaternion);
-                    poseStack.mulPose(RCGQuaternion.Vector3F.rotateXP((float) (Math.PI * 0.5)).quaternion);
-                }
-            }
-            poseStack.mulPose(blockEntity.rotation.quaternion);
+            blockEntity.setPoseStack(poseStack);
 
             poseStack.translate(-0.5, -0.5, -0.5);
             VertexConsumer vc = bufferSource.getBuffer(RenderType.cutoutMipped());

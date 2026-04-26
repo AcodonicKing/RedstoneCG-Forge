@@ -29,6 +29,8 @@
   "block.redstonecg.normal_reversed_path_selector": "Reversed Path Selector",
   "block.redstonecg.normal_one_way_through_gate": "One Way Through Gate",
   "block.redstonecg.normal_one_way_through_not_gate": "One Way Through Not Gate",
+  "block.redstonecg.normal_binary_encoder": "Binary Encoder",
+  "block.redstonecg.normal_binary_decoder": "Binary Decoder",
   "block.redstonecg.normal_delayer": "Delayer",
   "block.redstonecg.normal_block_reader": "Block Reader",
 
@@ -36,6 +38,7 @@
   "block.redstonecg.orb_indicator": "Orb Indicator",
   "block.redstonecg.clock_filling_indicator": "Clock Filling Indicator",
   "block.redstonecg.seven_segment_indicator": "Seven Segment Indicator",
+  "block.redstonecg.hexadecimal_indicator": "Hexadecimal Indicator",
   "block.redstonecg.flat_lamp_indicator": "Flat Lamp Indicator",
   "block.redstonecg.colored_flat_lamp_indicator": "Colored Flat Lamp",
   "block.redstonecg.colorful_flat_lamp_indicator": "Colorful Flat Lamp",

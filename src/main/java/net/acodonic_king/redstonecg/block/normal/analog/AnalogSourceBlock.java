@@ -2,14 +2,25 @@
 package net.acodonic_king.redstonecg.block.normal.analog;
 
 import net.acodonic_king.redstonecg.ModLoaderRider;
+import net.acodonic_king.redstonecg.RedstonecgMod;
 import net.acodonic_king.redstonecg.block.defaults.DefaultEmitting1_4Gate;
+import net.acodonic_king.redstonecg.block.defaults.DefaultRedstoneActionGate;
+import net.acodonic_king.redstonecg.block.defaults.PinMarkConnectionInterface;
 import net.acodonic_king.redstonecg.init.RedstonecgModItems;
+import net.acodonic_king.redstonecg.init.RedstonecgModVersionRides;
 import net.acodonic_king.redstonecg.procedures.AdventureProcedure;
+import net.acodonic_king.redstonecg.procedures.BlockFrameTransformUtils;
 import net.acodonic_king.redstonecg.procedures.CanConnectWallGateProcedure;
 import net.acodonic_king.redstonecg.procedures.ConnectionFace;
+import net.minecraft.core.Direction;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.LevelAccessor;
 
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.RenderShape;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -31,10 +42,60 @@ import net.acodonic_king.redstonecg.block.gui.analog_source.AnalogSourceGUIMenu;
 import net.acodonic_king.redstonecg.block.entity.AnalogSourceBlockEntity;
 
 import io.netty.buffer.Unpooled;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.shapes.BooleanOp;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
-public class AnalogSourceBlock extends DefaultEmitting1_4Gate implements EntityBlock {
+public class AnalogSourceBlock extends DefaultRedstoneActionGate implements EntityBlock, PinMarkConnectionInterface {
+	public static final IntegerProperty CONNECTION = IntegerProperty.create("connection",0,14);
+
 	public AnalogSourceBlock() {
 		super();
+	}
+
+	@Override
+	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+		super.createBlockStateDefinition(builder);
+		builder.add(CONNECTION);
+	}
+
+	@Override
+	public boolean canConnectRedstone(BlockState state, BlockGetter world, BlockPos pos, Direction side) {
+		ConnectionFace connectionFaceB = BlockFrameTransformUtils.canConnectRedstoneTargetConnectionFace(world, pos, side);
+		return CanConnectWallGateProcedure.To1_4Gate(state, connectionFaceB);
+	}
+
+	@Override
+	public ConnectionFace getOutputConnectionFace(LevelAccessor world, BlockPos pos, ConnectionFace requesterFace) {
+		BlockState blockState = world.getBlockState(pos);
+		ConnectionFace connectionFaceA = requesterFace.getConnectable();
+		if(!CanConnectWallGateProcedure.To1_4Gate(blockState, requesterFace))
+			connectionFaceA.CHANNEL = 5;
+		return connectionFaceA;
+	}
+
+	@Override
+	public int getConnection(BlockState bs) {
+		return bs.getValue(CONNECTION);
+	}
+
+	@Override
+	public int connectionFilter(int connection) {
+		return CanConnectWallGateProcedure.To1_4GateConnectionFilter(connection);
+	}
+
+	@Override
+	public VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
+		return switch (state.getValue(FACING)) {
+			case DOWN -> Shapes.join(box(0, 0, 0, 16, 2, 16),box(4, 2, 4, 12, 4, 12),BooleanOp.OR);
+			case NORTH -> Shapes.join(box(0, 0, 0, 16, 16, 2),box(4, 4, 2, 12, 12, 4),BooleanOp.OR);
+			case EAST -> Shapes.join(box(14, 0, 0, 16, 16, 16), box(12, 4, 4, 14, 12, 12),BooleanOp.OR);
+			case SOUTH -> Shapes.join(box(0, 0, 14, 16, 16, 16),box(4, 4, 12, 12, 12, 14),BooleanOp.OR);
+			case WEST -> Shapes.join(box(0, 0, 0, 2, 16, 16),box(2, 4, 4, 4, 12, 12),BooleanOp.OR);
+			case UP -> Shapes.join(box(0, 14, 0, 16, 16, 16),box(4, 12, 4, 12, 14, 12),BooleanOp.OR);
+		};
 	}
 
 	@Override
@@ -44,14 +105,35 @@ public class AnalogSourceBlock extends DefaultEmitting1_4Gate implements EntityB
 		ItemStack itemStack = entity.getItemInHand(hand);
 		if(!itemStack.isEmpty()){
 			if(itemStack.is(RedstonecgModItems.ROTATION_BRACKET.get())){return InteractionResult.FAIL;}
-			if(itemStack.is(RedstonecgModItems.NORMAL_ANALOG_SOURCE.get())){
+			/*if(itemStack.is(RedstonecgModItems.NORMAL_ANALOG_SOURCE.get())){
 				if(AdventureProcedure.valueConfig(world, entity)){
-					int power = getPower(world, pos) + 1;
+					int power = getPower(world, pos);
+					power += entity.isCrouching() ? -1 : 1;
 					if(power > 15)
 						power = 0;
+					if(power < 0)
+						power = 15;
 					setPower(world, blockstate, pos, power);
 					return InteractionResult.SUCCESS;
 				}
+			}*/
+		}
+		if(AdventureProcedure.valueConfig(world, entity)) {
+			Vec3 hitPos = hit.getLocation().subtract(RedstonecgModVersionRides.getBlockPosCenter(pos));
+			//RedstonecgMod.LOGGER.debug(hitPos);
+			if (switch (blockstate.getValue(FACING)) {
+				case DOWN, UP -> (-0.25 <= hitPos.x && hitPos.x <= 0.25) && (-0.25 <= hitPos.z && hitPos.z <= 0.25);
+				case EAST, WEST -> (-0.25 <= hitPos.y && hitPos.y <= 0.25) && (-0.25 <= hitPos.z && hitPos.z <= 0.25);
+				case NORTH, SOUTH -> (-0.25 <= hitPos.x && hitPos.x <= 0.25) && (-0.25 <= hitPos.y && hitPos.y <= 0.25);
+			}) {
+				int power = getPower(world, pos);
+				power += entity.isCrouching() ? -1 : 1;
+				if (power > 15)
+					power = 0;
+				if (power < 0)
+					power = 15;
+				setPower(world, blockstate, pos, power);
+				return InteractionResult.SUCCESS;
 			}
 		}
 		if(entity.isCrouching()){
@@ -103,7 +185,7 @@ public class AnalogSourceBlock extends DefaultEmitting1_4Gate implements EntityB
 		if (state.getBlock() != newState.getBlock()) {
 			BlockEntity blockEntity = world.getBlockEntity(pos);
 			if (blockEntity instanceof AnalogSourceBlockEntity be) {
-				Containers.dropContents(world, pos, be);
+				//Containers.dropContents(world, pos, be);
 				world.updateNeighbourForOutputSignal(pos, this);
 			}
 			super.onRemove(state, world, pos, newState, isMoving);
@@ -112,24 +194,22 @@ public class AnalogSourceBlock extends DefaultEmitting1_4Gate implements EntityB
 
 	@Override
 	public boolean hasAnalogOutputSignal(BlockState state) {
-		return false;
+		return true;
 	}
 
-	/*@Override
+	@Override
 	public int getAnalogOutputSignal(BlockState blockState, Level world, BlockPos pos) {
-		BlockEntity tileentity = world.getBlockEntity(pos);
-		if (tileentity instanceof AnalogSourceBlockEntity be)
-			return AbstractContainerMenu.getRedstoneSignalFromContainer(be);
-		else
-			return 0;
-	}*/
+		if(world.getBlockEntity(pos) instanceof AnalogSourceBlockEntity be)
+			return be.POWER;
+		return 0;
+	}
 
 	public void setPower(LevelAccessor level, BlockState state, BlockPos pos, int power){
 		Level world = (Level) level;
 		power = Math.max(0, Math.min(power, 15));
 		if (world.getBlockEntity(pos) instanceof AnalogSourceBlockEntity be){
 			if(be.POWER != power){
-				be.POWER = power;
+				be.setPower(power);
 				be.setChanged();
 				world.updateNeighborsAt(pos, state.getBlock());
 			}

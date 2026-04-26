@@ -45,6 +45,27 @@ public class GetGateInputSidesProcedure {
 			default -> new Direction[]{Direction.UP, Direction.UP};
 		};
 	}
+	public static Direction[] Get2TGate(BlockState blockstate){
+		return Get2Gate(
+				LittleTools.getDirection(blockstate),
+				LittleTools.getIntegerProperty(blockstate, "connection")
+		);
+	}
+	public static Direction[] Get2TGateForth(BlockState blockstate){
+		return Get2TGate(
+				Direction.NORTH,
+				LittleTools.getIntegerProperty(blockstate, "connection")
+		);
+	}
+	public static Direction[] Get2TGate(Direction forth_direction, int connection){
+		return switch (connection) {
+			case (0) -> new Direction[]{forth_direction.getCounterClockWise(Direction.Axis.Y), forth_direction.getClockWise(Direction.Axis.Y)};
+			case (1) -> new Direction[]{forth_direction.getOpposite(), forth_direction.getCounterClockWise(Direction.Axis.Y)};
+			case (2) -> new Direction[]{forth_direction.getClockWise(Direction.Axis.Y), forth_direction.getOpposite()};
+			case (3) -> new Direction[]{forth_direction.getClockWise(Direction.Axis.Y), forth_direction.getOpposite(), forth_direction.getCounterClockWise(Direction.Axis.Y)};
+			default -> new Direction[]{Direction.UP, Direction.UP};
+		};
+	}
 	public static Direction[] Get2ABGate(BlockState blockstate){
 		return Get2ABGate(
 				LittleTools.getDirection(blockstate),
@@ -76,6 +97,19 @@ public class GetGateInputSidesProcedure {
 		}
 		return new Direction[]{SideA, SideB};
 	}
+	public static Direction[] Get3GateForth(BlockState blockstate){
+		return Get3Gate(Direction.NORTH);
+	}
+	public static Direction[] Get3Gate(BlockState blockstate){
+		return Get3Gate(LittleTools.getDirection(blockstate));
+	}
+	public static Direction[] Get3Gate(Direction forth_direction){
+		return new Direction[]{
+				forth_direction.getCounterClockWise(Direction.Axis.Y),
+				forth_direction.getOpposite(),
+				forth_direction.getClockWise(Direction.Axis.Y),
+		};
+	}
 	public static Direction[] Get3ABCGate(BlockState blockstate){
 		return Get3ABCGate(
 				LittleTools.getDirection(blockstate),
@@ -89,30 +123,44 @@ public class GetGateInputSidesProcedure {
 		);
 	}
 	public static Direction[] Get3ABCGate(Direction forth_direction, int connection){
-        Direction SideA = Direction.UP;
-		Direction SideB = Direction.UP;
-		if (connection < 2) {
-			SideA = forth_direction.getOpposite();
-		} else if (connection < 4) {
-			SideA = forth_direction.getCounterClockWise(Direction.Axis.Y);
-		} else {
-			SideA = forth_direction.getClockWise(Direction.Axis.Y);
-		}
-		if (connection == 5 || connection == 0){
-			SideB = forth_direction.getCounterClockWise(Direction.Axis.Y);
-		} else if (connection < 3){
-			SideB = forth_direction.getClockWise(Direction.Axis.Y);
-		} else {
-			SideB = forth_direction.getOpposite();
-		}
-		connection = connection > 2 ? connection - 3 : connection;
-		Direction SideC = switch(connection){
-			case(0) -> forth_direction.getClockWise(Direction.Axis.Y);
-			case(1) -> forth_direction.getCounterClockWise(Direction.Axis.Y);
-			case(2) -> forth_direction.getOpposite();
+        Direction SideA = Get3ABCGate(forth_direction, connection, 1);
+		Direction SideB = Get3ABCGate(forth_direction, connection, 2);
+		Direction SideC = Get3ABCGate(forth_direction, connection, 3);
+		return new Direction[]{SideA, SideB, SideC};
+	}
+	public static Direction Get3ABCGate(Direction forth_direction, int connection, int mark){
+		return switch (mark){
+			case 0 -> forth_direction;
+			case 1 -> {
+				Direction SideA = Direction.UP;
+				if (connection < 2) {
+					SideA = forth_direction.getOpposite();
+				} else if (connection < 4) {
+					SideA = forth_direction.getCounterClockWise(Direction.Axis.Y);
+				} else {
+					SideA = forth_direction.getClockWise(Direction.Axis.Y);
+				}
+				yield SideA;
+			}
+			case 2 -> {
+				Direction SideB = Direction.UP;
+				if (connection == 5 || connection == 0){
+					SideB = forth_direction.getCounterClockWise(Direction.Axis.Y);
+				} else if (connection < 3){
+					SideB = forth_direction.getClockWise(Direction.Axis.Y);
+				} else {
+					SideB = forth_direction.getOpposite();
+				}
+				yield SideB;
+			}
+			case 3 -> switch(connection % 3){
+				case(0) -> forth_direction.getClockWise(Direction.Axis.Y);
+				case(1) -> forth_direction.getCounterClockWise(Direction.Axis.Y);
+				case(2) -> forth_direction.getOpposite();
+				default -> Direction.UP;
+			};
 			default -> Direction.UP;
 		};
-		return new Direction[]{SideA, SideB, SideC};
 	}
 	public static NonNullList<Direction> Get1_4Gate(BlockState blockstate){
 		return Get1_4Gate(

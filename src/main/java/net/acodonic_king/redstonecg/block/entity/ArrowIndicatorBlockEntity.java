@@ -24,7 +24,13 @@ import net.minecraft.world.level.block.state.BlockState;
 public class ArrowIndicatorBlockEntity extends DefaultAnalogIndicatorBlockEntity{
     public ResourceLocation BLOCK;
     public ModelResourceLocation BASE_MODEL;
-    public ModelResourceLocation[] PINMARK_MODELS;
+    public static final ModelResourceLocation[] PINMARK_MODELS = new ModelResourceLocation[]{
+            new ModelResourceLocation(new ResourceLocation("redstonecg", "arrow_indicator"), "connection=8,waterlogged=false"),
+            new ModelResourceLocation(new ResourceLocation("redstonecg", "arrow_indicator"), "connection=9,waterlogged=false"),
+            new ModelResourceLocation(new ResourceLocation("redstonecg", "arrow_indicator"), "connection=10,waterlogged=false"),
+            new ModelResourceLocation(new ResourceLocation("redstonecg", "arrow_indicator"), "connection=11,waterlogged=false"),
+            new ModelResourceLocation(new ResourceLocation("redstonecg", "arrow_indicator"), "connection=12,waterlogged=false"),
+    };
     public ModelResourceLocation ARROW_MODEL;
     public float[] ARROW_MODEL_POSITION = new float[]{0.5f, 0.0f, 0.5f, 0.5f};
     public float[] ANGLE_CONVERSION = new float[]{(float) ((Math.PI * 1.5) / 255.0f), (float) (Math.PI * 1.75)};
@@ -35,13 +41,6 @@ public class ArrowIndicatorBlockEntity extends DefaultAnalogIndicatorBlockEntity
         BLOCK = ModLoaderRider.getBlockRegistryName(state.getBlock());
         setModel(0);
         setRange(0,256);
-        PINMARK_MODELS = new ModelResourceLocation[]{
-                new ModelResourceLocation(BLOCK, "connection=8,waterlogged=false"),
-                new ModelResourceLocation(BLOCK, "connection=9,waterlogged=false"),
-                new ModelResourceLocation(BLOCK, "connection=10,waterlogged=false"),
-                new ModelResourceLocation(BLOCK, "connection=11,waterlogged=false"),
-                new ModelResourceLocation(BLOCK, "connection=12,waterlogged=false"),
-        };
         //super(pos, state);
     }
     public void setModelBase(int model){
@@ -159,22 +158,20 @@ public class ArrowIndicatorBlockEntity extends DefaultAnalogIndicatorBlockEntity
             renderPose(blockEntity, poseStack);
             model = modelManager.getModel(blockEntity.BASE_MODEL);
             renderModel(blockEntity, modelRenderer, vc, blockState, model, poseStack, packedLight, packedOverlay);
-            if(blockEntity.PINMARK_MODELS.length != 0) {
-                int connection = 0;
-                if (blockState.getBlock() instanceof PinMarkConnectionInterface pmci) {
-                    connection = pmci.getConnection(blockState);
-                    connection = pmci.connectionFilter(connection);
-                }
-                if (blockEntity.BASE_READ)
-                    connection |= 16;
-                for (int i = 0; i < 5; i++) {
-                    boolean v = (connection & 1) == 0;
-                    connection >>= 1;
-                    if (v)
-                        continue;
-                    model = modelManager.getModel(blockEntity.PINMARK_MODELS[i]);
-                    renderModel(blockEntity, modelRenderer, vc, blockState, model, poseStack, packedLight, packedOverlay);
-                }
+            int connection = 0;
+            if (blockState.getBlock() instanceof PinMarkConnectionInterface pmci) {
+                connection = pmci.getConnection(blockState);
+                connection = pmci.connectionFilter(connection);
+            }
+            if (blockEntity.BASE_READ)
+                connection |= 16;
+            for (int i = 0; i < 5; i++) {
+                boolean v = (connection & 1) == 0;
+                connection >>= 1;
+                if (v)
+                    continue;
+                model = modelManager.getModel(ArrowIndicatorBlockEntity.PINMARK_MODELS[i]);
+                renderModel(blockEntity, modelRenderer, vc, blockState, model, poseStack, packedLight, packedOverlay);
             }
             poseStack.translate(
                     blockEntity.ARROW_MODEL_POSITION[0],

@@ -8,6 +8,7 @@
     "outputs": [
         { "id": "redstonecg:seven_segment_indicator", "Count": 1, "count": 1 },
         { "id": "redstonecg:clock_filling_indicator", "Count": 1, "count": 1 },
-        { "id": "redstonecg:orb_indicator", "Count": 1, "count": 1 }
+        { "id": "redstonecg:orb_indicator", "Count": 1, "count": 1 },
+        { "id": "redstonecg:hexadecimal_indicator", "Count": 1, "count": 1 }
     ]
 }

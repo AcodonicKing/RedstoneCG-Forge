@@ -1,0 +1,12 @@
+{
+    "type": "redstonecg:redcu_crafting",
+    "designation": "hybrid/normal",
+    "ingredients": [
+        { "item": "redstonecg:normal_buf"},
+        { "item": "redstonecg:normal_one_way_through_gate" },
+        { "item": "redstonecg:normal_or" }
+    ],
+    "outputs": [
+        { "id": "redstonecg:normal_binary_encoder", "Count": 2, "count": 2 }
+    ]
+}

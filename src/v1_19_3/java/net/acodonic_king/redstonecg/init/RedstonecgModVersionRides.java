@@ -8,6 +8,7 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
@@ -25,6 +26,7 @@ import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Material;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.registries.RegistryObject;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.items.IItemHandler;
@@ -80,12 +82,14 @@ public class RedstonecgModVersionRides {
     public static Button createButton(int x, int y, int w, int h, String text, Button.OnPress onPress) {
         return Button.builder(Component.translatable(text), onPress).pos(x, y).size(w, h).build();
     }
-    public static Item.Properties defaultItemProperties = new Item.Properties();
+    public static Item.Properties getDefaultItemProperties(){
+        return new Item.Properties().stacksTo(64).rarity(Rarity.COMMON);
+    }
     public static BlockItem createBlockItem(RegistryObject<Block> block){
-        return new BlockItem(block.get(), defaultItemProperties);
+        return new BlockItem(block.get(), getDefaultItemProperties());
     }
     public static Item.Properties newItemSuper(int stacksize){
-        return defaultItemProperties.stacksTo(stacksize).rarity(Rarity.COMMON);
+        return new Item.Properties().stacksTo(stacksize).rarity(Rarity.COMMON);
     }
     public static Level getPlayerLevel(Player player){
         return player.level;
@@ -104,5 +108,8 @@ public class RedstonecgModVersionRides {
     }
     public static TagKey<Item> getItemTag(String master, String name){
         return TagKey.create(Registries.ITEM, new ResourceLocation(master, name));
+    }
+    public static Vec3 getBlockPosCenter(BlockPos pos){
+        return pos.getCenter();
     }
 }

@@ -6,15 +6,13 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Mirror;
-import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 
-public class DefaultAnalogInteractible2Gate extends DefaultAnalogInteractibleGate implements PinMarkConnectionInterface {
+public class DefaultAnalogInteractable2Gate extends DefaultAnalogInteractableGate implements PinMarkConnectionInterface {
     public static final IntegerProperty CONNECTION = IntegerProperty.create("connection",0,2);
-    public DefaultAnalogInteractible2Gate(){super();}
+    public DefaultAnalogInteractable2Gate(){super();}
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {

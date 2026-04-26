@@ -1,0 +1,10 @@
+{
+    "variants": {
+        "model=0": {
+            "model": "redstonecg:custom/sourceknob"
+        },
+        "model=1": {
+            "model": "redstonecg:custom/sourceknob"
+        }
+    }
+}

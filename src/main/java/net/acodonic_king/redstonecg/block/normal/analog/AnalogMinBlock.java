@@ -1,14 +1,17 @@
 
 package net.acodonic_king.redstonecg.block.normal.analog;
 
-import net.acodonic_king.redstonecg.block.defaults.DefaultAnalogInteractible2Gate;
+import net.acodonic_king.redstonecg.block.defaults.DefaultAnalogInteractable2TGate;
 
-public class AnalogMinBlock extends DefaultAnalogInteractible2Gate {
+public class AnalogMinBlock extends DefaultAnalogInteractable2TGate {
 	public AnalogMinBlock() {
 		super();
 	}
 	@Override
-	public int redstonePowerOperation(int SideAPower, int SideBPower){
-		return Math.min(SideAPower, SideBPower);
+	public int redstonePowerOperation(int[] SidePower){
+		int power = 15;
+		for(int p: SidePower)
+			power = Math.min(power, p);
+		return power;
 	}
 }
