@@ -11,13 +11,13 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 public class RedstonecgModClientSetup {
     @SubscribeEvent
     public static void onClientSetup(FMLClientSetupEvent event) {
-        BlockEntityRenderers.register(RedstonecgModBlockEntities.DEFAULT_ANALOG_INDICATOR.get(), DefaultAnalogIndicatorBlockEntity.DefaultAnalogIndicatorBlockEntityRenderer::new);
-        BlockEntityRenderers.register(RedstonecgModBlockEntities.REDCU_WIRE_TRANSITION.get(), RedCuWireTransitionBlockEntity.RedCuWireTransitionBlockEntityRenderer::new);
-        BlockEntityRenderers.register(RedstonecgModBlockEntities.DELAYER.get(), DefaultAnalogIndicatorBlockEntity.DefaultAnalogIndicatorBlockEntityRenderer::new);
-        BlockEntityRenderers.register(RedstonecgModBlockEntities.DEFAULT_COLORED_LAMP.get(), DefaultColoredLampBlockEntity.DefaultColoredLampBlockEntityRenderer::new);
-        BlockEntityRenderers.register(RedstonecgModBlockEntities.ARROW_INDICATOR.get(), ArrowIndicatorBlockEntity.ArrowIndicatorBlockEntityRenderer::new);
-        BlockEntityRenderers.register(RedstonecgModBlockEntities.DEFAULT_COLORED_FLAT_LAMP.get(), DefaultColoredFlatLampBlockEntity.DefaultColoredFlatLampBlockEntityRenderer::new);
-        BlockEntityRenderers.register(RedstonecgModBlockEntities.HANGING_REDCU_WIRE_CONNECTOR.get(), HangingRedCuWireConnectorBlockEntity.HangingRedCuWireConnectorBlockEntityRenderer::new);
-        BlockEntityRenderers.register(RedstonecgModBlockEntities.ANALOG_SOURCE.get(), AnalogSourceBlockEntity.AnalogSourceBlockEntityRenderer::new);
+        BlockEntityRenderers.register(RedstonecgModBlockEntities.DEFAULT_ANALOG_INDICATOR.get(), DefaultAnalogIndicatorBlockEntityRenderer::new);
+        BlockEntityRenderers.register(RedstonecgModBlockEntities.REDCU_WIRE_TRANSITION.get(), RedCuWireTransitionBlockEntityRenderer::new);
+        BlockEntityRenderers.register(RedstonecgModBlockEntities.DELAYER.get(), DefaultAnalogIndicatorBlockEntityRenderer::new);
+        BlockEntityRenderers.register(RedstonecgModBlockEntities.DEFAULT_COLORED_LAMP.get(), DefaultColoredLampBlockEntityRenderer::new);
+        BlockEntityRenderers.register(RedstonecgModBlockEntities.ARROW_INDICATOR.get(), ArrowIndicatorBlockEntityRenderer::new);
+        BlockEntityRenderers.register(RedstonecgModBlockEntities.DEFAULT_COLORED_FLAT_LAMP.get(), DefaultColoredFlatLampBlockEntityRenderer::new);
+        BlockEntityRenderers.register(RedstonecgModBlockEntities.HANGING_REDCU_WIRE_CONNECTOR.get(), HangingRedCuWireConnectorBlockEntityRenderer::new);
+        BlockEntityRenderers.register(RedstonecgModBlockEntities.ANALOG_SOURCE.get(), AnalogSourceBlockEntityRenderer::new);
     }
 }

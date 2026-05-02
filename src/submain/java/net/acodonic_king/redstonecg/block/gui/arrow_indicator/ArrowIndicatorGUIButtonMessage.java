@@ -25,6 +25,11 @@ public class ArrowIndicatorGUIButtonMessage extends ButtonMessage {
     public ArrowIndicatorGUIButtonMessage(int buttonID, BlockPos pos) {
         super(buttonID, pos);
     }
+
+    public static void sendAndHandle(Player entity, ArrowIndicatorGUIButtonMessage msg){
+        send(msg);
+        msg.handleButtonAction(entity);
+    }
     public static void sendAndHandle(Player entity, int buttonID, BlockPos pos){
         ArrowIndicatorGUIButtonMessage msg = new ArrowIndicatorGUIButtonMessage(buttonID, pos);
         //RedstonecgMod.PACKET_HANDLER.sendToServer(msg);
@@ -65,8 +70,10 @@ public class ArrowIndicatorGUIButtonMessage extends ButtonMessage {
         if (buttonID == 0) {
             EditBox range_box_start = (EditBox)guistate.get("box:range_box_start");
             EditBox range_box_end = (EditBox)guistate.get("box:range_box_end");
+            String range_start = this.tag.getString("range_start");
+            String range_end = this.tag.getString("range_end");
             try {
-                float value = Float.parseFloat(range_box_start.getValue());
+                float value = Float.parseFloat(range_start);
                 value = Mth.clamp(value, -999.9999f, 999.9999f);
                 int h = (int) (value * 16);
                 if(range[0] != h) {
@@ -75,7 +82,7 @@ public class ArrowIndicatorGUIButtonMessage extends ButtonMessage {
                 }
             } catch (NumberFormatException ignored) {}
             try {
-                float value = Float.parseFloat(range_box_end.getValue());
+                float value = Float.parseFloat(range_end);
                 value = Mth.clamp(value, -999.9999f, 999.9999f);
                 int h = (int) (value * 16);
                 if(range[1] != h) {
@@ -92,8 +99,8 @@ public class ArrowIndicatorGUIButtonMessage extends ButtonMessage {
         }
         if(be_changed) {
             blockEntity.setChanged();
-            world.scheduleTick(pos, world.getBlockState(pos).getBlock(), 1);
             MessengerBlockEntityPigeon.send(new MessengerBlockEntityPigeon(pos, blockEntity.getUpdateTag()));
+            world.scheduleTick(pos, world.getBlockState(pos).getBlock(), 2);
         }
     }
 

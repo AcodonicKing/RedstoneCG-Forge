@@ -3,6 +3,7 @@ package net.acodonic_king.redstonecg.default_gui_classes;
 import net.acodonic_king.redstonecg.RedstonecgMod;
 import net.acodonic_king.redstonecg.init.RedstonecgModNetworking;
 import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
@@ -14,6 +15,7 @@ import java.util.function.Supplier;
 public class ButtonMessage {
     public final int buttonID;
     public final BlockPos pos;
+    public CompoundTag tag = new CompoundTag();
     public ButtonMessage(FriendlyByteBuf buffer) {
         this.buttonID = buffer.readInt();
         int x, y, z;
@@ -21,6 +23,7 @@ public class ButtonMessage {
         y = buffer.readInt();
         z = buffer.readInt();
         this.pos = new BlockPos(x, y, z);
+        this.tag = buffer.readNbt();
     }
     public ButtonMessage(int buttonID, BlockPos pos) {
         this.buttonID = buttonID;
@@ -31,6 +34,7 @@ public class ButtonMessage {
         buffer.writeInt(message.pos.getX());
         buffer.writeInt(message.pos.getY());
         buffer.writeInt(message.pos.getZ());
+        buffer.writeNbt(message.tag);
     }
     public static void send(ButtonMessage msg){
         RedstonecgModNetworking.PACKET_HANDLER.sendToServer(msg);

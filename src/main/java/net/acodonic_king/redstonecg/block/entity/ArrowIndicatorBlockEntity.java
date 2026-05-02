@@ -1,21 +1,7 @@
 package net.acodonic_king.redstonecg.block.entity;
 
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.acodonic_king.redstonecg.ModLoaderRider;
-import net.acodonic_king.redstonecg.RedstonecgMod;
-import net.acodonic_king.redstonecg.block.defaults.PinMarkConnectionInterface;
 import net.acodonic_king.redstonecg.init.RedstonecgModBlockEntities;
-import net.acodonic_king.redstonecg.procedures.RCGQuaternion;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.block.ModelBlockRenderer;
-import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
-import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
-import net.minecraft.client.resources.model.BakedModel;
-import net.minecraft.client.resources.model.ModelManager;
-import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
@@ -23,15 +9,8 @@ import net.minecraft.world.level.block.state.BlockState;
 
 public class ArrowIndicatorBlockEntity extends DefaultAnalogIndicatorBlockEntity{
     public ResourceLocation BLOCK;
-    public ModelResourceLocation BASE_MODEL;
-    public static final ModelResourceLocation[] PINMARK_MODELS = new ModelResourceLocation[]{
-            new ModelResourceLocation(new ResourceLocation("redstonecg", "arrow_indicator"), "connection=8,waterlogged=false"),
-            new ModelResourceLocation(new ResourceLocation("redstonecg", "arrow_indicator"), "connection=9,waterlogged=false"),
-            new ModelResourceLocation(new ResourceLocation("redstonecg", "arrow_indicator"), "connection=10,waterlogged=false"),
-            new ModelResourceLocation(new ResourceLocation("redstonecg", "arrow_indicator"), "connection=11,waterlogged=false"),
-            new ModelResourceLocation(new ResourceLocation("redstonecg", "arrow_indicator"), "connection=12,waterlogged=false"),
-    };
-    public ModelResourceLocation ARROW_MODEL;
+    public String BASE_MODEL;
+    public String ARROW_MODEL;
     public float[] ARROW_MODEL_POSITION = new float[]{0.5f, 0.0f, 0.5f, 0.5f};
     public float[] ANGLE_CONVERSION = new float[]{(float) ((Math.PI * 1.5) / 255.0f), (float) (Math.PI * 1.75)};
     private int[] VALUE_RANGE = new int[]{0, 255};
@@ -62,14 +41,14 @@ public class ArrowIndicatorBlockEntity extends DefaultAnalogIndicatorBlockEntity
     public void setModel(int model){
         model %= 6;
         MODEL = (byte) model;
-        BASE_MODEL = new ModelResourceLocation(BLOCK, "connection="+model+",waterlogged=false");
+        BASE_MODEL =  "connection="+model+",waterlogged=false";
         model %= 3;
         if(model == 2) {
-            ARROW_MODEL = new ModelResourceLocation(BLOCK, "connection=7,waterlogged=false");
+            ARROW_MODEL = "connection=7,waterlogged=false";
             ARROW_MODEL_POSITION[0] = 0.75f;
             ARROW_MODEL_POSITION[2] = 0.75f;
         } else {
-            ARROW_MODEL = new ModelResourceLocation(BLOCK, "connection=6,waterlogged=false");
+            ARROW_MODEL = "connection=6,waterlogged=false";
             ARROW_MODEL_POSITION[0] = 0.5f;
             ARROW_MODEL_POSITION[2] = 0.5f;
         }
@@ -140,81 +119,5 @@ public class ArrowIndicatorBlockEntity extends DefaultAnalogIndicatorBlockEntity
         setParameterSet(tag);
         if(tag.contains("angle"))
             ARROW_MODEL_POSITION[3] = tag.getFloat("angle");
-    }
-    public static class ArrowIndicatorBlockEntityRenderer implements BlockEntityRenderer<ArrowIndicatorBlockEntity> {
-        BlockEntityRendererProvider.Context context;
-        public ArrowIndicatorBlockEntityRenderer(BlockEntityRendererProvider.Context context){
-            super();
-            this.context = context;
-        }
-        @Override
-        public void render(ArrowIndicatorBlockEntity blockEntity, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, int packedOverlay) {
-            ModelManager modelManager = Minecraft.getInstance().getModelManager();
-            BlockState blockState = blockEntity.getBlockState();
-            ModelBlockRenderer modelRenderer = Minecraft.getInstance().getBlockRenderer().getModelRenderer();
-            BakedModel model;
-            VertexConsumer vc = bufferSource.getBuffer(RenderType.cutoutMipped());
-
-            renderPose(blockEntity, poseStack);
-            model = modelManager.getModel(blockEntity.BASE_MODEL);
-            renderModel(blockEntity, modelRenderer, vc, blockState, model, poseStack, packedLight, packedOverlay);
-            int connection = 0;
-            if (blockState.getBlock() instanceof PinMarkConnectionInterface pmci) {
-                connection = pmci.getConnection(blockState);
-                connection = pmci.connectionFilter(connection);
-            }
-            if (blockEntity.BASE_READ)
-                connection |= 16;
-            for (int i = 0; i < 5; i++) {
-                boolean v = (connection & 1) == 0;
-                connection >>= 1;
-                if (v)
-                    continue;
-                model = modelManager.getModel(ArrowIndicatorBlockEntity.PINMARK_MODELS[i]);
-                renderModel(blockEntity, modelRenderer, vc, blockState, model, poseStack, packedLight, packedOverlay);
-            }
-            poseStack.translate(
-                    blockEntity.ARROW_MODEL_POSITION[0],
-                    blockEntity.ARROW_MODEL_POSITION[1],
-                    blockEntity.ARROW_MODEL_POSITION[2]
-            );
-            poseStack.mulPose(RCGQuaternion.Vector3F.rotateYP(blockEntity.ARROW_MODEL_POSITION[3]).quaternion);
-            model = modelManager.getModel(blockEntity.ARROW_MODEL);
-            renderModel(blockEntity, modelRenderer, vc, blockState, model, poseStack, packedLight, packedOverlay);
-            poseStack.popPose();
-        }
-        private void renderPose(ArrowIndicatorBlockEntity blockEntity, PoseStack poseStack){
-            poseStack.pushPose();
-            poseStack.translate(0.5, 0.5, 0.5);
-            switch (blockEntity.facingMode){
-                case 5 -> poseStack.mulPose(blockEntity.facing.quaternion);
-                case 0 -> {}
-                default -> {
-                    poseStack.mulPose(blockEntity.facing.quaternion);
-                    poseStack.mulPose(RCGQuaternion.Vector3F.rotateXP((float) (Math.PI * 0.5)).quaternion);
-                }
-            }
-            poseStack.mulPose(blockEntity.rotation.quaternion);
-            poseStack.translate(-0.5, -0.5, -0.5);
-        }
-        private void renderModel(
-                ArrowIndicatorBlockEntity blockEntity,
-                ModelBlockRenderer modelRenderer,
-                VertexConsumer vc,
-                BlockState blockState,
-                BakedModel model,
-                PoseStack poseStack,
-                int packedLight, int packedOverlay
-        ){
-            modelRenderer.renderModel(
-                    poseStack.last(),
-                    vc,
-                    blockState,
-                    model,
-                    1.0f, 1.0f, 1.0f,
-                    packedLight,
-                    packedOverlay
-            );
-        }
     }
 }

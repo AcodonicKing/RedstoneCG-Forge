@@ -170,7 +170,10 @@ public class ArrowIndicatorGUIScreen extends AbstractContainerScreenRide<ArrowIn
         if(range_box_start.mouseClicked(mouseX, mouseY, button) || range_box_end.mouseClicked(mouseX, mouseY, button)){
             return super.mouseClicked(mouseX, mouseY, button);
         } else if (range_box_start.isFocused() || range_box_end.isFocused()){
-            ArrowIndicatorGUIButtonMessage.sendAndHandle(entity, 0, pos);
+            ArrowIndicatorGUIButtonMessage msg = new ArrowIndicatorGUIButtonMessage(0, pos);
+            msg.tag.putString("range_start", range_box_start.getValue());
+            msg.tag.putString("range_end", range_box_end.getValue());
+            ArrowIndicatorGUIButtonMessage.sendAndHandle(entity, msg);
             range_box_start.setFocused(false);
             range_box_end.setFocused(false);
             return true;
@@ -190,7 +193,10 @@ public class ArrowIndicatorGUIScreen extends AbstractContainerScreenRide<ArrowIn
         }
         if (key == GLFW.GLFW_KEY_ENTER || key == GLFW.GLFW_KEY_KP_ENTER) {
             if (range_box_start.isFocused() || range_box_end.isFocused()){
-                ArrowIndicatorGUIButtonMessage.sendAndHandle(entity, 0, pos);
+                ArrowIndicatorGUIButtonMessage msg = new ArrowIndicatorGUIButtonMessage(0, pos);
+                msg.tag.putString("range_start", range_box_start.getValue());
+                msg.tag.putString("range_end", range_box_end.getValue());
+                ArrowIndicatorGUIButtonMessage.sendAndHandle(entity, msg);
                 range_box_start.setFocused(false);
                 range_box_end.setFocused(false);
                 return true;

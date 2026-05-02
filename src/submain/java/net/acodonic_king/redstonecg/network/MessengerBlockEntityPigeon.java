@@ -2,14 +2,12 @@ package net.acodonic_king.redstonecg.network;
 
 import net.acodonic_king.redstonecg.RedstonecgMod;
 import net.acodonic_king.redstonecg.init.RedstonecgModNetworking;
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.network.NetworkEvent;
+import net.minecraftforge.network.PacketDistributor;
 
 import java.util.function.Supplier;
 
@@ -33,7 +31,7 @@ public class MessengerBlockEntityPigeon {
     }
     public static void send(MessengerBlockEntityPigeon msg){
         try {
-            RedstonecgModNetworking.PACKET_HANDLER.sendToServer(msg);
+            RedstonecgModNetworking.PACKET_HANDLER.send(PacketDistributor.ALL.noArg(), msg);
         } catch (java.lang.NullPointerException ignored) {
 
         }
@@ -41,12 +39,12 @@ public class MessengerBlockEntityPigeon {
     public static void handleData(MessengerBlockEntityPigeon message, Supplier<NetworkEvent.Context> contextSupplier){
         NetworkEvent.Context context = contextSupplier.get();
         context.enqueueWork(() -> {
-            Level world = Minecraft.getInstance().level;
-            if (world == null) return;
-            BlockEntity be = world.getBlockEntity(message.POS);
-            if(be == null) return;
-            be.load(message.TAG);
-            be.setChanged();
+            if (context.getDirection().getReceptionSide().isClient()) {
+                net.minecraftforge.fml.DistExecutor.unsafeRunWhenOn(
+                        net.minecraftforge.api.distmarker.Dist.CLIENT,
+                        () -> () -> MessengerBlockEntityPigeonClient.handle(message)
+                );
+            }
         });
         context.setPacketHandled(true);
     }
