@@ -55,11 +55,4 @@ public class RedCuCrafterBlockEntity extends DefaultContainerBlockEntity {
 			return false;
 		return true;
 	}
-
-	@Override
-	public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction facing) {
-		if (!this.remove && facing != null)
-			return handlers[facing.ordinal()].cast();
-		return super.getCapability(capability, facing);
-	}
 }

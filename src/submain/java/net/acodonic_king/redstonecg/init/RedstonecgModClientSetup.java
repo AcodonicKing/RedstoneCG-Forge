@@ -19,5 +19,6 @@ public class RedstonecgModClientSetup {
         BlockEntityRenderers.register(RedstonecgModBlockEntities.DEFAULT_COLORED_FLAT_LAMP.get(), DefaultColoredFlatLampBlockEntityRenderer::new);
         BlockEntityRenderers.register(RedstonecgModBlockEntities.HANGING_REDCU_WIRE_CONNECTOR.get(), HangingRedCuWireConnectorBlockEntityRenderer::new);
         BlockEntityRenderers.register(RedstonecgModBlockEntities.ANALOG_SOURCE.get(), AnalogSourceBlockEntityRenderer::new);
+        BlockEntityRenderers.register(RedstonecgModBlockEntities.CONTROL_PANEL.get(), ControlPanelBlockEntityRenderer::new);
     }
 }

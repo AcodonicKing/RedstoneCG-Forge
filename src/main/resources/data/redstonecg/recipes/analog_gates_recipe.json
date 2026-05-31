@@ -7,7 +7,6 @@
         { "item": "minecraft:quartz" }
     ],
     "outputs": [
-        { "id": "redstonecg:normal_analog_source", "Count": 1, "count": 1 },
         { "id": "redstonecg:normal_analog_bias", "Count": 1, "count": 1 },
         { "id": "redstonecg:normal_analog_gain", "Count": 1, "count": 1 },
         { "id": "redstonecg:normal_analog_pass", "Count": 1, "count": 1 },

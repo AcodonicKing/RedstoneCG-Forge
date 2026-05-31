@@ -2,6 +2,8 @@ package net.acodonic_king.redstonecg.init;
 
 import net.acodonic_king.redstonecg.RedstonecgMod;
 import net.acodonic_king.redstonecg.block.gui.arrow_indicator.ArrowIndicatorGUIButtonMessage;
+import net.acodonic_king.redstonecg.block.gui.control_panel.ControlPanelGUIButtonMessage;
+import net.acodonic_king.redstonecg.block.gui.control_panel.ControlPanelGUISlotMessage;
 import net.acodonic_king.redstonecg.block.gui.delayer.DelayerGUIButtonMessage;
 import net.acodonic_king.redstonecg.block.gui.redcu_crafter.RedCuCrafterGUIButtonMessage;
 import net.acodonic_king.redstonecg.block.gui.redcu_crafter.RedCuCrafterGUISlotMessage;
@@ -45,6 +47,10 @@ public class RedstonecgModNetworking {
         addNetworkMessage(RedstonecgModVariables.SavedDataSyncMessage.class, RedstonecgModVariables.SavedDataSyncMessage::buffer, RedstonecgModVariables.SavedDataSyncMessage::new, RedstonecgModVariables.SavedDataSyncMessage::handleData);
         addNetworkMessage(MessengerBlockEntityPigeon.class, MessengerBlockEntityPigeon::buffer, MessengerBlockEntityPigeon::new, MessengerBlockEntityPigeon::handleData);
         addNetworkMessage(ArrowIndicatorGUIButtonMessage.class, ArrowIndicatorGUIButtonMessage::buffer, ArrowIndicatorGUIButtonMessage::new, ArrowIndicatorGUIButtonMessage::handleData);
+
+        addNetworkMessage(ControlPanelGUIButtonMessage.class, ControlPanelGUIButtonMessage::buffer, ControlPanelGUIButtonMessage::new, ControlPanelGUIButtonMessage::handleData);
+        addNetworkMessage(ControlPanelGUISlotMessage.class, ControlPanelGUISlotMessage::buffer, ControlPanelGUISlotMessage::new, ControlPanelGUISlotMessage::handleData);
+
     }
 
     public static void register(IEventBus bus){

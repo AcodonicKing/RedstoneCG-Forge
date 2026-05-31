@@ -1,11 +1,14 @@
 package net.acodonic_king.redstonecg.block.entity;
 
 import net.acodonic_king.redstonecg.ModLoaderRider;
+import net.acodonic_king.redstonecg.block.defaults.StainLampInterface;
 import net.acodonic_king.redstonecg.init.RedstonecgModBlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.BeaconBeamBlock;
 import net.minecraft.world.level.block.state.BlockState;
 
 public class DefaultColoredFlatLampBlockEntity extends DefaultAnalogIndicatorBlockEntity{
@@ -36,7 +39,42 @@ public class DefaultColoredFlatLampBlockEntity extends DefaultAnalogIndicatorBlo
             c >>= 8;
         }
     }
+    public int getColor(){
+        int c = 0;
+        for(int i = 0; i <= 2; i++){
+            c <<= 8;
+            c |= COLOR[i] & 0xFF;
+        }
+        return c;
+    }
     public void setItem(Item item){
         ITEM = item;
+    }
+    public Item getItem(){
+        return ITEM;
+    }
+    public CompoundTag getParameterSet(){
+        CompoundTag tag = new CompoundTag();
+        if(ITEM != null)
+            tag.putString("item", ModLoaderRider.getItemRegistryName(ITEM).toString());
+        else
+            tag.putInt("color", getColor());
+        return tag;
+    }
+    public void setParameterSet(CompoundTag tag){
+        if(tag.contains("item")) {
+            ITEM = ModLoaderRider.getItemFromRegistry(new ResourceLocation(tag.getString("item")));
+            if (ITEM instanceof BlockItem bi) {
+                if (bi.getBlock() instanceof BeaconBeamBlock bl) {
+                    setColor(bl.getColor().getTextColor());
+                } else if (bi.getBlock() instanceof StainLampInterface bl) {
+                    setColor(bl.getLampStainColor());
+                }
+            } else if (ITEM instanceof StainLampInterface bl) {
+                setColor(bl.getLampStainColor());
+            }
+        }
+        if(tag.contains("color"))
+            setColor(tag.getInt("color"));
     }
 }

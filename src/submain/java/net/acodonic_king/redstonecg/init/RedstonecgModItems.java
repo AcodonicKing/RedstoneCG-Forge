@@ -28,7 +28,6 @@ public class RedstonecgModItems {
 	public static final RegistryObject<Item> ROTATION_BRACKET = item("rotation_bracket", RotationBracket::new);
 	public static final RegistryObject<Item> RED_CU_CRAFTER = block(RedstonecgModBlocks.REDCU_CRAFTER);
 	public static final RegistryObject<Item> SMOOTH_STONE_PLATE = block(RedstonecgModBlocks.SMOOTH_STONE_PLATE);
-
 	//==== Floor ====
 	//Digital
 	public static final RegistryObject<Item> NORMAL_AND = block(RedstonecgModBlocks.NORMAL_AND);
@@ -44,7 +43,13 @@ public class RedstonecgModItems {
 	public static final RegistryObject<Item> NORMAL_T_TRIGGER = block(RedstonecgModBlocks.NORMAL_T_TRIGGER);
 	public static final RegistryObject<Item> NORMAL_JK_TRIGGER = block(RedstonecgModBlocks.NORMAL_JK_TRIGGER);
 	//Analog
-	public static final RegistryObject<Item> NORMAL_ANALOG_SOURCE = block(RedstonecgModBlocks.NORMAL_ANALOG_SOURCE);
+	public static final RegistryObject<Item> NORMAL_ANALOG_SOURCE = itemBlock(
+			RedstonecgModBlocks.NORMAL_ANALOG_SOURCE,
+			() -> new AnalogSourceItem(
+					RedstonecgModBlocks.NORMAL_ANALOG_SOURCE.get(),
+					RedstonecgModVersionRides.getDefaultItemProperties()
+			)
+	);
 	public static final RegistryObject<Item> NORMAL_ANALOG_BIAS = block(RedstonecgModBlocks.NORMAL_ANALOG_BIAS);
 	public static final RegistryObject<Item> NORMAL_ANALOG_GAIN = block(RedstonecgModBlocks.NORMAL_ANALOG_GAIN);
 	public static final RegistryObject<Item> NORMAL_ANALOG_PASS = block(RedstonecgModBlocks.NORMAL_ANALOG_PASS);
@@ -71,7 +76,13 @@ public class RedstonecgModItems {
 	public static final RegistryObject<Item> ORB_INDICATOR = block(RedstonecgModBlocks.ORB_INDICATOR);
 	public static final RegistryObject<Item> HEXADECIMAL_INDICATOR = block(RedstonecgModBlocks.HEXADECIMAL_INDICATOR);
 	public static final RegistryObject<Item> FLAT_LAMP_INDICATOR = block(RedstonecgModBlocks.FLAT_LAMP_INDICATOR);
-	public static final RegistryObject<Item> COLORED_FLAT_LAMP_INDICATOR = block(RedstonecgModBlocks.COLORED_FLAT_LAMP_INDICATOR);
+	public static final RegistryObject<Item> COLORED_FLAT_LAMP_INDICATOR = itemBlock(
+			RedstonecgModBlocks.COLORED_FLAT_LAMP_INDICATOR,
+			() -> new ColoredLampItem(
+					RedstonecgModBlocks.COLORED_FLAT_LAMP_INDICATOR.get(),
+					RedstonecgModVersionRides.getDefaultItemProperties()
+			)
+	);
 	public static final RegistryObject<Item> COLORFUL_FLAT_LAMP_INDICATOR = block(RedstonecgModBlocks.COLORFUL_FLAT_LAMP_INDICATOR);
 	public static final RegistryObject<Item> ARROW_INDICATOR = itemBlock(
 			RedstonecgModBlocks.ARROW_INDICATOR,
@@ -81,8 +92,24 @@ public class RedstonecgModItems {
 			)
 	);
 	public static final RegistryObject<Item> BAR_INDICATOR = block(RedstonecgModBlocks.BAR_INDICATOR);
-	public static final RegistryObject<Item> COLORED_LAMP_BLOCK = block(RedstonecgModBlocks.COLORED_LAMP_BLOCK);
+	public static final RegistryObject<Item> COLORED_LAMP_BLOCK = itemBlock(
+			RedstonecgModBlocks.COLORED_LAMP_BLOCK,
+			() -> new ColoredLampItem(
+					RedstonecgModBlocks.COLORED_LAMP_BLOCK.get(),
+					RedstonecgModVersionRides.getDefaultItemProperties()
+			)
+	);
 	public static final RegistryObject<Item> COLORFUL_LAMP_BLOCK = block(RedstonecgModBlocks.COLORFUL_LAMP_BLOCK);
+	//Interaction
+	public static final RegistryObject<Item> RED_SWITCH = block(RedstonecgModBlocks.RED_SWITCH);
+	public static final RegistryObject<Item> RED_BUTTON = block(RedstonecgModBlocks.RED_BUTTON);
+	public static final RegistryObject<Item> CONTROL_PANEL = itemBlock(
+			RedstonecgModBlocks.CONTROL_PANEL,
+			() -> new ControlPanelItem(
+					RedstonecgModBlocks.CONTROL_PANEL.get(),
+					RedstonecgModVersionRides.getDefaultItemProperties()
+			)
+	);
 	//Parallel Digital
 	public static final RegistryObject<Item> PARALLEL_AND = block(RedstonecgModBlocks.PARALLEL_AND);
 	public static final RegistryObject<Item> PARALLEL_OR = block(RedstonecgModBlocks.PARALLEL_OR);

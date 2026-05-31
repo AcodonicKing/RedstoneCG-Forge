@@ -168,12 +168,18 @@ public class HangingRedCuWireConnectorBlockEntity extends RedCuWireBlockEntity{
             removeConnectorThisSide(pos);
         return power;
     }
-    public void tickTargets(LevelAccessor world){
+    public void tickTargets(LevelAccessor world, int recursion){
         for(HangingRedCuWireConnectorPosition target: TARGETS) {
             BlockPos targetPos = target.getBlockPos();
             if (world.getBlockState(targetPos).getBlock() instanceof WireInterface nb) {
-                nb.onTick(world, targetPos);
+                nb.onTick(world, targetPos, recursion);
             }
+        }
+    }
+    public void scheduleTickTargets(LevelAccessor world){
+        for(HangingRedCuWireConnectorPosition target: TARGETS) {
+            BlockPos targetPos = target.getBlockPos();
+            world.scheduleTick(targetPos, world.getBlockState(targetPos).getBlock(), 1);
         }
     }
 

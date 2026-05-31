@@ -1,5 +1,7 @@
 package net.acodonic_king.redstonecg.block.defaults;
 
+import net.acodonic_king.redstonecg.RedstonecgMod;
+import net.acodonic_king.redstonecg.network.RedstonecgModVariables;
 import net.acodonic_king.redstonecg.procedures.BlockFrameTransformUtils;
 import net.acodonic_king.redstonecg.procedures.ConnectionFace;
 import net.minecraft.core.BlockPos;
@@ -17,10 +19,10 @@ public class DefaultRedstoneActionGate extends DefaultConnectableGate implements
     public DefaultRedstoneActionGate(){
         super();
     }
-    public int onRedstoneUpdate(LevelAccessor world, BlockState blockState, BlockPos pos, BlockPos fromPos){
-        return onRedstoneUpdate(world, blockState, pos);
+    public int onRedstoneUpdate(LevelAccessor world, BlockState blockState, BlockPos pos, BlockPos fromPos, int recursion){
+        return onRedstoneUpdate(world, blockState, pos, recursion);
     }
-    public int onRedstoneUpdate(LevelAccessor world, BlockState blockState, BlockPos pos){
+    public int onRedstoneUpdate(LevelAccessor world, BlockState blockState, BlockPos pos, int recursion){
         return 0;
     }
     @Override
@@ -58,9 +60,12 @@ public class DefaultRedstoneActionGate extends DefaultConnectableGate implements
     @Override
     public void neighborChanged(BlockState blockstate, Level world, BlockPos pos, Block neighborBlock, BlockPos fromPos, boolean moving) {
         super.neighborChanged(blockstate, world, pos, neighborBlock, fromPos, moving);
-        this.onRedstoneUpdate(world, blockstate, pos, fromPos);
+        this.onRedstoneUpdate(world, blockstate, pos, fromPos, 0);
     }
-    public void sendRedstoneUpdateInDirection(LevelAccessor level, Block thisBlock, BlockPos thisPos, Direction direction){
+    public static int getGateChainLimit(LevelAccessor world){
+        return RedstonecgModVariables.MapVariables.get(world).gateChainLimit;
+    }
+    public void sendRedstoneUpdateInDirection(LevelAccessor level, Block thisBlock, BlockPos thisPos, Direction direction, int recursion){
         Level world = (Level) level;
         if(direction == null) {
             world.blockUpdated(thisPos, thisBlock);
@@ -70,11 +75,19 @@ public class DefaultRedstoneActionGate extends DefaultConnectableGate implements
         //RedstonecgMod.LOGGER.debug("Sending update to {}",neighborPos);
         BlockState bs = world.getBlockState(neighborPos);
         Block block = bs.getBlock();
+        recursion++;
         if (block instanceof DefaultConnectableGate nb){
             if(nb.isOutput(world, bs, neighborPos, direction.getOpposite())){return;}
         }
+        if(recursion > getGateChainLimit(level)){
+            //RedstonecgMod.LOGGER.debug(recursion);
+            world.scheduleTick(neighborPos, block, 1);
+            return;
+        }
         if (block instanceof DefaultRedstoneActionGate nb){
-            nb.onRedstoneUpdate(world, bs, neighborPos, thisPos);
+            nb.onRedstoneUpdate(world, bs, neighborPos, thisPos, recursion);
+        } else if (block instanceof WireInterface wi) {
+            wi.onTick(world, neighborPos, recursion);
         } else {
             //block.neighborChanged(bs,world,neighborPos,thisBlock,thisPos,false);
             world.neighborChanged(neighborPos,thisBlock,thisPos);
@@ -82,7 +95,7 @@ public class DefaultRedstoneActionGate extends DefaultConnectableGate implements
     }
     @Override
     public void tick(BlockState blockstate, ServerLevel world, BlockPos pos, RandomSource random){
-        onRedstoneUpdate(world,blockstate,pos);
+        onRedstoneUpdate(world, blockstate, pos, 0);
     }
     @Override
     public boolean isOutput(LevelAccessor world, BlockState blockState, BlockPos pos, Direction direction){

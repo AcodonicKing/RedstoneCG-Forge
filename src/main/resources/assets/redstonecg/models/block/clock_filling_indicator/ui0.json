@@ -1,5 +1,5 @@
 {
-  "parent": "redstonecg:custom/floor_component",
+  "parent": "redstonecg:custom/indicator",
   "textures": {
     "all": "redstonecg:block/clock_filling_indicator/ui0",
     "particle": "redstonecg:block/clock_filling_indicator/ui0",

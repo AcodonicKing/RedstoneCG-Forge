@@ -1,0 +1,13 @@
+{
+    "type": "redstonecg:redcu_crafting",
+    "designation": "interaction/normal",
+    "ingredients": [
+        { "item": "redstonecg:smooth_stone_plate"},
+        { "item": "minecraft:redstone" },
+        { "item": "minecraft:stick" }
+    ],
+    "outputs": [
+        { "id": "redstonecg:red_switch", "Count": 1, "count": 1 },
+        { "id": "redstonecg:red_button", "Count": 1, "count": 1 }
+    ]
+}

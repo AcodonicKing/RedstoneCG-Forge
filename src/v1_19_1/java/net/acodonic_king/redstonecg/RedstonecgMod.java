@@ -41,6 +41,7 @@ public class RedstonecgMod {
         RedstonecgModBlockEntities.REGISTRY.register(bus);
         RedstonecgModMenus.REGISTRY.register(bus);
         RedstonecgModRecipes.REGISTRY.register(bus);
+        RedstonecgModRecipes.TYPES.register(bus);
         RedstonecgModNetworking.register(bus);
     }
 }

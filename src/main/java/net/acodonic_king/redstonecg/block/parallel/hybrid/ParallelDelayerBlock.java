@@ -52,7 +52,7 @@ public class ParallelDelayerBlock extends DelayerBlockBase implements ParallelGa
         Direction updateDirection = BlockFrameTransformUtils.directionFromPositions(fromPos, thisPos);
         Direction direction = BlockFrameTransformUtils.getLocalDirectionFromWorld(world, thisPos, updateDirection);
         if(direction.getAxis() == Direction.Axis.X && !breakParallelLine(world, thisState, thisPos, updateDirection, false)){
-            sendRedstoneUpdateInDirection(world, thisState.getBlock(), thisPos, updateDirection);
+            sendRedstoneUpdateInDirection(world, thisState.getBlock(), thisPos, updateDirection, 0);
         }
     }
 

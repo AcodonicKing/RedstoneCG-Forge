@@ -15,6 +15,11 @@ import net.minecraft.world.level.block.state.properties.Property;
 import org.apache.commons.lang3.tuple.Pair;
 
 public class BlockFrameTransformUtils {
+    public static final Direction CW0 = Direction.NORTH;
+    public static final Direction CW90 = Direction.EAST;
+    public static final Direction CW180 = Direction.SOUTH;
+    public static final Direction CW270 = Direction.WEST;
+
     public static Direction[] all(BlockState blockState){
         Direction directionA = LittleTools.getDirection(blockState);
         Direction directionB = LittleTools.getDirectionB(blockState);

@@ -1,6 +1,7 @@
 
 package net.acodonic_king.redstonecg.block.normal.wire;
 
+import net.acodonic_king.redstonecg.RedstonecgMod;
 import net.acodonic_king.redstonecg.block.defaults.*;
 import net.acodonic_king.redstonecg.block.entity.RedCuWireBlockEntity;
 import net.acodonic_king.redstonecg.procedures.*;
@@ -11,7 +12,6 @@ import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.BlockGetter;
@@ -92,7 +92,7 @@ public class RedCuWireBlock extends DefaultWire implements OldInterface, PinMark
 	}
 
 	@Override
-	public void onTick(LevelAccessor world, BlockPos pos, int power){
+	public void onTick(LevelAccessor world, BlockPos pos, int power, int recursion){
 		BlockState thisBlock = world.getBlockState(pos);
 		ConnectionFacePrimaryRange connectionFaceRangeA = new ConnectionFacePrimaryRange(thisBlock.getValue(DefaultWire.FACING));
 		int filter = RedCuWireCanConnectRedstoneProcedure.wireConnectionFilter(thisBlock.getValue(RedCuWireBlock.CONNECTION));
@@ -110,15 +110,25 @@ public class RedCuWireBlock extends DefaultWire implements OldInterface, PinMark
 			wireEntity.setChanged();
 			//world.setBlock(pos, thisBlock, 2);
 			//((Level) world).sendBlockUpdated(pos, thisBlock, thisBlock, 2);
+			recursion++;
+			boolean exceedsRecursion = recursion > getWireChainLimit(world);
 			for(ConnectionFace connectionFaceA: connectionFaceList){
 				BlockPos targetPos = pos.relative(connectionFaceA.FACE);
 				//RedstonecgMod.LOGGER.debug("Sending RedCu wire update to {}", targetPos);
 				BlockState bs = world.getBlockState(targetPos);
 				Block targetBlock = bs.getBlock();
 				if (targetBlock instanceof DefaultRedstoneActionGate nb){
-					nb.onRedstoneUpdate(world, bs, targetPos, pos);
+					if (exceedsRecursion) {
+						world.scheduleTick(targetPos, targetBlock, 1);
+						continue;
+					}
+					nb.onRedstoneUpdate(world, bs, targetPos, pos, recursion);
 				} else if (targetBlock instanceof WireInterface nb) {
-					nb.onTick(world, targetPos);
+					if (exceedsRecursion) {
+						world.scheduleTick(targetPos, targetBlock, 1);
+						continue;
+					}
+					nb.onTick(world, targetPos, recursion);
 				} else {
 					Block nb = bs.getBlock();
 					//nb.neighborChanged(bs,(Level) world,targetPos,thisBlock.getBlock(),pos,false);
@@ -146,7 +156,7 @@ public class RedCuWireBlock extends DefaultWire implements OldInterface, PinMark
 	@Override
 	public void neighborChanged(BlockState blockstate, Level world, BlockPos pos, Block neighborBlock, BlockPos fromPos, boolean moving) {
 		super.neighborChanged(blockstate, world, pos, neighborBlock, fromPos, moving);
-		this.onTick(world, pos);
+		this.onTick(world, pos, 0);
 	}
 
 	@Override

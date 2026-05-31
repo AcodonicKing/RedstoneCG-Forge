@@ -47,6 +47,10 @@
   "block.redstonecg.colored_lamp_indicator": "Colored Lamp",
   "block.redstonecg.colorful_lamp_indicator": "Colorful Lamp",
 
+  "block.redstonecg.red_switch": "Red Switch",
+  "block.redstonecg.red_button": "Red Button",
+  "block.redstonecg.control_panel": "Control Panel",
+
   "block.redstonecg.parallel_and": "Parallel AND Gate",
   "block.redstonecg.parallel_or": "Parallel OR Gate",
   "block.redstonecg.parallel_xor": "Parallel XOR Gate",
@@ -100,6 +104,12 @@
 
   "gui.redstonecg.arrow_indicator_gui.button_change": "Change",
 
+  "tooltip.redstonecg.analog_source.placing": "Upon placing, the block will:",
+  "tooltip.redstonecg.analog_source.output": "- output %d;",
+  "tooltip.redstonecg.analog_source.range": "- range from %d to %d;",
+  "tooltip.redstonecg.analog_source.reset": "Right-click on air to reset.",
+  "tooltip.redstonecg.analog_source.set": "Place Analog Source or\nright-click on Analog Source to copy parameters.",
+
   "tooltip.redstonecg.arrow_indicator.placing": "Upon placing, the block will:",
   "tooltip.redstonecg.arrow_indicator.glass_cover": "- be covered with glass;",
   "tooltip.redstonecg.arrow_indicator.tq_base": "- 3/4 of a circle;",
@@ -113,6 +123,15 @@
   "tooltip.redstonecg.hanging_redcu_wire_connector.connect": "connect to Hanging RedCu Wire Connector at %d %d %d",
   "tooltip.redstonecg.hanging_redcu_wire_connector.distance": "if the distance is not more than %d.",
   "tooltip.redstonecg.hanging_redcu_wire_connector.set": "Place Hanging RedCu Wire Connector or\nright-click on Hanging RedCu Wire Connector to copy it's position.",
+
+  "tooltip.redstonecg.colored_lamp.placing": "Upon placement, the block will:",
+  "tooltip.redstonecg.colored_lamp.stained_item": "Get stained by %s;",
+  "tooltip.redstonecg.colored_lamp.stained_color": "Get colored to #%06X ;",
+  "tooltip.redstonecg.colored_lamp.reset": "Click on air to reset, or hold a staining item in offhand to stain it.",
+  "tooltip.redstonecg.colored_lamp.set": "Place a block, or crouch-right-click a block or use with staining item in offhand to stain it.",
+
+  "tooltip.redstonecg.control_panel.reset": "Click on air to reset.",
+  "tooltip.redstonecg.control_panel.set": "Place a block, or right-click a block to change type.",
 
   "tooltip.redstonecg.rotation_bracket": "Right click to rotate a block clockwise.\nShift + right click to rotate counterclockwise."
 

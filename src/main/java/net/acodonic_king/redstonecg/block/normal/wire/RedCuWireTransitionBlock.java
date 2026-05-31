@@ -43,6 +43,8 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
+import static net.acodonic_king.redstonecg.block.defaults.DefaultWire.getWireChainLimit;
+
 public class RedCuWireTransitionBlock extends SuperBlock implements EntityBlock, WireInterface, MeasurementProvider, RedstoneSignalInterface, SupportingFaceInterface {
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
     public static final IntegerProperty MODEL = IntegerProperty.create("model", 0, 11);
@@ -77,16 +79,16 @@ public class RedCuWireTransitionBlock extends SuperBlock implements EntityBlock,
                 world.sendBlockUpdated(pos, blockstate, blockstate, 3);
             }
         }
-        this.onTick(world, pos);
+        this.onTick(world, pos, 0);
     }
 
     @Override
-    public void onTick(LevelAccessor world, BlockPos pos){
-        onTick(world, pos, 0);
+    public void onTick(LevelAccessor world, BlockPos pos, int recursion){
+        onTick(world, pos, 0, recursion);
     }
 
     @Override
-    public void onTick(LevelAccessor world, BlockPos pos, int power){
+    public void onTick(LevelAccessor world, BlockPos pos, int power, int recursion){
         if(world.getBlockEntity(pos) instanceof RedCuWireTransitionBlockEntity blockEntity){
             for(byte side: "DNESWU".getBytes()){
                 char char_side = (char) side;
@@ -102,6 +104,8 @@ public class RedCuWireTransitionBlock extends SuperBlock implements EntityBlock,
             blockEntity.POWER = power;
             blockEntity.setChanged();
             BlockState thisBlock = blockEntity.getBlockState();
+            recursion++;
+            boolean exceedsRecursion = recursion > getWireChainLimit(world);
             for(byte side: "DNESWU".getBytes()){
                 char char_side = (char) side;
                 byte connection = blockEntity.getSideCharacter(char_side);
@@ -111,9 +115,17 @@ public class RedCuWireTransitionBlock extends SuperBlock implements EntityBlock,
                 BlockState bs = world.getBlockState(targetPos);
                 Block targetBlock = bs.getBlock();
                 if (targetBlock instanceof DefaultRedstoneActionGate nb){
-                    nb.onRedstoneUpdate(world, bs, targetPos, pos);
+                    if (exceedsRecursion) {
+                        world.scheduleTick(targetPos, targetBlock, 1);
+                        continue;
+                    }
+                    nb.onRedstoneUpdate(world, bs, targetPos, pos, recursion);
                 } else if (targetBlock instanceof WireInterface nb){
-                    nb.onTick(world, targetPos);
+                    if (exceedsRecursion) {
+                        world.scheduleTick(targetPos, targetBlock, 1);
+                        continue;
+                    }
+                    nb.onTick(world, targetPos, recursion);
                 } else {
                     Block nb = bs.getBlock();
                     //nb.neighborChanged(bs,(Level) world,targetPos,thisBlock.getBlock(),pos,false);
@@ -227,7 +239,7 @@ public class RedCuWireTransitionBlock extends SuperBlock implements EntityBlock,
         if(world.getBlockEntity(pos) instanceof RedCuWireTransitionBlockEntity be){
             char d = RedCuWireTransitionBlockEntity.getCharacterDirection(direction);
             byte c = be.getSideCharacter(d);
-            if (c == requesterFace.CHANNEL)
+            if (c == requesterFace.CHANNEL || requesterFace.CHANNEL == 4)
                 return be.POWER;
         }
         return 0;
@@ -334,7 +346,7 @@ public class RedCuWireTransitionBlock extends SuperBlock implements EntityBlock,
     @Override
     public void neighborChanged(BlockState blockstate, Level world, BlockPos pos, Block neighborBlock, BlockPos fromPos, boolean moving) {
         super.neighborChanged(blockstate, world, pos, neighborBlock, fromPos, moving);
-        this.onTick(world, pos);
+        this.onTick(world, pos, 0);
     }
 
     @Override

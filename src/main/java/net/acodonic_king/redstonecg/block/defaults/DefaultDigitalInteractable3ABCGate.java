@@ -6,7 +6,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
@@ -30,7 +29,7 @@ public class DefaultDigitalInteractable3ABCGate extends DefaultDigitalInteractab
     public boolean redstoneOutputOperation(int SideAPower, int SideBPower, int SideCPower){return false;}
 
     @Override
-    public int onRedstoneUpdate(LevelAccessor world, BlockState blockState, BlockPos pos){
+    public int onRedstoneUpdate(LevelAccessor world, BlockState blockState, BlockPos pos, int recursion){
         Direction[] Sides = GetGateInputSidesProcedure.Get3ABCGateForth(blockState);
         int [] power = {0,0,0};
         int i = 0;
@@ -41,7 +40,7 @@ public class DefaultDigitalInteractable3ABCGate extends DefaultDigitalInteractab
         }
         boolean output = this.redstoneOutputOperation(power[0], power[1], power[2]);
 
-        setOutput(world, blockState, pos, output);
+        setOutput(world, blockState, pos, output, recursion);
         if (output) {return 15;}
         return 0;
     }

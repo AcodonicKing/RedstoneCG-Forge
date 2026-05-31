@@ -3,6 +3,7 @@ package net.acodonic_king.redstonecg.init;
 import net.acodonic_king.redstonecg.RedstonecgMod;
 import net.acodonic_king.redstonecg.block.gui.analog_source.AnalogSourceGUIMenu;
 import net.acodonic_king.redstonecg.block.gui.arrow_indicator.ArrowIndicatorGUIMenu;
+import net.acodonic_king.redstonecg.block.gui.control_panel.ControlPanelGUIMenu;
 import net.acodonic_king.redstonecg.block.gui.delayer.DelayerGUIMenu;
 import net.acodonic_king.redstonecg.block.gui.redcu_crafter.RedCuCrafterGUIMenu;
 import net.acodonic_king.redstonecg.block.gui.redcu_wire_transition.RedCuWireTransitionGUIMenu;
@@ -19,4 +20,5 @@ public class RedstonecgModMenus {
 	public static final RegistryObject<MenuType<RedCuWireTransitionGUIMenu>> REDCU_WIRE_TRANSITION_GUI = REGISTRY.register("redcu_wire_transition_gui", () -> IForgeMenuType.create(RedCuWireTransitionGUIMenu::new));
 	public static final RegistryObject<MenuType<DelayerGUIMenu>> DELAYER_GUI = REGISTRY.register("delayer_gui", () -> IForgeMenuType.create(DelayerGUIMenu::new));
 	public static final RegistryObject<MenuType<ArrowIndicatorGUIMenu>> ARROW_INDICATOR_GUI = REGISTRY.register("arrow_indicator_gui", () -> IForgeMenuType.create(ArrowIndicatorGUIMenu::new));
+	public static final RegistryObject<MenuType<ControlPanelGUIMenu>> CONTROL_PANEL_GUI = REGISTRY.register("control_panel_gui", () -> IForgeMenuType.create(ControlPanelGUIMenu::new));
 }

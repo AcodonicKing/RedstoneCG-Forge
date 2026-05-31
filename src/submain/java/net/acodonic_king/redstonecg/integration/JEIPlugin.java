@@ -7,6 +7,7 @@ import mezz.jei.api.registration.IRecipeRegistration;
 import mezz.jei.api.recipe.RecipeType;
 import net.acodonic_king.redstonecg.ModLoaderRider;
 import net.acodonic_king.redstonecg.RedstonecgMod;
+import net.acodonic_king.redstonecg.init.RedstonecgModRecipes;
 import net.acodonic_king.redstonecg.recipe.RedCuCrafterRecipe;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
@@ -27,7 +28,7 @@ public class JEIPlugin implements IModPlugin {
     @Override
     public void registerRecipes(IRecipeRegistration registration){
         RecipeManager recipeManager = Objects.requireNonNull(Minecraft.getInstance().level).getRecipeManager();
-        List<RedCuCrafterRecipe> customRecipes = ModLoaderRider.getAllRecipes(recipeManager.getAllRecipesFor(RedCuCrafterRecipe.Type.INSTANCE));
+        List<RedCuCrafterRecipe> customRecipes = ModLoaderRider.getAllRecipes(recipeManager.getAllRecipesFor(RedstonecgModRecipes.REDCU_CRAFTING.get()));
         registration.addRecipes(REDCU_CRAFTING, customRecipes);
     }
 

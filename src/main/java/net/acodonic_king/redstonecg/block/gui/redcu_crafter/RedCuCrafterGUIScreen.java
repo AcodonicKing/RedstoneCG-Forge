@@ -3,6 +3,7 @@ package net.acodonic_king.redstonecg.block.gui.redcu_crafter;
 import net.acodonic_king.redstonecg.ModLoaderRider;
 import net.acodonic_king.redstonecg.default_gui_classes.AbstractContainerScreenRide;
 import net.acodonic_king.redstonecg.default_gui_classes.ScreenTools;
+import net.acodonic_king.redstonecg.init.RedstonecgModRecipes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.entity.player.Player;
@@ -35,8 +36,8 @@ public class RedCuCrafterGUIScreen extends AbstractContainerScreenRide<RedCuCraf
 		this.imageWidth = 222;
 		this.imageHeight = 166;
 	}
-	private static final ResourceLocation texture = ScreenTools.getImage("redstonecg","textures/screens/red_cu_crafter_gui.png");
-	private static final ResourceLocation selected = ScreenTools.getImage("redstonecg","textures/screens/redcucraftertabs/selected.png");
+	private static final ResourceLocation texture = ScreenTools.getImage("redstonecg","textures/screens/redcu_crafter_gui/background.png");
+	private static final ResourceLocation selected = ScreenTools.getImage("redstonecg","textures/screens/redcu_crafter_gui/selected.png");
 	private int mouse_hovering_over_block = 0;
 
 	@Override
@@ -88,11 +89,11 @@ public class RedCuCrafterGUIScreen extends AbstractContainerScreenRide<RedCuCraf
 
 		String strcategory = (String) guistate.getOrDefault("variable:block_category_string", "wires");
 		int bcsy = ((buttonImage) guistate.get("button:"+strcategory)).y - 1;
-		ScreenTools.blitTexture(this,ms, this.leftPos + 7, bcsy, 18, 18, selected);
+		ScreenTools.blitTexture(this, ms, this.leftPos + 7, bcsy, 18, 18, selected);
 
 		String junccategory = (String) guistate.getOrDefault("variable:junction_type_string", "/normal");
 		bcsy = ((buttonImageJunction) guistate.get("button:"+junccategory)).y - 1;
-		ScreenTools.blitTexture(this,ms, this.leftPos + this.imageWidth - 25, bcsy, 18, 18, selected);
+		ScreenTools.blitTexture(this, ms, this.leftPos + this.imageWidth - 25, bcsy, 18, 18, selected);
         strcategory += junccategory;
 
 		Object objcategory = guistate.get("category:"+strcategory);
@@ -175,7 +176,7 @@ public class RedCuCrafterGUIScreen extends AbstractContainerScreenRide<RedCuCraf
 			/*ImageButton new_button = new ImageButton(this.x, this.y, 16, 16, 0, 0, 16, ScreenTools.getImage("redstonecg","textures/screens/redcucraftertabs/atlas/"+name+".png"), 16, 32, e -> {
 				RedCuCrafterGUIButtonMessage.sendAndHandle(screen.entity, id, screen.pos);
 			});*/
-			this.button = new ScreenTools.ImageButton(this.x, this.y, 16, 16, "textures/screens/redcucraftertabs/atlas/"+name+".png", 16, 32){
+			this.button = new ScreenTools.ImageButton(this.x, this.y, 16, 16, "textures/screens/redcu_crafter_gui/atlas/"+name+".png", 16, 32){
 				@Override
 				public void onClick(){
 					RedCuCrafterGUIButtonMessage.sendAndHandle(screen.entity, id, screen.pos);
@@ -201,7 +202,7 @@ public class RedCuCrafterGUIScreen extends AbstractContainerScreenRide<RedCuCraf
 				//	super.render(ms, gx, gy, ticks);
 				//}
 			};*/
-			this.button = new ScreenTools.ImageButton(this.x, this.y, 16, 16, "textures/screens/redcucraftertabs/atlas"+name+".png", 16, 32){
+			this.button = new ScreenTools.ImageButton(this.x, this.y, 16, 16, "textures/screens/redcu_crafter_gui/atlas"+name+".png", 16, 32){
 				@Override
 				public void onClick(){
 					RedCuCrafterGUIButtonMessage.sendAndHandle(screen.entity, id, screen.pos);
@@ -255,15 +256,16 @@ public class RedCuCrafterGUIScreen extends AbstractContainerScreenRide<RedCuCraf
 		new buttonImage(this, 2, 8, 48, "hybrid");
 		new buttonImage(this, 3, 8, 66, "analog");
 		new buttonImage(this, 4, 8, 84, "indicators");
-		new buttonImageJunction(this, 5, 24, 12, "/normal");
-		new buttonImageJunction(this,6, 24, 30, "/parallel");
+		new buttonImage(this, 5, 8, 102, "interaction");
+		new buttonImageJunction(this, 6, 24, 12, "/normal");
+		new buttonImageJunction(this,7, 24, 30, "/parallel");
 
 		guistate.put("variable:block_category", 0);
 		guistate.put("variable:junction_type", 0);
 		guistate.put("variable:block_selected", 0);
 
 		RecipeManager recipeManager = world.getRecipeManager();
-		List<RedCuCrafterRecipe> customRecipes = ModLoaderRider.getAllRecipes(recipeManager.getAllRecipesFor(RedCuCrafterRecipe.Type.INSTANCE));
+		List<RedCuCrafterRecipe> customRecipes = ModLoaderRider.getAllRecipes(recipeManager.getAllRecipesFor(RedstonecgModRecipes.REDCU_CRAFTING.get()));
 		List<item_option> wires_normal = new ArrayList<>();
 		List<item_option> wires_parallel = new ArrayList<>();
 		List<item_option> digital_normal = new ArrayList<>();
@@ -274,6 +276,8 @@ public class RedCuCrafterGUIScreen extends AbstractContainerScreenRide<RedCuCraf
 		List<item_option> analog_parallel = new ArrayList<>();
 		List<item_option> indicators_normal = new ArrayList<>();
 		List<item_option> indicators_parallel = new ArrayList<>();
+		List<item_option> interaction_normal = new ArrayList<>();
+		List<item_option> interaction_parallel = new ArrayList<>();
 		for (RedCuCrafterRecipe recipe : customRecipes) {
             switch (recipe.getDesignation()) {
                 case "wires/normal" -> add_item_options(wires_normal, recipe);
@@ -286,6 +290,8 @@ public class RedCuCrafterGUIScreen extends AbstractContainerScreenRide<RedCuCraf
                 case "analog/parallel" -> add_item_options(analog_parallel, recipe);
                 case "indicators/normal" -> add_item_options(indicators_normal, recipe);
                 case "indicators/parallel" -> add_item_options(indicators_parallel, recipe);
+				case "interaction/normal" -> add_item_options(interaction_normal, recipe);
+				case "interaction/parallel" -> add_item_options(interaction_parallel, recipe);
             }
 		}
 		guistate.put("category:wires/normal", wires_normal);
@@ -298,5 +304,7 @@ public class RedCuCrafterGUIScreen extends AbstractContainerScreenRide<RedCuCraf
 		guistate.put("category:analog/parallel", analog_parallel);
 		guistate.put("category:indicators/normal", indicators_normal);
 		guistate.put("category:indicators/parallel", indicators_parallel);
+		guistate.put("category:interaction/normal", interaction_normal);
+		guistate.put("category:interaction/parallel", interaction_parallel);
 	}
 }

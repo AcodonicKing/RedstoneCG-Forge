@@ -26,7 +26,7 @@ public class DefaultAnalogInteractable3Gate extends DefaultAnalogInteractableGat
     public int redstonePowerOperation(int SideRightPower, int SideBackPower, int SideLeftPower){return 0;}
 
     @Override
-    public int onRedstoneUpdate(LevelAccessor world, BlockState blockState, BlockPos pos){
+    public int onRedstoneUpdate(LevelAccessor world, BlockState blockState, BlockPos pos, int recursion){
         Direction[] Sides = GetGateInputSidesProcedure.Get3GateForth(blockState);
         int [] power = {0,0,0};
         int i = 0;
@@ -36,7 +36,7 @@ public class DefaultAnalogInteractable3Gate extends DefaultAnalogInteractableGat
             i++;
         }
         int output = this.redstonePowerOperation(power[0], power[1], power[2]);
-        setPower(world, blockState, pos, output);
+        setPower(world, blockState, pos, output, recursion);
         return output;
     }
 

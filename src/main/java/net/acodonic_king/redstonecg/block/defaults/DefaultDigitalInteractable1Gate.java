@@ -6,7 +6,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
@@ -29,12 +28,12 @@ public class DefaultDigitalInteractable1Gate extends DefaultDigitalInteractableG
     public boolean redstoneOutputOperation(int SidePower){return false;}
 
     @Override
-    public int onRedstoneUpdate(LevelAccessor world, BlockState blockState, BlockPos pos){
+    public int onRedstoneUpdate(LevelAccessor world, BlockState blockState, BlockPos pos, int recursion){
         Direction Side = GetGateInputSidesProcedure.Get1GateForth(blockState);
         ConnectionFace thisFace = BlockFrameTransformUtils.getConnectionFace(blockState, Side);
         int SidePower = GetRedstoneSignalProcedure.execute(world, pos, thisFace);
         boolean output = this.redstoneOutputOperation(SidePower);
-        setOutput(world, blockState, pos, output);
+        setOutput(world, blockState, pos, output, recursion);
         if (output) {return 15;}
         return 0;
     }

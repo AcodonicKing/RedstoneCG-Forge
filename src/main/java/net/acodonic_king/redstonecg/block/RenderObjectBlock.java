@@ -8,7 +8,7 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 
 public class RenderObjectBlock extends SuperBlock {
-    public static final IntegerProperty MODEL = IntegerProperty.create("model",0,1);
+    public static final IntegerProperty MODEL = IntegerProperty.create("model",0,4);
     public RenderObjectBlock() {
         super(RedstonecgModVersionRides.defaultGateProperties);
     }

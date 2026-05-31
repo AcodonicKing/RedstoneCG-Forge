@@ -3,6 +3,8 @@ package net.acodonic_king.redstonecg.init;
 import net.acodonic_king.redstonecg.RedstonecgMod;
 import net.acodonic_king.redstonecg.block.entity.*;
 import net.acodonic_king.redstonecg.block.normal.indicator.ArrowIndicatorBlock;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.registries.RegistryObject;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.DeferredRegister;
@@ -127,6 +129,10 @@ public class RedstonecgModBlockEntities {
 			DelayerBlockEntity::new,
 			RedstonecgModBlocks.NORMAL_DELAYER.get(),
 			RedstonecgModBlocks.PARALLEL_DELAYER.get()
+	).build(null));
+	public static final RegistryObject<BlockEntityType<ControlPanelBlockEntity>> CONTROL_PANEL = REGISTRY.register("control_panel", () -> BlockEntityType.Builder.of(
+			(BlockPos position, BlockState state) -> new ControlPanelBlockEntity(position, state, 1),
+			RedstonecgModBlocks.CONTROL_PANEL.get()
 	).build(null));
 
 	private static RegistryObject<BlockEntityType<?>> register(String registryname, RegistryObject<Block> block, BlockEntityType.BlockEntitySupplier<?> supplier) {

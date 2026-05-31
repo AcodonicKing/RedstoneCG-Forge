@@ -1,6 +1,7 @@
 package net.acodonic_king.redstonecg.item;
 
 import net.acodonic_king.redstonecg.block.defaults.DefaultGate;
+import net.acodonic_king.redstonecg.block.defaults.RotationBracketInterface;
 import net.acodonic_king.redstonecg.block.defaults.WireInterface;
 import net.acodonic_king.redstonecg.block.entity.DefaultAnalogIndicatorBlockEntity;
 import net.acodonic_king.redstonecg.init.RedstonecgModVersionRides;
@@ -59,6 +60,9 @@ public class RotationBracket extends SuperItem {
                 be.setChanged();
                 world.sendBlockUpdated(pos, blockState, blockState, 3);
                 world.scheduleTick(pos, block, 1);
+                return InteractionResult.SUCCESS;
+            } else if (block instanceof RotationBracketInterface bi){
+                bi.rotationBracket(world, pos, !player.isCrouching());
                 return InteractionResult.SUCCESS;
             }
         }

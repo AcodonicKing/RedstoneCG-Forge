@@ -3,6 +3,15 @@ package net.acodonic_king.redstonecg.procedures;
 import net.minecraft.core.Direction;
 
 public class ConnectionFace {
+    /*public static final Direction[][] FACEMAP = { // secondary primary
+            {Direction.DOWN, Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST, Direction.UP},
+            {Direction.NORTH, Direction.UP, Direction.EAST, Direction.DOWN, Direction.WEST, Direction.SOUTH},
+            {Direction.EAST, Direction.UP, Direction.SOUTH, Direction.DOWN, Direction.NORTH, Direction.WEST},
+            {Direction.SOUTH, Direction.UP, Direction.WEST, Direction.DOWN, Direction.EAST, Direction.NORTH},
+            {Direction.WEST, Direction.UP, Direction.NORTH, Direction.DOWN, Direction.SOUTH, Direction.EAST},
+            {Direction.UP, Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST, Direction.DOWN},
+    };*/
+
     public Direction FACE;
     public int CHANNEL;
     public ConnectionFace(Direction primary, Direction secondary){
@@ -36,6 +45,7 @@ public class ConnectionFace {
             };
             primary = primary.getCounterClockWise(Direction.Axis.X);
             FACE = BlockFrameTransformUtils.rotateDirectionClockwiseY(primary, secondary);
+            //FACE = FACEMAP[BlockFrameTransformUtils.encodeDirectionToInt(primary)][BlockFrameTransformUtils.encodeDirectionToInt(secondary)];
         }
     }
     public ConnectionFace(Direction face){

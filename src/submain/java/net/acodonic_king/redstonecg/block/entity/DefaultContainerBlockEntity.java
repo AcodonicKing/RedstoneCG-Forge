@@ -1,5 +1,6 @@
 package net.acodonic_king.redstonecg.block.entity;
 
+import net.acodonic_king.redstonecg.init.RedstonecgModVersionRides;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
@@ -14,6 +15,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.wrapper.InvWrapper;
 import net.minecraftforge.items.wrapper.SidedInvWrapper;
 
 import javax.annotation.Nullable;
@@ -22,6 +24,7 @@ import java.util.stream.IntStream;
 public abstract class DefaultContainerBlockEntity extends RandomizableContainerBlockEntity implements WorldlyContainer {
     public NonNullList<ItemStack> stacks;
     public final LazyOptional<? extends IItemHandler>[] handlers = SidedInvWrapper.create(this, Direction.values());
+    public final LazyOptional<IItemHandler> unsidedHandler = LazyOptional.of(() -> new InvWrapper(this));
 
     public DefaultContainerBlockEntity(BlockEntityType<?> blockEntityType, BlockPos position, BlockState state, int container_size){
         super(blockEntityType, position, state);
@@ -98,8 +101,14 @@ public abstract class DefaultContainerBlockEntity extends RandomizableContainerB
     }
 
     @Override
-    public <T> LazyOptional<T> getCapability(Capability<T> cap, @Nullable Direction side) {
-        return LazyOptional.empty();
+    public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction facing) {
+        if (!this.remove && capability == RedstonecgModVersionRides.item_handler) {
+            if (facing == null) {
+                return unsidedHandler.cast();
+            }
+            return handlers[facing.ordinal()].cast();
+        }
+        return super.getCapability(capability, facing);
     }
 
     @Override

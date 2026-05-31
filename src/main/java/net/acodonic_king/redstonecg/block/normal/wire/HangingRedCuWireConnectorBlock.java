@@ -1,6 +1,5 @@
 package net.acodonic_king.redstonecg.block.normal.wire;
 
-import net.acodonic_king.redstonecg.RedstonecgMod;
 import net.acodonic_king.redstonecg.block.defaults.*;
 import net.acodonic_king.redstonecg.block.entity.HangingRedCuWireConnectorBlockEntity;
 import net.acodonic_king.redstonecg.init.RedstonecgModItems;
@@ -10,7 +9,6 @@ import net.acodonic_king.redstonecg.network.RedstonecgModVariables;
 import net.acodonic_king.redstonecg.procedures.*;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.Position;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
@@ -44,6 +42,8 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.List;
+
+import static net.acodonic_king.redstonecg.block.defaults.DefaultWire.getWireChainLimit;
 
 public class HangingRedCuWireConnectorBlock extends SuperBlock implements EntityBlock, WireInterface, MeasurementProvider, FlooringInterface, RedstoneSignalInterface, PinMarkConnectionInterface, SupportingFaceInterface {
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
@@ -219,12 +219,12 @@ public class HangingRedCuWireConnectorBlock extends SuperBlock implements Entity
     }
 
     @Override
-    public void onTick(LevelAccessor world, BlockPos pos){
-        onTick(world, pos, 0);
+    public void onTick(LevelAccessor world, BlockPos pos, int recursion){
+        onTick(world, pos, 0, recursion);
     }
 
     @Override
-    public void onTick(LevelAccessor world, BlockPos pos, int power){
+    public void onTick(LevelAccessor world, BlockPos pos, int power, int recursion){
         BlockState thisBlock = world.getBlockState(pos);
         if(world.getBlockEntity(pos) instanceof HangingRedCuWireConnectorBlockEntity wireEntity){
             ConnectionFacePrimaryRange connectionFaceRangeA = new ConnectionFacePrimaryRange(wireEntity.FACING);
@@ -246,14 +246,24 @@ public class HangingRedCuWireConnectorBlock extends SuperBlock implements Entity
             if(wireEntity.POWER == power){return;}
             wireEntity.POWER = power;
             wireEntity.setChanged();
+            recursion++;
+            boolean exceedsRecursion = recursion > getWireChainLimit(world);
             for(ConnectionFace connectionFaceA: connectionFaceList){
                 BlockPos targetPos = pos.relative(connectionFaceA.FACE);
                 BlockState bs = world.getBlockState(targetPos);
                 Block targetBlock = bs.getBlock();
                 if (targetBlock instanceof DefaultRedstoneActionGate nb){
-                    nb.onRedstoneUpdate(world, bs, targetPos, pos);
+                    if (exceedsRecursion) {
+                        world.scheduleTick(targetPos, targetBlock, 1);
+                        continue;
+                    }
+                    nb.onRedstoneUpdate(world, bs, targetPos, pos, recursion);
                 } else if (targetBlock instanceof WireInterface nb) {
-                    nb.onTick(world, targetPos);
+                    if (exceedsRecursion) {
+                        world.scheduleTick(targetPos, targetBlock, 1);
+                        continue;
+                    }
+                    nb.onTick(world, targetPos, recursion);
                 } else {
                     ((Level) world).neighborChanged(targetPos,thisBlock.getBlock(),pos);
                 }
@@ -263,28 +273,38 @@ public class HangingRedCuWireConnectorBlock extends SuperBlock implements Entity
                 BlockPos targetPos = pos.relative(face);
                 BlockState bs = world.getBlockState(targetPos);
                 Block targetBlock = bs.getBlock();
-                if (targetBlock instanceof DefaultRedstoneActionGate nb){
-                    nb.onRedstoneUpdate(world, bs, targetPos, pos);
+                if (targetBlock instanceof DefaultRedstoneActionGate nb) {
+                    if (exceedsRecursion)
+                        world.scheduleTick(targetPos, targetBlock, 1);
+                    else
+                        nb.onRedstoneUpdate(world, bs, targetPos, pos, recursion);
                 } else if (targetBlock instanceof WireInterface nb) {
-                    nb.onTick(world, targetPos);
+                    if (exceedsRecursion)
+                        world.scheduleTick(targetPos, targetBlock, 1);
+                    else
+                        nb.onTick(world, targetPos, recursion);
                 } else {
-                    ((Level) world).neighborChanged(targetPos,thisBlock.getBlock(),pos);
+                    ((Level) world).neighborChanged(targetPos, thisBlock.getBlock(), pos);
                 }
             }
-            wireEntity.tickTargets(world);
+            if (exceedsRecursion) {
+                wireEntity.scheduleTickTargets(world);
+            } else {
+                wireEntity.tickTargets(world, recursion);
+            }
         }
     }
 
     @Override
     public void tick(BlockState blockstate, ServerLevel world, BlockPos pos, RandomSource random) {
         super.tick(blockstate, world, pos, random);
-        this.onTick(world, pos);
+        this.onTick(world, pos, 0);
     }
 
     @Override
     public void neighborChanged(BlockState blockstate, Level world, BlockPos pos, Block neighborBlock, BlockPos fromPos, boolean moving) {
         super.neighborChanged(blockstate, world, pos, neighborBlock, fromPos, moving);
-        this.onTick(world, pos);
+        this.onTick(world, pos, 0);
     }
 
     @Override

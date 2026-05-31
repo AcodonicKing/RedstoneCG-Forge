@@ -15,7 +15,7 @@ public class BinaryDecoderBlock extends DefaultAnalogInteractable3ABCGate {
     }
 
     @Override
-    public int onRedstoneUpdate(LevelAccessor world, BlockState blockState, BlockPos pos){
+    public int onRedstoneUpdate(LevelAccessor world, BlockState blockState, BlockPos pos, int recursion){
         Direction[] Sides = GetGateInputSidesProcedure.Get3ABCGateForth(blockState);
         int[] power = {0,0};
         for(int i = 0; i < 2; i++){
@@ -28,15 +28,15 @@ public class BinaryDecoderBlock extends DefaultAnalogInteractable3ABCGate {
         if(state)
             power[0] &= ~power[1];
 
-        setPower(world, blockState, pos, power[0]);
+        setPower(world, blockState, pos, power[0], recursion);
         LittleTools.setBooleanProperty(world, pos, state, "visible_state", 2);
         Direction direction = BlockFrameTransformUtils.getWorldDirectionFromLocal(blockState, Sides[2]);
-        this.sendRedstoneUpdateInDirection(world,blockState.getBlock(),pos,direction);
+        this.sendRedstoneUpdateInDirection(world,blockState.getBlock(),pos,direction, recursion);
         return power[0];
     }
 
     @Override
-    public void setPower(LevelAccessor level, BlockState state, BlockPos pos, int power){
+    public void setPower(LevelAccessor level, BlockState state, BlockPos pos, int power, int recursion){
         power = Math.max(0, Math.min(power, 15));
         Level world = (Level) level;
         if (world.getBlockEntity(pos) instanceof DefaultAnalogGateBlockEntity be){
@@ -44,7 +44,7 @@ public class BinaryDecoderBlock extends DefaultAnalogInteractable3ABCGate {
                 be.POWER = power;
                 be.setChanged();
                 Direction direction = BlockFrameTransformUtils.getWorldDirectionFromLocalForward(state);
-                this.sendRedstoneUpdateInDirection(level,state.getBlock(),pos,direction);
+                this.sendRedstoneUpdateInDirection(level,state.getBlock(),pos,direction, recursion);
             }
         }
     }

@@ -2,6 +2,7 @@ package net.acodonic_king.redstonecg.block.entity;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.util.Mth;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.core.BlockPos;
 
@@ -41,6 +42,21 @@ public class AnalogSourceBlockEntity extends SuperBlockEntity {
 		setAngle();
     }
 
+	public CompoundTag getParameterSet(){
+		CompoundTag tag = new CompoundTag();
+		tag.putInt("power", POWER);
+		tag.putIntArray("range", POWER_RANGE);
+		return tag;
+	}
+
+	public void setParameterSet(CompoundTag tag){
+		if(tag.contains("power"))
+			POWER = tag.getInt("power");
+		if(tag.contains("range"))
+			POWER_RANGE = tag.getIntArray("range");
+		setAngle();
+	}
+
 	public void setAngle(){
 		ANGLE = (float) (POWER - POWER_RANGE[0]) / (POWER_RANGE[1] - POWER_RANGE[0] + 1);
 		ANGLE = 0.5f - ANGLE;
@@ -49,6 +65,26 @@ public class AnalogSourceBlockEntity extends SuperBlockEntity {
 
 	public void setPower(int v){
 		POWER = v;
+		setAngle();
+	}
+
+	public boolean adjustPower(int direction){
+		int power = POWER;
+		power += direction;
+		if (power > POWER_RANGE[1])
+			power = POWER_RANGE[0];
+		if (power < POWER_RANGE[0])
+			power = POWER_RANGE[1];
+		if(POWER != power) {
+			setPower(power);
+			return true;
+		}
+		return false;
+	}
+
+	public void setPowerRange(int[] range){
+		POWER_RANGE = range;
+		POWER = Mth.clamp(POWER, POWER_RANGE[0], POWER_RANGE[1]);
 		setAngle();
 	}
 }

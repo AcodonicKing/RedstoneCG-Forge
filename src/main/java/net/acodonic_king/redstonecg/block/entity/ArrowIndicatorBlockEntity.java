@@ -15,6 +15,7 @@ public class ArrowIndicatorBlockEntity extends DefaultAnalogIndicatorBlockEntity
     public float[] ANGLE_CONVERSION = new float[]{(float) ((Math.PI * 1.5) / 255.0f), (float) (Math.PI * 1.75)};
     private int[] VALUE_RANGE = new int[]{0, 255};
     public byte MODEL = 0;
+
     public ArrowIndicatorBlockEntity(BlockPos pos, BlockState state) {
         super(RedstonecgModBlockEntities.ARROW_INDICATOR.get(), pos, state);
         BLOCK = ModLoaderRider.getBlockRegistryName(state.getBlock());
@@ -53,9 +54,8 @@ public class ArrowIndicatorBlockEntity extends DefaultAnalogIndicatorBlockEntity
             ARROW_MODEL_POSITION[2] = 0.5f;
         }
     }
-    public float[] angleRange(){
-        int model = MODEL % 3;
-        return switch (model){
+    public static float[] angleRange(int model){
+        return switch (model % 3){
             case 0 -> new float[]{(float)(Math.PI * 1.75), (float)(Math.PI * 0.25)};
             case 1 -> new float[]{(float)(Math.PI * 1.00), (float)(Math.PI * -1.0)};
             case 2 -> new float[]{(float)(Math.PI * 1.00), (float)(Math.PI * 0.50)};
@@ -65,18 +65,12 @@ public class ArrowIndicatorBlockEntity extends DefaultAnalogIndicatorBlockEntity
     public void setRange(int start, int end){
         VALUE_RANGE[0] = start;
         VALUE_RANGE[1] = end;
-        float[] angles = angleRange();
+        float[] angles = angleRange(MODEL);
         float a_range = angles[0] - angles[1];
         ANGLE_CONVERSION[0] = a_range / (end - start);
         ANGLE_CONVERSION[1] = angles[0] + start * ANGLE_CONVERSION[0];
     }
     public int[] getRange(){
-        /*float[] angles = angleRange();
-        float a_range = angles[0] - angles[1];
-        int[] out = new int[2];
-        out[0] = (int) ((ANGLE_CONVERSION[1] - angles[0]) / ANGLE_CONVERSION[0]);
-        out[1] = (int)(a_range / ANGLE_CONVERSION[0]) + out[0];
-        return out;*/
         return VALUE_RANGE;
     }
     public void setRedCuSignal(int value){

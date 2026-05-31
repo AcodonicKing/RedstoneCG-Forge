@@ -38,6 +38,8 @@ public class ArrowIndicatorBlockEntityRenderer implements BlockEntityRenderer<Ar
         VertexConsumer vc = bufferSource.getBuffer(RenderType.cutoutMipped());
 
         renderPose(blockEntity, poseStack);
+        model = modelManager.getModel(DefaultAnalogIndicatorBlockEntityRenderer.SMOOTH_STONE_PLATE);
+        renderModel(blockEntity, modelRenderer, vc, blockState, model, poseStack, packedLight, packedOverlay);
         model = modelManager.getModel(new ModelResourceLocation(blockEntity.BLOCK, blockEntity.BASE_MODEL));
         renderModel(blockEntity, modelRenderer, vc, blockState, model, poseStack, packedLight, packedOverlay);
         int connection = 0;

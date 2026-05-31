@@ -2,10 +2,13 @@ package net.acodonic_king.redstonecg.init;
 
 import net.acodonic_king.redstonecg.RedstonecgMod;
 import net.acodonic_king.redstonecg.block.*;
+import net.acodonic_king.redstonecg.block.ControlPanelBlock;
 import net.acodonic_king.redstonecg.block.normal.hybrid.*;
 import net.acodonic_king.redstonecg.block.normal.analog.*;
 import net.acodonic_king.redstonecg.block.normal.digital.*;
 import net.acodonic_king.redstonecg.block.normal.indicator.*;
+import net.acodonic_king.redstonecg.block.normal.interaction.RedButtonBlock;
+import net.acodonic_king.redstonecg.block.normal.interaction.RedSwitchBlock;
 import net.acodonic_king.redstonecg.block.normal.wire.*;
 import net.acodonic_king.redstonecg.block.parallel.analog.*;
 import net.acodonic_king.redstonecg.block.parallel.digital.*;
@@ -71,6 +74,11 @@ public class RedstonecgModBlocks {
 	public static final RegistryObject<Block> BAR_INDICATOR = REGISTRY.register("bar_indicator", BarIndicatorBlock::new);
 	public static final RegistryObject<Block> COLORED_LAMP_BLOCK = REGISTRY.register("colored_lamp_indicator", ColoredLampBlock::new);
 	public static final RegistryObject<Block> COLORFUL_LAMP_BLOCK = REGISTRY.register("colorful_lamp_indicator", ColorfulLampBlock::new);
+	//Interaction
+	public static final RegistryObject<Block> RED_SWITCH = REGISTRY.register("red_switch", RedSwitchBlock::new);
+	public static final RegistryObject<Block> RED_BUTTON = REGISTRY.register("red_button", RedButtonBlock::new);
+	public static final RegistryObject<Block> CONTROL_PANEL = REGISTRY.register("control_panel", ControlPanelBlock::new);
+
 	//Parallel Digital
 	public static final RegistryObject<Block> PARALLEL_AND = REGISTRY.register("parallel_and", ParallelAndBlock::new);
 	public static final RegistryObject<Block> PARALLEL_OR = REGISTRY.register("parallel_or", ParallelOrBlock::new);

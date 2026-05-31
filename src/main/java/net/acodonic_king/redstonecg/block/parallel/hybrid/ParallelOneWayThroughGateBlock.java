@@ -2,11 +2,9 @@
 package net.acodonic_king.redstonecg.block.parallel.hybrid;
 
 import net.acodonic_king.redstonecg.block.defaults.DefaultParallelAnalogInteractableABGate;
-import net.acodonic_king.redstonecg.block.defaults.DefaultRedstoneActionGate;
 import net.acodonic_king.redstonecg.block.entity.DefaultAnalogGateBlockEntity;
 import net.acodonic_king.redstonecg.procedures.*;
 import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -29,7 +27,7 @@ public class ParallelOneWayThroughGateBlock extends DefaultParallelAnalogInterac
 	}
 
 	@Override
-	public int onRedstoneUpdate(LevelAccessor world, BlockState thisState, BlockPos thisPos){
+	public int onRedstoneUpdate(LevelAccessor world, BlockState thisState, BlockPos thisPos, int recursion){
 		int linePower = GetParallelSignalProcedure.getParallelLinePower(world, thisPos);
 		ConnectionFace connectionFaceA = BlockFrameTransformUtils.getConnectionFace(thisState, Direction.NORTH);
 		int backPower = GetRedstoneSignalProcedure.execute(world, thisPos, connectionFaceA);
@@ -46,7 +44,7 @@ public class ParallelOneWayThroughGateBlock extends DefaultParallelAnalogInterac
 		if (world.getBlockEntity(thisPos) instanceof DefaultAnalogGateBlockEntity be) {
 			be.POWER = ASignal;
 			be.setChanged();
-			sendRedstoneUpdateInDirection(world, thisState.getBlock(), thisPos, connectionFaceA.FACE.getOpposite());
+			sendRedstoneUpdateInDirection(world, thisState.getBlock(), thisPos, connectionFaceA.FACE.getOpposite(), recursion);
 		}
 		return 0;
 	}

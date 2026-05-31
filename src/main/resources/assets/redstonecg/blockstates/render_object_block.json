@@ -1,10 +1,10 @@
 {
     "variants": {
-        "model=0": {
-            "model": "redstonecg:custom/sourceknob"
-        },
-        "model=1": {
-            "model": "redstonecg:custom/sourceknob"
-        }
+        "model=0": {"model": "redstonecg:custom/sourceknob"},
+        "model=1": {"model": "redstonecg:custom/interaction/button_off"},
+        "model=2": {"model": "redstonecg:custom/interaction/button_on"},
+        "model=3": {"model": "redstonecg:custom/interaction/switch_off"},
+        "model=4": {"model": "redstonecg:custom/interaction/switch_on"}
+
     }
 }

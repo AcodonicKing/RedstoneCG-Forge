@@ -126,7 +126,7 @@ public class ForwardPathSelectorBlock extends DefaultConnectableGate implements 
 			if(nb.isOutput(world, bs, neighborPos, direction.getOpposite())){return;}
 		}
 		if (block instanceof DefaultRedstoneActionGate nb){
-			nb.onRedstoneUpdate(world, bs, neighborPos, thisPos);
+			nb.onRedstoneUpdate(world, bs, neighborPos, thisPos, 0);
 		} else {
 			world.neighborChanged(neighborPos,thisBlock,thisPos);
 			//block.neighborChanged(bs,world,neighborPos,thisBlock,thisPos,false);

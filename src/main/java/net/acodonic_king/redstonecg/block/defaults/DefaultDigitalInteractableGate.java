@@ -56,7 +56,7 @@ public class DefaultDigitalInteractableGate extends DefaultRedstoneActionGate im
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
         return new DefaultDigitalGateBlockEntity(pos, state);
     }
-    public void setOutput(LevelAccessor level, BlockState state, BlockPos pos, boolean output){
+    public void setOutput(LevelAccessor level, BlockState state, BlockPos pos, boolean output, int recursion){
         Level world = (Level) level;
         if (world.getBlockEntity(pos) instanceof DefaultDigitalGateBlockEntity be){
             if(be.OUTPUT != output){
@@ -64,7 +64,7 @@ public class DefaultDigitalInteractableGate extends DefaultRedstoneActionGate im
                 be.setChanged();
                 LittleTools.setBooleanProperty(world, pos, output, "visible_state",2);
                 Direction direction = BlockFrameTransformUtils.getWorldDirectionFromLocalForward(state);
-                this.sendRedstoneUpdateInDirection(level,state.getBlock(),pos,direction);
+                this.sendRedstoneUpdateInDirection(level,state.getBlock(),pos,direction, recursion);
             }
         }
     }

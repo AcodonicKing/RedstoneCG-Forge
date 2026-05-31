@@ -1,6 +1,7 @@
 package net.acodonic_king.redstonecg;
 
 import net.acodonic_king.redstonecg.init.*;
+import net.acodonic_king.redstonecg.procedures.RCGMatrix;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
@@ -41,6 +42,10 @@ public class RedstonecgMod {
         RedstonecgModItems.REGISTRY.register(bus);
         RedstonecgModTabs.REGISTRY.register(bus);
         RedstonecgModRecipes.REGISTRY.register(bus);
+        RedstonecgModRecipes.TYPES.register(bus);
         RedstonecgModNetworking.register(bus);
+
+        /*RCGMatrix.M4F a = new RCGMatrix.M4F().translate(0.5f, 0.375f, 0.5f).rotateY((float) Math.PI);
+        System.out.println(a);*/
     }
 }

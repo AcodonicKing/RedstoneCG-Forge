@@ -90,6 +90,8 @@ public class RedstonecgModVariables {
 		public boolean adventureSurvival = false;
 		public boolean adventureGateGUI = false;
 		public int hangingRedCuWireMaxDistance = 16;
+		public int gateChainLimit = 1024;
+		public int wireChainLimit = 1024;
 
 		public static MapVariables load(CompoundTag tag) {
 			MapVariables data = new MapVariables();
@@ -97,17 +99,28 @@ public class RedstonecgModVariables {
 			return data;
 		}
 
+		public boolean readBoolean(CompoundTag nbt, String var, boolean def){
+			if(nbt.contains(var))
+				return nbt.getBoolean(var);
+			return def;
+		}
+
+		public int readInt(CompoundTag nbt, String var, int def){
+			if(nbt.contains(var))
+				return nbt.getInt(var);
+			return def;
+		}
+
 		public void read(CompoundTag nbt) {
-			enableredcuwireautoconnect = nbt.getBoolean("enableredcuwireautoconnect");
-			canSurviveAnyCase = nbt.getBoolean("can_survive");
-			adventurePinConfig = nbt.getBoolean("adventure_pin_config");
-			adventureValueConfig = nbt.getBoolean("adventure_value_config");
-			adventureSurvival = nbt.getBoolean("adventure_survival");
-			adventureGateGUI = nbt.getBoolean("adventure_gate_gui");
-			if(nbt.contains("hanging_redcu_wire_max_distance"))
-				hangingRedCuWireMaxDistance = nbt.getInt("hanging_redcu_wire_max_distance");
-			else
-				hangingRedCuWireMaxDistance = 16;
+			enableredcuwireautoconnect = readBoolean(nbt, "enableredcuwireautoconnect", false);
+			canSurviveAnyCase = readBoolean(nbt,"can_survive", false);
+			adventurePinConfig = readBoolean(nbt,"adventure_pin_config", false);
+			adventureValueConfig = readBoolean(nbt,"adventure_value_config", false);
+			adventureSurvival = readBoolean(nbt,"adventure_survival", false);
+			adventureGateGUI = readBoolean(nbt,"adventure_gate_gui", false);
+			hangingRedCuWireMaxDistance = readInt(nbt, "hanging_redcu_wire_max_distance", 16);
+			gateChainLimit = readInt(nbt, "gate_chain_limit", 1024);
+			wireChainLimit = readInt(nbt, "wire_chain_limit", 1024);
 		}
 
 		@Override
@@ -119,6 +132,8 @@ public class RedstonecgModVariables {
 			nbt.putBoolean("adventure_survival", adventureSurvival);
 			nbt.putBoolean("adventure_gate_gui", adventureGateGUI);
 			nbt.putInt("hanging_redcu_wire_max_distance", hangingRedCuWireMaxDistance);
+			nbt.putInt("gate_chain_limit", gateChainLimit);
+			nbt.putInt("wire_chain_limit", wireChainLimit);
 			return nbt;
 		}
 
@@ -132,7 +147,12 @@ public class RedstonecgModVariables {
 
 		public static MapVariables get(LevelAccessor world) {
 			if (world instanceof ServerLevelAccessor serverLevelAcc) {
-				return serverLevelAcc.getLevel().getServer().getLevel(Level.OVERWORLD).getDataStorage().computeIfAbsent(e -> MapVariables.load(e), MapVariables::new, DATA_NAME);
+				return serverLevelAcc
+						.getLevel()
+						.getServer()
+						.getLevel(Level.OVERWORLD)
+						.getDataStorage()
+						.computeIfAbsent(e -> MapVariables.load(e), MapVariables::new, DATA_NAME);
 			} else {
 				return clientSide;
 			}

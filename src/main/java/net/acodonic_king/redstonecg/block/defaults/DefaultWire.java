@@ -1,5 +1,6 @@
 package net.acodonic_king.redstonecg.block.defaults;
 
+import net.acodonic_king.redstonecg.RedstonecgMod;
 import net.acodonic_king.redstonecg.block.entity.RedCuWireBlockEntity;
 import net.acodonic_king.redstonecg.init.RedstonecgModItems;
 import net.acodonic_king.redstonecg.init.RedstonecgModVersionRides;
@@ -135,24 +136,32 @@ public class DefaultWire extends SuperBlock implements EntityBlock, WireInterfac
         return connectionFaceRangeA.canConnect(connectionFaceB);
     }
 
-    @Override
-    public void onTick(LevelAccessor world, BlockPos pos){
-        onTick(world, pos, 0);
+    public static int getWireChainLimit(LevelAccessor world){
+        return RedstonecgModVariables.MapVariables.get(world).wireChainLimit;
     }
 
     @Override
-    public void onTick(LevelAccessor world, BlockPos pos, int power){}
+    public void onTick(LevelAccessor world, BlockPos pos, int recursion){
+        try {
+            onTick(world, pos, 0, recursion);
+        } catch (StackOverflowError e) {
+            world.scheduleTick(pos, world.getBlockState(pos).getBlock(), 1);
+        }
+    }
+
+    @Override
+    public void onTick(LevelAccessor world, BlockPos pos, int power, int recursion){}
 
     @Override
     public void tick(BlockState blockstate, ServerLevel world, BlockPos pos, RandomSource random) {
         super.tick(blockstate, world, pos, random);
-        this.onTick(world, pos);
+        this.onTick(world, pos, 0);
     }
 
     @Override
     public void neighborChanged(BlockState blockstate, Level world, BlockPos pos, Block neighborBlock, BlockPos fromPos, boolean moving) {
         super.neighborChanged(blockstate, world, pos, neighborBlock, fromPos, moving);
-        this.onTick(world, pos);
+        this.onTick(world, pos, 0);
     }
 
     @Override

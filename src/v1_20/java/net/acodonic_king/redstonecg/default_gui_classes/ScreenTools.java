@@ -5,7 +5,6 @@ import com.mojang.blaze3d.vertex.*;
 import net.acodonic_king.redstonecg.RedstonecgMod;
 import net.acodonic_king.redstonecg.procedures.RCGMatrix;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
@@ -60,10 +59,10 @@ public class ScreenTools {
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         BufferBuilder bufferbuilder = Tesselator.getInstance().getBuilder();
         bufferbuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
-        bufferbuilder.vertex(matrix4f.matrix, (float) OnScreenLeft,  (float) OnScreenBottom, (float) ScreenLayer).uv(OnImageLeft,  OnImageBottom).endVertex();
-        bufferbuilder.vertex(matrix4f.matrix, (float) OnScreenRight, (float) OnScreenBottom, (float) ScreenLayer).uv(OnImageRight, OnImageBottom).endVertex();
-        bufferbuilder.vertex(matrix4f.matrix, (float) OnScreenRight, (float) OnScreenTop,    (float) ScreenLayer).uv(OnImageRight, OnImageTop   ).endVertex();
-        bufferbuilder.vertex(matrix4f.matrix, (float) OnScreenLeft,  (float) OnScreenTop,    (float) ScreenLayer).uv(OnImageLeft,  OnImageTop   ).endVertex();
+        bufferbuilder.vertex(matrix4f.getMatrix(), (float) OnScreenLeft,  (float) OnScreenBottom, (float) ScreenLayer).uv(OnImageLeft,  OnImageBottom).endVertex();
+        bufferbuilder.vertex(matrix4f.getMatrix(), (float) OnScreenRight, (float) OnScreenBottom, (float) ScreenLayer).uv(OnImageRight, OnImageBottom).endVertex();
+        bufferbuilder.vertex(matrix4f.getMatrix(), (float) OnScreenRight, (float) OnScreenTop,    (float) ScreenLayer).uv(OnImageRight, OnImageTop   ).endVertex();
+        bufferbuilder.vertex(matrix4f.getMatrix(), (float) OnScreenLeft,  (float) OnScreenTop,    (float) ScreenLayer).uv(OnImageLeft,  OnImageTop   ).endVertex();
         BufferUploader.drawWithShader(bufferbuilder.end());
     }
     public static void blitSetTextureRectaroid(AbstractContainerScreenRide.ScreenStack ms, float[][] rectaroid_pos_uv, int ScreenLayer){
@@ -72,7 +71,7 @@ public class ScreenTools {
         BufferBuilder bufferbuilder = Tesselator.getInstance().getBuilder();
         bufferbuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
         for(float[] pos_uv : rectaroid_pos_uv)
-            bufferbuilder.vertex(matrix4f.matrix, pos_uv[0],  pos_uv[1], (float) ScreenLayer).uv(pos_uv[2],  pos_uv[3]).endVertex();
+            bufferbuilder.vertex(matrix4f.getMatrix(), pos_uv[0],  pos_uv[1], (float) ScreenLayer).uv(pos_uv[2],  pos_uv[3]).endVertex();
         BufferUploader.drawWithShader(bufferbuilder.end());
     }
     public static void playClickSound() {

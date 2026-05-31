@@ -1,9 +1,9 @@
 {
-  "parent": "redstonecg:custom/floor_component",
+  "parent": "redstonecg:custom/flat_lamp_indicator",
   "textures": {
     "all": "redstonecg:block/universal_indicator/ui3",
     "particle": "redstonecg:block/universal_indicator/ui3",
-    "0": "redstonecg:block/universal_indicator/ui3"
+    "1": "redstonecg:block/universal_indicator/ui3"
   },
   "render_type": "solid"
 }

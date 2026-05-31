@@ -14,7 +14,7 @@ public class DLatchBlock extends DefaultDigitalInteractable2ABGate {
 		super();
 	}
 	@Override
-	public int onRedstoneUpdate(LevelAccessor world, BlockState blockState, BlockPos pos){
+	public int onRedstoneUpdate(LevelAccessor world, BlockState blockState, BlockPos pos, int recursion){
         Direction[] Sides = GetGateInputSidesProcedure.Get2ABGateForth(blockState);
 
 		int[] power = {0,0};
@@ -27,7 +27,7 @@ public class DLatchBlock extends DefaultDigitalInteractable2ABGate {
 		//RedstonecgMod.LOGGER.debug("{} {}", power[0], power[1]);
 
 		if (power[1] > 0) {
-			setOutput(world, blockState, pos, power[0] > 0);
+			setOutput(world, blockState, pos, power[0] > 0, recursion);
 		}
 
 		return 0;

@@ -2,7 +2,6 @@
 package net.acodonic_king.redstonecg.block.parallel.hybrid;
 
 import net.acodonic_king.redstonecg.block.defaults.DefaultParallelGateWithAlternate;
-import net.acodonic_king.redstonecg.block.defaults.DefaultRedstoneActionGate;
 import net.acodonic_king.redstonecg.block.defaults.PinMarkConnectionInterface;
 import net.acodonic_king.redstonecg.block.entity.DefaultAnalogGateBlockEntity;
 import net.acodonic_king.redstonecg.procedures.*;
@@ -19,7 +18,6 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.BlockGetter;
 import net.minecraft.core.Direction;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.phys.BlockHitResult;
@@ -48,7 +46,7 @@ public class ParallelPathSelectorBlock extends DefaultParallelGateWithAlternate 
 	}
 
 	@Override
-	public int onRedstoneUpdate(LevelAccessor world, BlockState thisState, BlockPos thisPos){
+	public int onRedstoneUpdate(LevelAccessor world, BlockState thisState, BlockPos thisPos, int recursion){
 		int linePower = GetParallelSignalProcedure.getParallelLinePower(world, thisPos);
 		ConnectionFace connectionFaceA = BlockFrameTransformUtils.getConnectionFace(thisState, Direction.NORTH);
 		int backPower = GetRedstoneSignalProcedure.execute(world, thisPos, connectionFaceA);
@@ -68,22 +66,22 @@ public class ParallelPathSelectorBlock extends DefaultParallelGateWithAlternate 
 		if(Changed > 0) {
 			//RedstonecgMod.LOGGER.debug("Block updated to {}", thisState);
 			world.setBlock(thisPos, thisState, 2);
-			sendRedstoneUpdateInDirection(world, thisState.getBlock(), thisPos, connectionFaceA.FACE.getOpposite());
+			sendRedstoneUpdateInDirection(world, thisState.getBlock(), thisPos, connectionFaceA.FACE.getOpposite(), recursion);
             Direction alternateDirection = getAlternateReadDirection(thisState, thisState.getValue(CONNECTION));
             BlockPos targetPos = thisPos.relative(alternateDirection.getOpposite());
-            updateAlternate(world, thisPos, targetPos);
+            updateAlternate(world, thisPos, targetPos, recursion + 1);
         }
 		return 0;
 	}
 
-	public void updateAlternate(LevelAccessor world, BlockPos thisPos, BlockPos targetPos){
+	public void updateAlternate(LevelAccessor world, BlockPos thisPos, BlockPos targetPos, int recursion){
 		BlockState targetState = world.getBlockState(targetPos);
 		if(targetState.getBlock() instanceof ParallelPathSelectorBlock block){
-			block.receiveAlternateUpdate(world,targetState,targetPos,thisPos);
+			block.receiveAlternateUpdate(world,targetState,targetPos,thisPos, recursion);
 		}
 	}
 
-	public void receiveAlternateUpdate(LevelAccessor world, BlockState thisState, BlockPos thisPos, BlockPos fromPos){
+	public void receiveAlternateUpdate(LevelAccessor world, BlockState thisState, BlockPos thisPos, BlockPos fromPos, int recursion){
 		int connection = thisState.getValue(CONNECTION); //Where pin A and pin B?
 		boolean direction = thisState.getValue(DIRECTION); //Alternate goes to pin B (false) or pin A (true)?
 		boolean pinIsAlternate = direction ? (connection > 1) : (connection < 2);
@@ -91,10 +89,10 @@ public class ParallelPathSelectorBlock extends DefaultParallelGateWithAlternate 
 			Direction alternateDirection = getAlternateReadDirection(thisState, connection).getOpposite();
 			BlockPos targetPos = thisPos.relative(alternateDirection);
 			if(targetPos == fromPos){ return; }
-			updateAlternate(world, thisPos, targetPos);
+			updateAlternate(world, thisPos, targetPos, recursion + 1);
 		} else {
 			Direction updateDirection = BlockFrameTransformUtils.getWorldDirectionFromLocal(thisState, Direction.SOUTH);
-			sendRedstoneUpdateInDirection(world, thisState.getBlock(), thisPos, updateDirection);
+			sendRedstoneUpdateInDirection(world, thisState.getBlock(), thisPos, updateDirection, recursion);
 		}
 	}
 

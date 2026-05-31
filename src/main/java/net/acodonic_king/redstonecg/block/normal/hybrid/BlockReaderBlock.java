@@ -56,7 +56,7 @@ public class BlockReaderBlock extends DefaultAnalogInteractableGate implements P
         return CanConnectWallGateProcedure.To1_3Gate(blockState, connectionFaceB);
     }
     @Override
-    public int onRedstoneUpdate(LevelAccessor world, BlockState blockState, BlockPos pos){
+    public int onRedstoneUpdate(LevelAccessor world, BlockState blockState, BlockPos pos, int recursion){
         Direction side = Direction.UP;
         if(blockState.getValue(BASE_READ))
             side = BlockFrameTransformUtils.getWorldDirectionFromLocal(blockState, Direction.DOWN);
@@ -77,7 +77,7 @@ public class BlockReaderBlock extends DefaultAnalogInteractableGate implements P
             connection = ConnectionFacePrimaryRange.rotateFilter(connection, blockState.getValue(ROTATION));
             ConnectionFacePrimaryRange connectionFaceRange = new ConnectionFacePrimaryRange(blockState.getValue(FACING));
             for(ConnectionFace connectionFaceA: connectionFaceRange.getList(connection)){
-                sendRedstoneUpdateInDirection(world, blockState.getBlock(), pos, connectionFaceA.FACE);
+                sendRedstoneUpdateInDirection(world, blockState.getBlock(), pos, connectionFaceA.FACE, recursion);
             }
         }
         return power;

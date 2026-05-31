@@ -7,7 +7,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.core.Direction;
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.level.block.state.properties.BooleanProperty;
 
 public class ParallelOneWayThroughNotGateBlock extends ParallelOneWayThroughGateBlock {
 	public ParallelOneWayThroughNotGateBlock() {
@@ -15,7 +14,7 @@ public class ParallelOneWayThroughNotGateBlock extends ParallelOneWayThroughGate
 	}
 
 	@Override
-	public int onRedstoneUpdate(LevelAccessor world, BlockState thisState, BlockPos thisPos){
+	public int onRedstoneUpdate(LevelAccessor world, BlockState thisState, BlockPos thisPos, int recursion){
 		int linePower = GetParallelSignalProcedure.getParallelLinePower(world, thisPos);
 		ConnectionFace connectionFaceA = BlockFrameTransformUtils.getConnectionFace(thisState, Direction.NORTH);
 		int backPower = GetRedstoneSignalProcedure.execute(world, thisPos, connectionFaceA);
@@ -32,7 +31,7 @@ public class ParallelOneWayThroughNotGateBlock extends ParallelOneWayThroughGate
 		if (world.getBlockEntity(thisPos) instanceof DefaultAnalogGateBlockEntity be) {
 			be.POWER = ASignal;
 			be.setChanged();
-			sendRedstoneUpdateInDirection(world, thisState.getBlock(), thisPos, connectionFaceA.FACE.getOpposite());
+			sendRedstoneUpdateInDirection(world, thisState.getBlock(), thisPos, connectionFaceA.FACE.getOpposite(), recursion);
 		}
 		return 0;
 	}

@@ -13,7 +13,7 @@ public class SRLatchBlock extends DefaultDigitalInteractable2ABGate {
 		super();
 	}
 	@Override
-	public int onRedstoneUpdate(LevelAccessor world, BlockState blockState, BlockPos pos){
+	public int onRedstoneUpdate(LevelAccessor world, BlockState blockState, BlockPos pos, int recursion){
         Direction[] Sides = GetGateInputSidesProcedure.Get2ABGateForth(blockState);
 
 		int[] power = {0,0};
@@ -25,12 +25,12 @@ public class SRLatchBlock extends DefaultDigitalInteractable2ABGate {
 		}
 
 		if (power[1] > 0) {
-			setOutput(world, blockState, pos,false);
+			setOutput(world, blockState, pos,false, recursion);
 			return 0;
 		}
 
 		if (power[0] > 0) {
-			setOutput(world, blockState, pos,true);
+			setOutput(world, blockState, pos,true, recursion);
 			return 15;
 		}
 		return 0;

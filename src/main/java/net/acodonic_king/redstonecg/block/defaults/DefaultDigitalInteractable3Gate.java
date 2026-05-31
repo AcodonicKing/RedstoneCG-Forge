@@ -26,7 +26,7 @@ public class DefaultDigitalInteractable3Gate extends DefaultDigitalInteractableG
     public boolean redstoneOutputOperation(int SideRightPower, int SideBackPower, int SideLeftPower){return false;}
 
     @Override
-    public int onRedstoneUpdate(LevelAccessor world, BlockState blockState, BlockPos pos){
+    public int onRedstoneUpdate(LevelAccessor world, BlockState blockState, BlockPos pos, int recursion){
         Direction[] Sides = GetGateInputSidesProcedure.Get3GateForth(blockState);
         int [] power = {0,0,0};
         int i = 0;
@@ -37,7 +37,7 @@ public class DefaultDigitalInteractable3Gate extends DefaultDigitalInteractableG
         }
         boolean output = this.redstoneOutputOperation(power[0], power[1], power[2]);
 
-        setOutput(world, blockState, pos, output);
+        setOutput(world, blockState, pos, output, recursion);
         if (output) {return 15;}
         return 0;
     }

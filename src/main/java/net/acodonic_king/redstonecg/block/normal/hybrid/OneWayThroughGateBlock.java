@@ -4,7 +4,6 @@ package net.acodonic_king.redstonecg.block.normal.hybrid;
 import net.acodonic_king.redstonecg.block.defaults.DefaultRedstoneActionGate;
 import net.acodonic_king.redstonecg.block.defaults.PinMarkConnectionInterface;
 import net.acodonic_king.redstonecg.block.entity.DefaultAnalogGateBlockEntity;
-import net.acodonic_king.redstonecg.block.entity.DefaultDigitalGateBlockEntity;
 import net.acodonic_king.redstonecg.procedures.*;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
@@ -53,11 +52,11 @@ public class OneWayThroughGateBlock extends DefaultRedstoneActionGate implements
     @Override
     public void tick(BlockState blockstate, ServerLevel world, BlockPos pos, RandomSource random){
         LittleTools.setBooleanProperty(world, pos, false, "visible_state", 2);
-        onRedstoneUpdate(world,blockstate,pos);
+        onRedstoneUpdate(world,blockstate,pos, 0);
     }
 
     @Override
-    public int onRedstoneUpdate(LevelAccessor world, BlockState blockState, BlockPos pos){
+    public int onRedstoneUpdate(LevelAccessor world, BlockState blockState, BlockPos pos, int recursion){
         Direction[] Sides = GetGateInputSidesProcedure.Get2ABGateForth(blockState);
         int SideCPower = GetRedstoneSignalProcedure.execute(world, pos, Direction.NORTH);
         int SideDPower = GetRedstoneSignalProcedure.execute(world, pos, Sides[0]);
@@ -72,7 +71,7 @@ public class OneWayThroughGateBlock extends DefaultRedstoneActionGate implements
         world.setBlock(pos, blockState, 2);
         Direction direction = BlockFrameTransformUtils.getWorldDirectionFromLocal(blockState, Sides[1]);
         //RedstonecgMod.LOGGER.debug("in direction {} {} {}",Sides[1],direction,pos);
-        this.sendRedstoneUpdateInDirection(world,blockState.getBlock(),pos,direction);
+        this.sendRedstoneUpdateInDirection(world,blockState.getBlock(),pos,direction, recursion);
         if(SideCPower > 0){return SideDPower;}
         return 0;
     }

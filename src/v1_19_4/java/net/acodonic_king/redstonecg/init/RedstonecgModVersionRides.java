@@ -9,13 +9,16 @@ import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
+import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
@@ -23,12 +26,15 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.items.IItemHandler;
 
 //1.19.4
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
+import net.minecraftforge.registries.tags.ITag;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.function.ToIntFunction;
 
@@ -103,9 +109,13 @@ public class RedstonecgModVersionRides {
     public static Direction directionFromDelta(int dx, int dy, int dz){
         return Direction.fromNormal(dx, dy, dz);
     }
-    public static TagKey<Item> getItemTag(String master, String name){
+    public static TagKey<Item> createItemTag(String master, String name){
         return TagKey.create(Registries.ITEM, new ResourceLocation(master, name));
     }
+    public static @NotNull ITag<Item> getItemTag(TagKey<Item> tag){
+        return ForgeRegistries.ITEMS.tags().getTag(tag);
+    }
+    public static ResourceKey<Registry<RecipeType<?>>> RECIPE_TYPE = net.minecraft.core.registries.Registries.RECIPE_TYPE;
     public static Vec3 getBlockPosCenter(BlockPos pos){
         return pos.getCenter();
     }

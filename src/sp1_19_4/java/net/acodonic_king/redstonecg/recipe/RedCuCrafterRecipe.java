@@ -4,6 +4,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonElement;
 import net.acodonic_king.redstonecg.RedstonecgMod;
+import net.acodonic_king.redstonecg.init.RedstonecgModRecipes;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
@@ -133,13 +134,17 @@ public class RedCuCrafterRecipe implements Recipe<CraftingContainer> {
     }
 
     @Override
+    public boolean isSpecial() {
+        return true;
+    }
+
+    @Override
     public RecipeType<?> getType() {
-        return Type.INSTANCE;
+        return RedstonecgModRecipes.REDCU_CRAFTING.get();
     }
 
     public static class Type implements RecipeType<RedCuCrafterRecipe> {
-        private Type() { }
-        public static final Type INSTANCE = new Type();
+        public Type() { }
         public static final String ID = "redcu_crafting";
     }
 

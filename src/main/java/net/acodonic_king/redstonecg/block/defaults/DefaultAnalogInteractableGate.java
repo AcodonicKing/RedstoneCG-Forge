@@ -56,7 +56,7 @@ public class DefaultAnalogInteractableGate extends DefaultRedstoneActionGate imp
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
         return new DefaultAnalogGateBlockEntity(pos, state);
     }
-    public void setPower(LevelAccessor level, BlockState state, BlockPos pos, int power){
+    public void setPower(LevelAccessor level, BlockState state, BlockPos pos, int power, int recursion){
         power = Math.max(0, Math.min(power, 15));
         Level world = (Level) level;
         if (world.getBlockEntity(pos) instanceof DefaultAnalogGateBlockEntity be){
@@ -67,7 +67,7 @@ public class DefaultAnalogInteractableGate extends DefaultRedstoneActionGate imp
                 //if (world.isClientSide) return;
                 //RedstonecgMod.LOGGER.debug("Client? {}",world.isClientSide);
                 Direction direction = BlockFrameTransformUtils.getWorldDirectionFromLocalForward(state);
-                this.sendRedstoneUpdateInDirection(level,state.getBlock(),pos,direction);
+                this.sendRedstoneUpdateInDirection(level,state.getBlock(),pos,direction, recursion);
             }
         }
     }

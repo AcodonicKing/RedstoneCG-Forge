@@ -36,6 +36,9 @@ public class MessengerBlockEntityPigeon {
 
         }
     }
+    public static void send(MessengerBlockEntityPigeon msg, boolean client){
+        send(msg);
+    }
     public static void handleData(MessengerBlockEntityPigeon message, Supplier<NetworkEvent.Context> contextSupplier){
         NetworkEvent.Context context = contextSupplier.get();
         context.enqueueWork(() -> {

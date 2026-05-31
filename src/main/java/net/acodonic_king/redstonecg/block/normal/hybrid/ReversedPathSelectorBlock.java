@@ -4,7 +4,6 @@ package net.acodonic_king.redstonecg.block.normal.hybrid;
 import net.acodonic_king.redstonecg.block.defaults.DefaultRedstoneActionGate;
 import net.acodonic_king.redstonecg.block.defaults.PinMarkConnectionInterface;
 import net.acodonic_king.redstonecg.block.entity.DefaultAnalogGateBlockEntity;
-import net.acodonic_king.redstonecg.block.entity.DefaultDigitalGateBlockEntity;
 import net.acodonic_king.redstonecg.procedures.*;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
@@ -52,11 +51,11 @@ public class ReversedPathSelectorBlock extends DefaultRedstoneActionGate impleme
 	@Override
 	public void tick(BlockState blockstate, ServerLevel world, BlockPos pos, RandomSource random){
 		LittleTools.setBooleanProperty(world, pos, false, "visible_state", 2);
-		onRedstoneUpdate(world,blockstate,pos);
+		onRedstoneUpdate(world,blockstate,pos, 0);
 	}
 
 	@Override
-	public int onRedstoneUpdate(LevelAccessor world, BlockState blockState, BlockPos pos){
+	public int onRedstoneUpdate(LevelAccessor world, BlockState blockState, BlockPos pos, int recursion){
 		Direction[] Sides = GetGateInputSidesProcedure.Get3ABCGateForth(blockState);
 		int SideCPower = GetRedstoneSignalProcedure.execute(world, pos, Sides[2]);
 		int SideDPower = 0;
@@ -66,7 +65,7 @@ public class ReversedPathSelectorBlock extends DefaultRedstoneActionGate impleme
 		} else {
 			SideDPower = GetRedstoneSignalProcedure.execute(world, pos, Sides[0]);
 		}
-		setPower(world, blockState, pos, SideDPower);
+		setPower(world, blockState, pos, SideDPower, recursion);
 		return 0;
 	}
 
@@ -87,14 +86,14 @@ public class ReversedPathSelectorBlock extends DefaultRedstoneActionGate impleme
 		return new DefaultAnalogGateBlockEntity(pos, state);
 	}
 
-	public void setPower(LevelAccessor level, BlockState state, BlockPos pos, int power){
+	public void setPower(LevelAccessor level, BlockState state, BlockPos pos, int power, int recursion){
 		Level world = (Level) level;
 		if (world.getBlockEntity(pos) instanceof DefaultAnalogGateBlockEntity be){
 			if(be.POWER != power){
 				be.POWER = power;
 				LittleTools.setBooleanProperty(world, pos, power > 0, "visible_state");
 				Direction direction = BlockFrameTransformUtils.getWorldDirectionFromLocalForward(state);
-				this.sendRedstoneUpdateInDirection(level,state.getBlock(),pos,direction);
+				this.sendRedstoneUpdateInDirection(level,state.getBlock(),pos,direction, recursion);
 			}
 		}
 	}

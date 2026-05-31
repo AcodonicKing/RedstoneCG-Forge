@@ -11,6 +11,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Registry;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.Entity;
@@ -19,6 +20,7 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
+import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
@@ -26,13 +28,15 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.items.IItemHandler;
-import net.acodonic_king.redstonecg.default_gui_classes.ItemRenderingInterface;
 
 //1.19.2
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
+import net.minecraftforge.registries.tags.ITag;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.function.ToIntFunction;
 
@@ -107,9 +111,13 @@ public class RedstonecgModVersionRides {
     public static Direction directionFromDelta(int dx, int dy, int dz){
         return Direction.fromNormal(dx, dy, dz);
     }
-    public static TagKey<Item> getItemTag(String master, String name){
+    public static TagKey<Item> createItemTag(String master, String name){
         return TagKey.create(Registry.ITEM_REGISTRY, new ResourceLocation(master, name));
     }
+    public static @NotNull ITag<Item> getItemTag(TagKey<Item> tag){
+        return ForgeRegistries.ITEMS.tags().getTag(tag);
+    }
+    public static ResourceKey<Registry<RecipeType<?>>> RECIPE_TYPE = Registry.RECIPE_TYPE_REGISTRY;
     public static Vec3 getBlockPosCenter(BlockPos pos){
         return new Vec3(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
     }

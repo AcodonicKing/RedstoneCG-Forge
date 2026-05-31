@@ -89,7 +89,7 @@ public class ParallelLineOutputBlock extends DefaultParallelGate implements Enti
 	}
 
 	@Override
-	public int onRedstoneUpdate(LevelAccessor world, BlockState thisState, BlockPos thisPos){
+	public int onRedstoneUpdate(LevelAccessor world, BlockState thisState, BlockPos thisPos, int recursion){
 		Direction direction = BlockFrameTransformUtils.getWorldDirectionFromLocalForward(thisState);
 		int linePower = GetParallelSignalProcedure.getParallelLinePowerInDirection(world, thisPos.relative(direction), direction);
 		//RedstonecgMod.LOGGER.debug("Update {} {} {}", linePower, thisPos, direction);
@@ -103,7 +103,7 @@ public class ParallelLineOutputBlock extends DefaultParallelGate implements Enti
 			ConnectionFacePrimaryRange connectionFaceRange = new ConnectionFacePrimaryRange(thisState.getValue(FACING));
 			for(ConnectionFace connectionFaceA: connectionFaceRange.getList(connection)){
 				//RedstonecgMod.LOGGER.debug("Updating in {}", connectionFaceA.FACE);
-				sendRedstoneUpdateInDirection(world, thisState.getBlock(), thisPos, connectionFaceA.FACE);
+				sendRedstoneUpdateInDirection(world, thisState.getBlock(), thisPos, connectionFaceA.FACE, recursion);
 			}
 		}
 		return 0;
@@ -135,13 +135,13 @@ public class ParallelLineOutputBlock extends DefaultParallelGate implements Enti
 	}
 
 	@Override
-	public int onRedstoneUpdate(LevelAccessor world, BlockState thisState, BlockPos thisPos, BlockPos fromPos){
+	public int onRedstoneUpdate(LevelAccessor world, BlockState thisState, BlockPos thisPos, BlockPos fromPos, int recursion){
 		Direction updateDirection = BlockFrameTransformUtils.directionFromPositions(fromPos, thisPos);
 		Direction direction = BlockFrameTransformUtils.getLocalDirectionFromWorld(thisState, updateDirection);
 		if(direction.getAxis() == Direction.Axis.Z && !breakParallelLine(world, thisState, thisPos, updateDirection, false)){
-			sendRedstoneUpdateInDirection(world, thisState.getBlock(), thisPos, updateDirection);
+			sendRedstoneUpdateInDirection(world, thisState.getBlock(), thisPos, updateDirection, recursion);
 		}
-		return onRedstoneUpdate(world, thisState, thisPos);
+		return onRedstoneUpdate(world, thisState, thisPos, recursion);
 	}
 
 	@Override

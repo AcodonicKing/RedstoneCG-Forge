@@ -10,6 +10,7 @@ import net.minecraft.client.renderer.block.ModelBlockRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.client.resources.model.ModelManager;
 import net.minecraft.world.level.block.state.BlockState;
 
 public class DefaultColoredFlatLampBlockEntityRenderer implements BlockEntityRenderer<DefaultColoredFlatLampBlockEntity> {
@@ -21,7 +22,9 @@ public class DefaultColoredFlatLampBlockEntityRenderer implements BlockEntityRen
     @Override
     public void render(DefaultColoredFlatLampBlockEntity blockEntity, float v, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, int packedOverlay) {
         BlockState blockState = blockEntity.getBlockState();
-        BakedModel model = Minecraft.getInstance().getBlockRenderer().getBlockModel(blockState);
+
+        ModelManager modelManager = Minecraft.getInstance().getModelManager();
+        BakedModel model;
 
         poseStack.pushPose();
         poseStack.translate(0.5, 0.5, 0.5);
@@ -44,6 +47,8 @@ public class DefaultColoredFlatLampBlockEntityRenderer implements BlockEntityRen
 
         VertexConsumer vc = bufferSource.getBuffer(RenderType.cutoutMipped());
         ModelBlockRenderer modelRenderer = Minecraft.getInstance().getBlockRenderer().getModelRenderer();
+
+        model = modelManager.getModel(DefaultAnalogIndicatorBlockEntityRenderer.SMOOTH_STONE_PLATE);
         modelRenderer.renderModel(
                 poseStack.last(),
                 vc,
@@ -53,6 +58,18 @@ public class DefaultColoredFlatLampBlockEntityRenderer implements BlockEntityRen
                 packedLight,
                 packedOverlay
         );
+
+        model = Minecraft.getInstance().getBlockRenderer().getBlockModel(blockState);
+        modelRenderer.renderModel(
+                poseStack.last(),
+                vc,
+                blockState,
+                model,
+                r, g, b,
+                packedLight,
+                packedOverlay
+        );
+
         if(blockEntity.BASE_READ){
             model = Minecraft.getInstance().getModelManager().getModel(DefaultAnalogIndicatorBlockEntityRenderer.BASE_READ_MODEL);
             modelRenderer.renderModel(

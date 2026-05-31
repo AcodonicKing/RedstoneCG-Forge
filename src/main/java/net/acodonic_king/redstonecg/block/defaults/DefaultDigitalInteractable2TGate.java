@@ -29,7 +29,7 @@ public class DefaultDigitalInteractable2TGate extends DefaultDigitalInteractable
     public boolean redstoneOutputOperation(int[] SidePower){return false;}
 
     @Override
-    public int onRedstoneUpdate(LevelAccessor world, BlockState blockState, BlockPos pos){
+    public int onRedstoneUpdate(LevelAccessor world, BlockState blockState, BlockPos pos, int recursion){
         Direction[] Sides = GetGateInputSidesProcedure.Get2TGateForth(blockState);
         int[] power = new int[Sides.length];
         int i = 0;
@@ -40,7 +40,7 @@ public class DefaultDigitalInteractable2TGate extends DefaultDigitalInteractable
         }
         boolean output = this.redstoneOutputOperation(power);
 
-        setOutput(world, blockState, pos, output);
+        setOutput(world, blockState, pos, output, recursion);
         if (output) {return 15;}
         return 0;
     }

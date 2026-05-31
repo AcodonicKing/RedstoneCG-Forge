@@ -29,7 +29,7 @@ public class RedCuCraftingCategory implements IRecipeCategory<RedCuCrafterRecipe
 
     public RedCuCraftingCategory(IGuiHelper helper){
         this.icon = helper.createDrawableIngredient(VanillaTypes.ITEM_STACK, new ItemStack(RedstonecgModBlocks.REDCU_CRAFTER.get()));
-        this.background = helper.drawableBuilder(BACKGROUND, 0, 0, 158, 104).setTextureSize(158, 104).build();
+        this.background = helper.drawableBuilder(BACKGROUND, 0, 0, 158, 122).setTextureSize(158, 122).build();
         this.selector = helper.drawableBuilder(SELECTOR, 0, 0, 18, 18).setTextureSize(18, 18).build();
     }
 
@@ -79,6 +79,7 @@ public class RedCuCraftingCategory implements IRecipeCategory<RedCuCrafterRecipe
             case "hybrid" -> Pair.of(8, 44);
             case "analog" -> Pair.of(8, 62);
             case "indicators" -> Pair.of(8, 80);
+            case "interaction" -> Pair.of(8, 98);
             default -> Pair.of(26,8);
         };
         Pair<Integer, Integer> junction_pos = switch (parts[1]){

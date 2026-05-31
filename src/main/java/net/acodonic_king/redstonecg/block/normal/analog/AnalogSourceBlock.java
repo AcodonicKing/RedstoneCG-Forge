@@ -6,6 +6,7 @@ import net.acodonic_king.redstonecg.RedstonecgMod;
 import net.acodonic_king.redstonecg.block.defaults.DefaultEmitting1_4Gate;
 import net.acodonic_king.redstonecg.block.defaults.DefaultRedstoneActionGate;
 import net.acodonic_king.redstonecg.block.defaults.PinMarkConnectionInterface;
+import net.acodonic_king.redstonecg.block.entity.ArrowIndicatorBlockEntity;
 import net.acodonic_king.redstonecg.init.RedstonecgModItems;
 import net.acodonic_king.redstonecg.init.RedstonecgModVersionRides;
 import net.acodonic_king.redstonecg.procedures.AdventureProcedure;
@@ -13,6 +14,10 @@ import net.acodonic_king.redstonecg.procedures.BlockFrameTransformUtils;
 import net.acodonic_king.redstonecg.procedures.CanConnectWallGateProcedure;
 import net.acodonic_king.redstonecg.procedures.ConnectionFace;
 import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.LevelAccessor;
@@ -99,12 +104,37 @@ public class AnalogSourceBlock extends DefaultRedstoneActionGate implements Enti
 	}
 
 	@Override
+	public void setPlacedBy(Level level, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack) {
+		if (level.isClientSide) return;
+		if (!stack.hasTag()) return;
+		CompoundTag tag = stack.getTag();
+		if (!tag.contains("BlockParameterSet")) return;
+		tag = tag.getCompound("BlockParameterSet");
+		if (level.getBlockEntity(pos) instanceof AnalogSourceBlockEntity be){
+			if (tag.contains("connection"))
+				state = state.setValue(CONNECTION, tag.getInt("connection"));
+			be.setParameterSet(tag);
+			be.setChanged();
+			level.sendBlockUpdated(pos, state, state, 3);
+			level.scheduleTick(pos, state.getBlock(), 1);
+		}
+	}
+
+	@Override
 	public InteractionResult use(BlockState blockstate, Level world, BlockPos pos, Player entity, InteractionHand hand, BlockHitResult hit) {
 		InteractionResult interactionResult = super.use(blockstate, world, pos, entity, hand, hit);
 		if(interactionResult == InteractionResult.FAIL){return interactionResult;}
 		ItemStack itemStack = entity.getItemInHand(hand);
 		if(!itemStack.isEmpty()){
 			if(itemStack.is(RedstonecgModItems.ROTATION_BRACKET.get())){return InteractionResult.FAIL;}
+			if(itemStack.is(RedstonecgModItems.NORMAL_ANALOG_SOURCE.get())){
+				if(world.getBlockEntity(pos) instanceof AnalogSourceBlockEntity be){
+					CompoundTag tag = be.getParameterSet();
+					tag.putInt("connection", blockstate.getValue(CONNECTION));
+					itemStack.getOrCreateTag().put("BlockParameterSet", tag);
+					return InteractionResult.SUCCESS;
+				}
+			}
 			/*if(itemStack.is(RedstonecgModItems.NORMAL_ANALOG_SOURCE.get())){
 				if(AdventureProcedure.valueConfig(world, entity)){
 					int power = getPower(world, pos);
@@ -126,13 +156,13 @@ public class AnalogSourceBlock extends DefaultRedstoneActionGate implements Enti
 				case EAST, WEST -> (-0.25 <= hitPos.y && hitPos.y <= 0.25) && (-0.25 <= hitPos.z && hitPos.z <= 0.25);
 				case NORTH, SOUTH -> (-0.25 <= hitPos.x && hitPos.x <= 0.25) && (-0.25 <= hitPos.y && hitPos.y <= 0.25);
 			}) {
-				int power = getPower(world, pos);
-				power += entity.isCrouching() ? -1 : 1;
-				if (power > 15)
-					power = 0;
-				if (power < 0)
-					power = 15;
-				setPower(world, blockstate, pos, power);
+				if (world.getBlockEntity(pos) instanceof AnalogSourceBlockEntity be){
+					if(be.adjustPower(entity.isCrouching() ? -1 : 1)){
+						world.playSound(entity, pos, SoundEvents.STONE_BUTTON_CLICK_ON, SoundSource.BLOCKS, 1.0f, 1.0f);
+						be.setChanged();
+						world.updateNeighborsAt(pos, blockstate.getBlock());
+					}
+				}
 				return InteractionResult.SUCCESS;
 			}
 		}
@@ -204,11 +234,12 @@ public class AnalogSourceBlock extends DefaultRedstoneActionGate implements Enti
 		return 0;
 	}
 
-	public void setPower(LevelAccessor level, BlockState state, BlockPos pos, int power){
+	public void setPower(LevelAccessor level, BlockState state, BlockPos pos, Player player, int power){
 		Level world = (Level) level;
 		power = Math.max(0, Math.min(power, 15));
 		if (world.getBlockEntity(pos) instanceof AnalogSourceBlockEntity be){
 			if(be.POWER != power){
+				level.playSound(player, pos, SoundEvents.STONE_BUTTON_CLICK_ON, SoundSource.BLOCKS, 1.0f, 1.0f);
 				be.setPower(power);
 				be.setChanged();
 				world.updateNeighborsAt(pos, state.getBlock());

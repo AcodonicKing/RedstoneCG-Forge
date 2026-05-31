@@ -1,17 +1,21 @@
 package net.acodonic_king.redstonecg.command;
 
 import com.mojang.brigadier.arguments.BoolArgumentType;
+import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import net.acodonic_king.redstonecg.RedstonecgMod;
 import net.acodonic_king.redstonecg.block.defaults.FlooringInterface;
 import net.acodonic_king.redstonecg.block.defaults.OldInterface;
 import net.acodonic_king.redstonecg.init.RedstonecgModVersionRides;
 import net.acodonic_king.redstonecg.network.RedstonecgModVariables;
+import net.acodonic_king.redstonecg.procedures.BlockFrameTransformUtils;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.coordinates.BlockPosArgument;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.ChunkPos;
@@ -25,6 +29,24 @@ public class RepairCommand {
     public static LiteralArgumentBuilder<CommandSourceStack> command(){
         return Commands.literal("redstonecg_repair")
                 .requires(cs -> cs.hasPermission(1))
+                /*.then(Commands.literal("connectionFaces")
+                        .then(Commands.argument("x", IntegerArgumentType.integer())
+                        .then(Commands.argument("y", IntegerArgumentType.integer())
+                        .then(Commands.argument("z", IntegerArgumentType.integer())
+                                .executes(ctx -> {
+                                    CommandSourceStack source = ctx.getSource();
+                                    Level level = source.getLevel();
+                                    int x = IntegerArgumentType.getInteger(ctx, "x");
+                                    int y = IntegerArgumentType.getInteger(ctx, "y");
+                                    int z = IntegerArgumentType.getInteger(ctx, "z");
+                                    BlockPos pos = new BlockPos(x, y, z);
+                                    for(Direction direction: Direction.values()){
+                                        RedstonecgMod.LOGGER.debug(BlockFrameTransformUtils.getConnectionFace(level, pos, direction));
+                                    }
+                                    return 1;
+                                })
+                        )))
+                )*/
                 .then(Commands.literal("canSurviveAir")
                     .then(Commands.argument("enable", BoolArgumentType.bool())
                         .executes(ctx -> {

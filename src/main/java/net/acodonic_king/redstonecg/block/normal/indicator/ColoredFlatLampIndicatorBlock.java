@@ -6,12 +6,16 @@ import net.acodonic_king.redstonecg.block.entity.DefaultAnalogIndicatorBlockEnti
 import net.acodonic_king.redstonecg.block.entity.DefaultColoredFlatLampBlockEntity;
 import net.acodonic_king.redstonecg.init.RedstonecgModItems;
 import net.acodonic_king.redstonecg.init.RedstonecgModVersionRides;
+import net.acodonic_king.redstonecg.item.ColoredLampItem;
 import net.acodonic_king.redstonecg.procedures.AdventureProcedure;
+import net.acodonic_king.redstonecg.procedures.LittleTools;
 import net.acodonic_king.redstonecg.procedures.OnBlockRightClickedProcedure;
 import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
@@ -51,8 +55,27 @@ public class ColoredFlatLampIndicatorBlock extends DefaultIndicatorRedstoneInter
             if (itemStack.is(RedstonecgModItems.ROTATION_BRACKET.get())) {
                 return InteractionResult.PASS;
             }
-            if (itemStack.is(blockstate.getBlock().asItem()) && AdventureProcedure.pinConfig(world, entity)) {
-                if (world.getBlockEntity(pos) instanceof DefaultAnalogIndicatorBlockEntity be) {
+            if(itemStack.getItem() instanceof ColoredLampItem cli) {
+                if (world.getBlockEntity(pos) instanceof DefaultColoredFlatLampBlockEntity be) {
+                    CompoundTag tag = be.getParameterSet();
+                    if(tag.contains("item") && !world.isClientSide && !entity.getAbilities().instabuild){
+                        cli.clearSet(itemStack, entity);
+                        Item item = be.getItem();
+                        int count = LittleTools.hasItem(entity, item);
+                        if(count >= itemStack.getCount()){
+                            LittleTools.removeItems(entity, item, itemStack.getCount());
+                        } else if (count > 0) {
+                            int drop = itemStack.getCount() - count;
+                            itemStack.setCount(count);
+                            LittleTools.removeItems(entity, item, itemStack.getCount());
+                            ItemStack dropStack = itemStack.copy();
+                            dropStack.setCount(drop);
+                            if(!entity.addItem(dropStack))
+                                entity.drop(dropStack, false);
+                        } else
+                            return InteractionResult.FAIL;
+                    }
+                    itemStack.getOrCreateTag().put("BlockParameterSet", tag);
                     be.BASE_READ = !be.BASE_READ;
                     be.setChanged();
                     world.sendBlockUpdated(pos, blockstate, blockstate, 3);
@@ -63,7 +86,7 @@ public class ColoredFlatLampIndicatorBlock extends DefaultIndicatorRedstoneInter
             Item stainItem = null;
             if (itemStack.getItem() instanceof BlockItem bi) {
                 if (bi.getBlock() instanceof BeaconBeamBlock bl) {
-                    if (itemStack.is(RedstonecgModVersionRides.getItemTag("forge", "stained_glass_panes"))) {
+                    if (itemStack.is(RedstonecgModVersionRides.createItemTag("forge", "stained_glass_panes"))) {
                         color = bl.getColor().getTextColor();
                         stainItem = itemStack.getItem();
                         if (!world.isClientSide && !entity.getAbilities().instabuild) {
@@ -74,9 +97,14 @@ public class ColoredFlatLampIndicatorBlock extends DefaultIndicatorRedstoneInter
                 if (color == -1)
                     if (bi.getBlock() instanceof StainLampInterface bl) {
                         color = bl.getLampStainColor(world, pos, entity, hand, hit);
-                        stainItem = bl.consumeStainingItem(world, pos, entity, hand, hit);
+                        stainItem = bl.consumeStainingItem(world, entity, hand);
                     }
             }
+            if (color == -1)
+                if (itemStack.getItem() instanceof StainLampInterface bl) {
+                    color = bl.getLampStainColor(world, pos, entity, hand, hit);
+                    stainItem = bl.consumeStainingItem(world, entity, hand);
+                }
             if (color != -1)
                 if (world.getBlockEntity(pos) instanceof DefaultColoredFlatLampBlockEntity be) {
                     be.setColor(color);
@@ -109,6 +137,21 @@ public class ColoredFlatLampIndicatorBlock extends DefaultIndicatorRedstoneInter
                     Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), new ItemStack(be.ITEM));
             }
             super.onRemove(state, level, pos, newState, isMoving);
+        }
+    }
+
+    @Override
+    public void setPlacedBy(Level level, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack) {
+        if (level.isClientSide) return;
+        if (!stack.hasTag()) return;
+        CompoundTag tag = stack.getTag();
+        if (!tag.contains("BlockParameterSet")) return;
+        tag = tag.getCompound("BlockParameterSet");
+        if (level.getBlockEntity(pos) instanceof DefaultColoredFlatLampBlockEntity be){
+            be.setParameterSet(tag);
+            be.setChanged();
+            level.sendBlockUpdated(pos, state, state, 3);
+            level.scheduleTick(pos, state.getBlock(), 1);
         }
     }
 }

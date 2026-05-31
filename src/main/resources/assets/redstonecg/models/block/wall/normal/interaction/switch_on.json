@@ -1,0 +1,37 @@
+{
+	"format_version": "1.9.0",
+	"credit": "Made with Blockbench",
+	"textures": {
+		"0": "redstonecg:block/smooth_stone_plate",
+		"1": "redstonecg:block/control_panel_sides",
+		"2": "redstonecg:block/toggleable",
+		"3": "redstonecg:block/toggleable_indicator",
+		"particle": "redstonecg:block/smooth_stone_plate"
+	},
+	"elements": [
+		{
+			"from": [0, 0, 0],
+			"to": [2, 16, 16],
+			"faces": {
+				"north": {"uv": [0, 0, 2, 16], "texture": "#0"},
+				"east": {"uv": [0, 0, 16, 16], "texture": "#2"},
+				"south": {"uv": [14, 0, 16, 16], "texture": "#0"},
+				"west": {"uv": [0, 0, 16, 16], "texture": "#0"},
+				"up": {"uv": [0, 14, 16, 16], "rotation": 270, "texture": "#0"},
+				"down": {"uv": [0, 0, 16, 2], "rotation": 90, "texture": "#0"}
+			}
+		},
+		{
+			"from": [2, 4, 4],
+			"to": [4, 12, 12],
+			"rotation": {"angle": -45, "axis": "x", "origin": [2, 8, 8]},
+			"faces": {
+				"north": {"uv": [0, 4, 8, 6], "rotation": 270, "texture": "#1"},
+				"east": {"uv": [8, 8, 16, 16], "rotation": 270, "texture": "#3"},
+				"south": {"uv": [0, 4, 8, 6], "rotation": 90, "texture": "#1"},
+				"up": {"uv": [0, 4, 8, 6], "rotation": 90, "texture": "#1"},
+				"down": {"uv": [0, 4, 8, 6], "rotation": 90, "texture": "#1"}
+			}
+		}
+	]
+}

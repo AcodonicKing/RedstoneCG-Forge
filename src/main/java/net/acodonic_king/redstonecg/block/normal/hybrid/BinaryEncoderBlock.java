@@ -22,7 +22,7 @@ public class BinaryEncoderBlock extends DefaultAnalogInteractable3ABCGate {
     }
 
     @Override
-    public int onRedstoneUpdate(LevelAccessor world, BlockState blockState, BlockPos pos){
+    public int onRedstoneUpdate(LevelAccessor world, BlockState blockState, BlockPos pos, int recursion){
         Direction[] Sides = GetGateInputSidesProcedure.Get3ABCGateForth(blockState);
         int[] power = {0,0,0};
         int i = 0;
@@ -32,13 +32,13 @@ public class BinaryEncoderBlock extends DefaultAnalogInteractable3ABCGate {
             i++;
         }
         int output = this.redstonePowerOperation(power[0], power[1], power[2]);
-        setPower(world, blockState, pos, output);
+        setPower(world, blockState, pos, output, recursion);
         LittleTools.setBooleanProperty(world, pos, power[2] > 0, "visible_state", 2);
         return output;
     }
 
     @Override
-    public void setPower(LevelAccessor level, BlockState state, BlockPos pos, int power){
+    public void setPower(LevelAccessor level, BlockState state, BlockPos pos, int power, int recursion){
         power = Math.max(0, Math.min(power, 15));
         Level world = (Level) level;
         if (world.getBlockEntity(pos) instanceof DefaultAnalogGateBlockEntity be){
@@ -46,7 +46,7 @@ public class BinaryEncoderBlock extends DefaultAnalogInteractable3ABCGate {
                 be.POWER = power;
                 be.setChanged();
                 Direction direction = BlockFrameTransformUtils.getWorldDirectionFromLocalForward(state);
-                this.sendRedstoneUpdateInDirection(level,state.getBlock(),pos,direction);
+                this.sendRedstoneUpdateInDirection(level,state.getBlock(),pos,direction, recursion);
             }
         }
     }

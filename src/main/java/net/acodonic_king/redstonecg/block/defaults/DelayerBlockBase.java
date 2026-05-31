@@ -138,12 +138,12 @@ public class DelayerBlockBase extends SuperBlock implements SimpleWaterloggedBlo
             world.sendBlockUpdated(pos, blockState, blockState, 3);
         }
         Direction direction = BlockFrameTransformUtils.getWorldDirectionFromLocalForward(dirs);
-        sendRedstoneUpdateInDirection(world, blockState.getBlock(), pos, direction);
+        sendRedstoneUpdateInDirection(world, blockState.getBlock(), pos, direction, 0);
         if(nextTick)
             world.scheduleTick(pos, blockState.getBlock(), 1);
     }
 
-    public void sendRedstoneUpdateInDirection(LevelAccessor level, Block thisBlock, BlockPos thisPos, Direction direction){
+    public void sendRedstoneUpdateInDirection(LevelAccessor level, Block thisBlock, BlockPos thisPos, Direction direction, int recursion){
         Level world = (Level) level;
         if(direction == null) {
             world.blockUpdated(thisPos, thisBlock);
@@ -157,7 +157,7 @@ public class DelayerBlockBase extends SuperBlock implements SimpleWaterloggedBlo
             if(nb.isOutput(world, bs, neighborPos, direction.getOpposite())){return;}
         }
         if (block instanceof DefaultRedstoneActionGate nb){
-            nb.onRedstoneUpdate(world, bs, neighborPos, thisPos);
+            nb.onRedstoneUpdate(world, bs, neighborPos, thisPos, recursion);
         } else {
             //block.neighborChanged(bs,world,neighborPos,thisBlock,thisPos,false);
             world.neighborChanged(neighborPos,thisBlock,thisPos);

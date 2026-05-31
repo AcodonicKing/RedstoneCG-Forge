@@ -80,7 +80,7 @@ public class RedstoneToRedCuConverterBlock extends DefaultWire implements OldInt
 	}
 
 	@Override
-	public void onTick(LevelAccessor world, BlockPos pos){
+	public void onTick(LevelAccessor world, BlockPos pos, int recursion){
 		BlockState thisBlock = world.getBlockState(pos);
 		ConnectionFacePrimaryRange connectionFaceRangeA = new ConnectionFacePrimaryRange(thisBlock.getValue(DefaultWire.FACING));
 		List<ConnectionFace> connectionFaceList = connectionFaceRangeA.getList();
@@ -116,6 +116,8 @@ public class RedstoneToRedCuConverterBlock extends DefaultWire implements OldInt
 			wireEntity.POWER = power;
 			wireEntity.setChanged();
 			//((Level) world).sendBlockUpdated(pos, thisBlock, thisBlock, 2);
+			recursion++;
+			boolean exceedsRecursion = recursion > getWireChainLimit(world);
 			for(int i = 0; i < 4; i++){
 				if(((filterRedCu >> i) & 1) == 0){continue;}
 				ConnectionFace connectionFaceA = connectionFaceList.get(i);
@@ -124,9 +126,17 @@ public class RedstoneToRedCuConverterBlock extends DefaultWire implements OldInt
 				BlockState bs = world.getBlockState(targetPos);
 				Block targetBlock = bs.getBlock();
 				if (targetBlock instanceof DefaultRedstoneActionGate nb){
-					nb.onRedstoneUpdate(world, bs, targetPos, pos);
+					if (exceedsRecursion) {
+						world.scheduleTick(targetPos, targetBlock, 1);
+						continue;
+					}
+					nb.onRedstoneUpdate(world, bs, targetPos, pos, recursion);
 				} else if (targetBlock instanceof WireInterface nb){
-					nb.onTick(world, targetPos);
+					if (exceedsRecursion) {
+						world.scheduleTick(targetPos, targetBlock, 1);
+						continue;
+					}
+					nb.onTick(world, targetPos, recursion);
 				} else {
 					Block nb = bs.getBlock();
 					//nb.neighborChanged(bs,(Level) world,targetPos,thisBlock.getBlock(),pos,false);

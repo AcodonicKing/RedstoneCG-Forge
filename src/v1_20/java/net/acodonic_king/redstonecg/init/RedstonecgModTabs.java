@@ -70,6 +70,10 @@ public class RedstonecgModTabs {
                 accept(tabData, RedstonecgModItems.BAR_INDICATOR);
                 accept(tabData, RedstonecgModItems.COLORED_LAMP_BLOCK);
                 accept(tabData, RedstonecgModItems.COLORFUL_LAMP_BLOCK);
+                //Interaction
+                accept(tabData, RedstonecgModItems.RED_SWITCH);
+                accept(tabData, RedstonecgModItems.RED_BUTTON);
+                accept(tabData, RedstonecgModItems.CONTROL_PANEL);
                 //Parallel Digital
                 accept(tabData, RedstonecgModItems.PARALLEL_AND);
                 accept(tabData, RedstonecgModItems.PARALLEL_OR);

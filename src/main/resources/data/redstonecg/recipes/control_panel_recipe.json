@@ -1,0 +1,11 @@
+{
+    "type": "redstonecg:redcu_crafting",
+    "designation": "interaction/normal",
+    "ingredients": [
+        { "item": "minecraft:smooth_stone"},
+        { "item": "minecraft:item_frame" }
+    ],
+    "outputs": [
+        { "id": "redstonecg:control_panel", "Count": 1, "count": 1 }
+    ]
+}

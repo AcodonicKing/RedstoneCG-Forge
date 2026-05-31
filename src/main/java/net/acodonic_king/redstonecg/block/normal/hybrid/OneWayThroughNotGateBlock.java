@@ -14,7 +14,7 @@ public class OneWayThroughNotGateBlock extends OneWayThroughGateBlock {
 	}
 
 	@Override
-	public int onRedstoneUpdate(LevelAccessor world, BlockState blockState, BlockPos pos){
+	public int onRedstoneUpdate(LevelAccessor world, BlockState blockState, BlockPos pos, int recursion){
 		Direction[] Sides = GetGateInputSidesProcedure.Get2ABGateForth(blockState);
 		int SideCPower = GetRedstoneSignalProcedure.execute(world, pos, Direction.NORTH);
 		int SideDPower = GetRedstoneSignalProcedure.execute(world, pos, Sides[0]);
@@ -29,7 +29,7 @@ public class OneWayThroughNotGateBlock extends OneWayThroughGateBlock {
 		world.setBlock(pos, blockState, 2);
 		Direction direction = BlockFrameTransformUtils.getWorldDirectionFromLocal(blockState, Sides[1]);
 		//RedstonecgMod.LOGGER.debug("in direction {} {} {}",Sides[1],direction,pos);
-		this.sendRedstoneUpdateInDirection(world,blockState.getBlock(),pos,direction);
+		this.sendRedstoneUpdateInDirection(world,blockState.getBlock(),pos,direction, recursion);
 		if(SideCPower > 0){return SideDPower;}
 		return 0;
 	}

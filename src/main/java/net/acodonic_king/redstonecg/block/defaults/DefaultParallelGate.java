@@ -19,13 +19,13 @@ public class DefaultParallelGate extends DefaultRedstoneActionGate implements Pa
         return CanConnectWallGateProcedure.To4Gate(state, connectionFaceB);
     }
     @Override
-    public int onRedstoneUpdate(LevelAccessor world, BlockState thisState, BlockPos thisPos, BlockPos fromPos){
+    public int onRedstoneUpdate(LevelAccessor world, BlockState thisState, BlockPos thisPos, BlockPos fromPos, int recursion){
         Direction updateDirection = BlockFrameTransformUtils.directionFromPositions(fromPos, thisPos);
         Direction direction = BlockFrameTransformUtils.getLocalDirectionFromWorld(thisState, updateDirection);
         if(direction.getAxis() == Direction.Axis.X && !breakParallelLine(world, thisState, thisPos, updateDirection, false)){
-            sendRedstoneUpdateInDirection(world, thisState.getBlock(), thisPos, updateDirection);
+            sendRedstoneUpdateInDirection(world, thisState.getBlock(), thisPos, updateDirection, 0);
         }
-        return onRedstoneUpdate(world, thisState, thisPos);
+        return onRedstoneUpdate(world, thisState, thisPos, recursion);
     }
     @Override
     public boolean breakParallelLine(LevelAccessor world, BlockState thisState, BlockPos thisPos, Direction directedTo, boolean readOut){

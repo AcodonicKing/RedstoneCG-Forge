@@ -15,7 +15,7 @@ public class AnalogMemoryBlock extends DefaultAnalogInteractable2ABGate {
         super();
     }
     @Override
-    public int onRedstoneUpdate(LevelAccessor world, BlockState blockState, BlockPos pos){
+    public int onRedstoneUpdate(LevelAccessor world, BlockState blockState, BlockPos pos, int recursion){
         Direction[] Sides = GetGateInputSidesProcedure.Get2ABGateForth(blockState);
 
         int[] power = {0,0};
@@ -27,7 +27,7 @@ public class AnalogMemoryBlock extends DefaultAnalogInteractable2ABGate {
         }
 
         if(power[1] > 0){
-            setPower(world, blockState, pos, power[0]);
+            setPower(world, blockState, pos, power[0], recursion);
         }
 
         return 0;

@@ -10,7 +10,7 @@ import net.minecraft.world.level.block.state.properties.IntegerProperty;
 
 import java.util.function.ToIntFunction;
 
-public class DefaultIndicatorRedstoneInteractableGate extends DefaultIndicatorInteractableGate{
+public class DefaultIndicatorRedstoneInteractableGate extends DefaultIndicatorInteractableGate implements PowerIntegerPropertyInterface{
     public static final IntegerProperty POWER = IntegerProperty.create("power",0,15);
 
     public DefaultIndicatorRedstoneInteractableGate(){
@@ -39,5 +39,10 @@ public class DefaultIndicatorRedstoneInteractableGate extends DefaultIndicatorIn
     @Override
     public void setPower(LevelAccessor world, BlockState state, BlockPos pos, int power){
         world.setBlock(pos, state.setValue(POWER, power), 2);
+    }
+
+    @Override
+    public IntegerProperty getPowerIntegerProperty() {
+        return POWER;
     }
 }

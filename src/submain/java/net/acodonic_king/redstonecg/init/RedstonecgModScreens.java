@@ -2,6 +2,7 @@ package net.acodonic_king.redstonecg.init;
 
 import net.acodonic_king.redstonecg.block.gui.analog_source.AnalogSourceGUIScreen;
 import net.acodonic_king.redstonecg.block.gui.arrow_indicator.ArrowIndicatorGUIScreen;
+import net.acodonic_king.redstonecg.block.gui.control_panel.ControlPanelGUIScreen;
 import net.acodonic_king.redstonecg.block.gui.delayer.DelayerGUIScreen;
 import net.acodonic_king.redstonecg.block.gui.redcu_crafter.RedCuCrafterGUIScreen;
 import net.acodonic_king.redstonecg.block.gui.redcu_wire_transition.RedCuWireTransitionGUIScreen;
@@ -21,6 +22,7 @@ public class RedstonecgModScreens {
 			MenuScreens.register(RedstonecgModMenus.REDCU_WIRE_TRANSITION_GUI.get(), RedCuWireTransitionGUIScreen::new);
 			MenuScreens.register(RedstonecgModMenus.DELAYER_GUI.get(), DelayerGUIScreen::new);
 			MenuScreens.register(RedstonecgModMenus.ARROW_INDICATOR_GUI.get(), ArrowIndicatorGUIScreen::new);
+			MenuScreens.register(RedstonecgModMenus.CONTROL_PANEL_GUI.get(), ControlPanelGUIScreen::new);
 		});
 	}
 }

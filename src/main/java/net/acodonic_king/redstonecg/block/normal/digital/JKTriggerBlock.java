@@ -31,7 +31,7 @@ public class JKTriggerBlock extends DefaultDigitalInteractableTriggerGate implem
 		return CanConnectWallGateProcedure.To4Gate(state, connectionFaceB);
 	}
 	@Override
-	public int onRedstoneUpdate(LevelAccessor level, BlockState blockState, BlockPos pos){
+	public int onRedstoneUpdate(LevelAccessor level, BlockState blockState, BlockPos pos, int recursion){
 		Level world = (Level) level;
 		if (world.getBlockEntity(pos) instanceof DefaultDigitalTriggerGateBlockEntity be) {
 			Direction[] Sides = GetGateInputSidesProcedure.Get3ABCGateForth(blockState);
@@ -54,7 +54,7 @@ public class JKTriggerBlock extends DefaultDigitalInteractableTriggerGate implem
 					} else if (SideBPower) {
 						output = false;
 					}
-					setOutput(world,blockState,pos,output);
+					setOutput(world,blockState,pos,output, recursion);
 					be.UNLOCKED = false;
 					be.setChanged();
 				}

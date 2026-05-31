@@ -29,7 +29,7 @@ public class DefaultAnalogInteractable2TGate extends DefaultAnalogInteractableGa
     public int redstonePowerOperation(int[] SidePower){return 0;}
 
     @Override
-    public int onRedstoneUpdate(LevelAccessor world, BlockState blockState, BlockPos pos){
+    public int onRedstoneUpdate(LevelAccessor world, BlockState blockState, BlockPos pos, int recursion){
         Direction[] Sides = GetGateInputSidesProcedure.Get2TGateForth(blockState);
         int[] power = new int[Sides.length];
         int i = 0;
@@ -39,7 +39,7 @@ public class DefaultAnalogInteractable2TGate extends DefaultAnalogInteractableGa
             i++;
         }
         int output = this.redstonePowerOperation(power);
-        setPower(world, blockState, pos, output);
+        setPower(world, blockState, pos, output, recursion);
         return output;
     }
 

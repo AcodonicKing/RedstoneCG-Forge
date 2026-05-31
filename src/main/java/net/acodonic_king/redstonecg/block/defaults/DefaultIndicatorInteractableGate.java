@@ -1,7 +1,6 @@
 package net.acodonic_king.redstonecg.block.defaults;
 
 import net.acodonic_king.redstonecg.block.entity.DefaultAnalogIndicatorBlockEntity;
-import net.acodonic_king.redstonecg.block.entity.DefaultDigitalTriggerGateBlockEntity;
 import net.acodonic_king.redstonecg.init.RedstonecgModItems;
 import net.acodonic_king.redstonecg.init.RedstonecgModVersionRides;
 import net.acodonic_king.redstonecg.network.RedstonecgModVariables;
@@ -192,6 +191,7 @@ public class DefaultIndicatorInteractableGate extends SuperBlock implements Simp
             if(be.BASE_READ){
                 ConnectionFace connectionFaceA = BlockFrameTransformUtils.getConnectionFace(be.ROTATION,be.FACING,Direction.DOWN);
                 connectionFaceA.CHANNEL = 4;
+                //RedstonecgMod.LOGGER.debug(connectionFaceA+" "+GetRedstoneSignalProcedure.execute(world, pos, connectionFaceA));
                 power = Math.max(power, GetRedstoneSignalProcedure.execute(world, pos, connectionFaceA));
             }
             setPower(world, ThisBlock, pos, power);

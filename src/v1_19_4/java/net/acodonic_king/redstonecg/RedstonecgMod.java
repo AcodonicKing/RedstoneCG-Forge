@@ -42,6 +42,7 @@ public class RedstonecgMod {
         bus.addListener(RedstonecgModTabs::load);
         RedstonecgModItems.REGISTRY.register(bus);
         RedstonecgModRecipes.REGISTRY.register(bus);
+        RedstonecgModRecipes.TYPES.register(bus);
         RedstonecgModNetworking.register(bus);
     }
 }

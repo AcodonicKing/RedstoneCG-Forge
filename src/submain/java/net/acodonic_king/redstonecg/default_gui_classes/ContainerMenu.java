@@ -97,7 +97,7 @@ public class ContainerMenu extends EmptyContainerMenu{
     }
 
     private void slotChanged(int slotid, int ctype, int meta) {
-        if (this.world != null && this.world.isClientSide()) {
+        if (this.world != null && this.world.isClientSide() && this.pos != null) {
             handleMenuSlotAction(entity, slotid, ctype, meta, pos);
         }
     }
@@ -111,16 +111,16 @@ public class ContainerMenu extends EmptyContainerMenu{
         if (slot != null && slot.hasItem()) {
             ItemStack itemstack1 = slot.getItem();
             itemstack = itemstack1.copy();
-            if (index < 4) {
+            if (index < container_size) {
                 if (!this.moveItemStackTo(itemstack1, 4, this.slots.size(), true))
                     return ItemStack.EMPTY;
                 slot.onQuickCraft(itemstack1, itemstack);
-            } else if (!this.moveItemStackTo(itemstack1, 0, 4, false)) {
-                if (index < 4 + 27) {
-                    if (!this.moveItemStackTo(itemstack1, 4 + 27, this.slots.size(), true))
+            } else if (!this.moveItemStackTo(itemstack1, 0, container_size, false)) {
+                if (index < (container_size + 27)) {
+                    if (!this.moveItemStackTo(itemstack1, container_size + 27, this.slots.size(), true))
                         return ItemStack.EMPTY;
                 } else {
-                    if (!this.moveItemStackTo(itemstack1, 4, 4 + 27, false))
+                    if (!this.moveItemStackTo(itemstack1, container_size, container_size + 27, false))
                         return ItemStack.EMPTY;
                 }
                 return ItemStack.EMPTY;

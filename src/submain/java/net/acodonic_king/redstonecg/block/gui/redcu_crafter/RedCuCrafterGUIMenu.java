@@ -1,10 +1,8 @@
 package net.acodonic_king.redstonecg.block.gui.redcu_crafter;
 
-import net.acodonic_king.redstonecg.RedstonecgMod;
 import net.acodonic_king.redstonecg.block.gui.redcu_crafter.RedCuCrafterGUIScreen.item_option;
 import net.acodonic_king.redstonecg.default_gui_classes.ContainerMenu;
 import net.acodonic_king.redstonecg.init.RedstonecgModMenus;
-import net.acodonic_king.redstonecg.init.RedstonecgModNetworking;
 import net.acodonic_king.redstonecg.init.RedstonecgModVersionRides;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;

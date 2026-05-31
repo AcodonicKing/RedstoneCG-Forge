@@ -1,7 +1,6 @@
 package net.acodonic_king.redstonecg.block.defaults;
 
 import net.acodonic_king.redstonecg.block.entity.DefaultAnalogGateBlockEntity;
-import net.acodonic_king.redstonecg.block.entity.DefaultDigitalGateBlockEntity;
 import net.acodonic_king.redstonecg.procedures.*;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -48,7 +47,7 @@ public class DefaultParallelAnalogAGate extends DefaultParallelGate implements E
     public int redstonePowerOperation(int LinePower, int BackPower){return 0;}
 
     @Override
-    public int onRedstoneUpdate(LevelAccessor world, BlockState thisState, BlockPos thisPos){
+    public int onRedstoneUpdate(LevelAccessor world, BlockState thisState, BlockPos thisPos, int recursion){
         int linePower = GetParallelSignalProcedure.getParallelLinePower(world, thisPos);
         ConnectionFace connectionFaceA = BlockFrameTransformUtils.getConnectionFace(thisState, Direction.SOUTH);
         int backPower = GetRedstoneSignalProcedure.execute(world, thisPos, connectionFaceA);
@@ -58,7 +57,7 @@ public class DefaultParallelAnalogAGate extends DefaultParallelGate implements E
             be.POWER = power;
             be.setChanged();
             updateVisibleState((Level) world, thisPos, thisState, power);
-            sendRedstoneUpdateInDirection(world, thisState.getBlock(), thisPos, connectionFaceA.FACE.getOpposite());
+            sendRedstoneUpdateInDirection(world, thisState.getBlock(), thisPos, connectionFaceA.FACE.getOpposite(), recursion);
         }
         return 0;
     }

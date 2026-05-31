@@ -36,7 +36,7 @@ public class TTriggerBlock extends DefaultDigitalInteractableTriggerGate impleme
 	}
 
 	@Override
-	public int onRedstoneUpdate(LevelAccessor level, BlockState blockState, BlockPos pos){
+	public int onRedstoneUpdate(LevelAccessor level, BlockState blockState, BlockPos pos, int recursion){
 		Level world = (Level) level;
 		if (world.getBlockEntity(pos) instanceof DefaultDigitalTriggerGateBlockEntity be) {
 			Direction Side = GetGateInputSidesProcedure.Get1GateForth(blockState);
@@ -48,7 +48,7 @@ public class TTriggerBlock extends DefaultDigitalInteractableTriggerGate impleme
 				if (be.UNLOCKED) {
 					output = !output;
 					be.UNLOCKED = false;
-					setOutput(world,blockState,pos,output);
+					setOutput(world,blockState,pos,output, recursion);
 				}
 			} else {
 				be.UNLOCKED = true;

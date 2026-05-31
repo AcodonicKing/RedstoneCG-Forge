@@ -1,5 +1,5 @@
 {
-  "parent": "redstonecg:custom/floor_component",
+  "parent": "redstonecg:custom/indicator",
   "textures": {
     "all": "redstonecg:block/seven_segment_indicator/ui14",
     "particle": "redstonecg:block/seven_segment_indicator/ui14",

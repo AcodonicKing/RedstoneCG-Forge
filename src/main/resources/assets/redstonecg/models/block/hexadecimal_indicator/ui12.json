@@ -1,5 +1,5 @@
 {
-  "parent": "redstonecg:custom/floor_component",
+  "parent": "redstonecg:custom/indicator",
   "textures": {
     "all": "redstonecg:block/hexadecimal_indicator/ui12",
     "particle": "redstonecg:block/hexadecimal_indicator/ui12",

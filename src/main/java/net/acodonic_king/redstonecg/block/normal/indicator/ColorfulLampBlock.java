@@ -2,6 +2,7 @@ package net.acodonic_king.redstonecg.block.normal.indicator;
 
 import net.acodonic_king.redstonecg.RedstonecgMod;
 import net.acodonic_king.redstonecg.block.defaults.DefaultColoredLampBlock;
+import net.acodonic_king.redstonecg.block.defaults.PowerIntegerPropertyInterface;
 import net.acodonic_king.redstonecg.block.entity.DefaultColoredLampBlockEntity;
 import net.acodonic_king.redstonecg.init.RedstonecgModVersionRides;
 import net.acodonic_king.redstonecg.network.MessengerBlockEntityPigeon;
@@ -25,7 +26,7 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.phys.BlockHitResult;
 
-public class ColorfulLampBlock  extends DefaultColoredLampBlock {
+public class ColorfulLampBlock  extends DefaultColoredLampBlock implements PowerIntegerPropertyInterface {
     public static final IntegerProperty POWER = IntegerProperty.create("power", 0, 15);
 
     public ColorfulLampBlock() {
@@ -64,5 +65,10 @@ public class ColorfulLampBlock  extends DefaultColoredLampBlock {
         if(state.getBlock() instanceof ColorfulLampBlock)
             return state.getValue(POWER);
         return 0;
+    }
+
+    @Override
+    public IntegerProperty getPowerIntegerProperty() {
+        return POWER;
     }
 }
