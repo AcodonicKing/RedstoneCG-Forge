@@ -74,6 +74,7 @@ public class RedstonecgModTabs {
                 accept(tabData, RedstonecgModItems.RED_SWITCH);
                 accept(tabData, RedstonecgModItems.RED_BUTTON);
                 accept(tabData, RedstonecgModItems.CONTROL_PANEL);
+                accept(tabData, RedstonecgModItems.CODED_CONTROL_PANEL);
                 //Parallel Digital
                 accept(tabData, RedstonecgModItems.PARALLEL_AND);
                 accept(tabData, RedstonecgModItems.PARALLEL_OR);

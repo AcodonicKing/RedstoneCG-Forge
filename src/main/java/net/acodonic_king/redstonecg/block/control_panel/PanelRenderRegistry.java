@@ -44,6 +44,15 @@ public class PanelRenderRegistry {
             new LeverPanelRender(),
             ModLoaderRider.getItemFromRegistry(new ResourceLocation("minecraft","lever"))
     );
+    public static final DefaultPanelRender TEXT_PANEL = register(
+            new TextPanelRender(),
+            ModLoaderRider.getItemFromRegistry(new ResourceLocation("minecraft","paper")),
+            ModLoaderRider.getItemFromRegistry(new ResourceLocation("minecraft","name_tag"))
+    );
+    /*public static final DefaultPanelRender BLOCK_RENDER = register(
+            new BlockRender(),
+            ModLoaderRider.getItemFromRegistry(new ResourceLocation("minecraft","redstone_lamp"))
+    );*/
 
     static {
         TagKey<Item> tag = RedstonecgModVersionRides.createItemTag("minecraft", "buttons");

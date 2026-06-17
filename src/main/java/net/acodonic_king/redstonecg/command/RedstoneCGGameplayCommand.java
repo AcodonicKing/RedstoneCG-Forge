@@ -77,6 +77,27 @@ public class RedstoneCGGameplayCommand {
                             return 1;
                         })
                 )
+                .then(Commands.literal("parallelChainLimit")
+                        .then(Commands.argument("length", IntegerArgumentType.integer(0))
+                                .executes(ctx -> {
+                                    CommandSourceStack source = ctx.getSource();
+                                    Level level = source.getLevel();
+                                    int length = IntegerArgumentType.getInteger(ctx,"length");
+                                    RedstonecgModVariables.MapVariables mapVariables = RedstonecgModVariables.MapVariables.get(level);
+                                    mapVariables.parallelChainLimit = length;
+                                    mapVariables.syncData(level);
+                                    RedstonecgModVersionRides.sendCommandSuccess(source,"The parallel chain limit has been set to "+length);
+                                    return 1;
+                                })
+                        )
+                        .executes(ctx -> {
+                            CommandSourceStack source = ctx.getSource();
+                            Level level = source.getLevel();
+                            int length = RedstonecgModVariables.MapVariables.get(level).parallelChainLimit;
+                            RedstonecgModVersionRides.sendCommandSuccess(source,"The parallel chain limit is "+length);
+                            return 1;
+                        })
+                )
                 ;
     }
 }

@@ -5,27 +5,69 @@ import net.acodonic_king.redstonecg.block.control_panel.logic.DefaultPanelLogic;
 import net.acodonic_king.redstonecg.block.entity.AnalogSourceBlockEntityRenderer;
 import net.acodonic_king.redstonecg.block.entity.ControlPanelBlockEntityRenderer;
 import net.acodonic_king.redstonecg.procedures.RCGMatrix;
+import net.acodonic_king.redstonecg.procedures.TextFormatClientTools;
 import net.minecraft.client.resources.model.BakedModel;
 
+import static net.acodonic_king.redstonecg.block.entity.AnalogSourceBlockEntityRenderer.text_rotate;
+
 public class AnalogSourcePanelRender implements DefaultPanelRender{
+    RCGMatrix.M4F transformer = new RCGMatrix.M4F();
     @Override
     public void render(ControlPanelBlockEntityRenderer ber, DefaultPanelLogic dpl) {
-        ber.POSE_STACK.pushPose();
-        ber.applySlotTransform();
-        BakedModel model = ber.getModel(AnalogSourceBlockEntityRenderer.KNOB_MODEL);
-        float angle = getAngle(dpl);
-        RCGMatrix.M4F mat = new RCGMatrix.M4F().translate(0.5f, 0.375f, 0.5f).rotateY(angle);
-        ber.POSE_STACK.mulPoseMatrix(mat.getMatrix());
-        ber.render(model, 1, 1, 1);
-        ber.POSE_STACK.popPose();
-    }
-    public float getAngle(DefaultPanelLogic dpl){
-        if(dpl instanceof AnalogSourcePanelLogic pl){
-            float angle = (float) (pl.POWER - pl.POWER_RANGE[0]) / (pl.POWER_RANGE[1] - pl.POWER_RANGE[0] + 1);
-            angle = 0.5f - angle;
-            angle *= (float) (2 * Math.PI);
-            return angle;
+        if(dpl instanceof AnalogSourcePanelLogic pl) {
+            ber.POSE_STACK.pushPose();
+            ber.applySlotTransform();
+            BakedModel model = ber.getModel(AnalogSourceBlockEntityRenderer.KNOB_MODEL);
+            float angle = pl.ANGLE;
+            transformer.identity().translate(0.5f, 0.375f, 0.5f).rotateY(angle);
+            ber.POSE_STACK.mulPoseMatrix(transformer.getMatrix());
+            ber.render(model, 1, 1, 1);
+            ber.POSE_STACK.popPose();
         }
-        return 0.0f;
+    }
+
+    @Override
+    public void renderText(ControlPanelBlockEntityRenderer ber, DefaultPanelLogic dpl) {
+        if(dpl instanceof AnalogSourcePanelLogic pl) {
+            if (pl.RENDER_TEXT.isEmpty())
+                return;
+            if (pl.RENDER_TEXT.lines() > 2) {
+                ber.POSE_STACK.pushPose();
+                ber.applySlotTransform();
+                transformer
+                        .identity()
+                        .translate(0.5f, 0.0f, 0.5f)
+                        .rotateY(RCGMatrix.ANGLES[2] + pl.ANGLE)
+                        .translate(0.0f, 0.0f, 0.5f)
+                        .mul(text_rotate);
+                ber.POSE_STACK.mulPoseMatrix(transformer.getMatrix());
+                TextFormatClientTools.midText(
+                        pl.RENDER_TEXT, 0xFFFFFF, 0.5f, 0.5f, ber.FONT,
+                        ber.POSE_STACK, ber.BUFFER_SOURCE, ber.PACKED_LIGHT
+                );
+                ber.POSE_STACK.popPose();
+            }
+            float z = ber.slotSizeZ() / 2;
+            float h = (ber.slotSizeZ() - 0.5f) / 2;
+            ber.POSE_STACK.pushPose();
+            ber.applySlotTransform();
+            transformer.identity().translate(0.5f, -0.125f, 0.5f).mul(text_rotate);
+            ber.POSE_STACK.mulPoseMatrix(transformer.getMatrix());
+            TextFormatClientTools.topText(
+                    pl.RENDER_TEXT, 0xFFFFFF, ber.slotSizeX(), h, z, ber.FONT,
+                    ber.POSE_STACK, ber.BUFFER_SOURCE, ber.PACKED_LIGHT
+            );
+            ber.POSE_STACK.popPose();
+            if(pl.RENDER_TEXT.lines() > 1){
+                ber.POSE_STACK.pushPose();
+                ber.applySlotTransform();
+                ber.POSE_STACK.mulPoseMatrix(transformer.getMatrix());
+                TextFormatClientTools.bottomText(
+                        pl.RENDER_TEXT, 0xFFFFFF, ber.slotSizeX(), h, z, ber.FONT,
+                        ber.POSE_STACK, ber.BUFFER_SOURCE, ber.PACKED_LIGHT
+                );
+                ber.POSE_STACK.popPose();
+            }
+        }
     }
 }

@@ -12,6 +12,7 @@ import net.acodonic_king.redstonecg.procedures.LittleTools;
 import net.acodonic_king.redstonecg.procedures.OnBlockRightClickedProcedure;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -26,6 +27,9 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ColoredFlatLampIndicatorBlock extends DefaultIndicatorRedstoneInteractableGate {
 
@@ -58,6 +62,7 @@ public class ColoredFlatLampIndicatorBlock extends DefaultIndicatorRedstoneInter
             if(itemStack.getItem() instanceof ColoredLampItem cli) {
                 if (world.getBlockEntity(pos) instanceof DefaultColoredFlatLampBlockEntity be) {
                     CompoundTag tag = be.getParameterSet();
+                    tag.putInt("connection", blockstate.getValue(CONNECTION));
                     if(tag.contains("item") && !world.isClientSide && !entity.getAbilities().instabuild){
                         cli.clearSet(itemStack, entity);
                         Item item = be.getItem();
@@ -143,15 +148,30 @@ public class ColoredFlatLampIndicatorBlock extends DefaultIndicatorRedstoneInter
     @Override
     public void setPlacedBy(Level level, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack) {
         if (level.isClientSide) return;
-        if (!stack.hasTag()) return;
-        CompoundTag tag = stack.getTag();
-        if (!tag.contains("BlockParameterSet")) return;
-        tag = tag.getCompound("BlockParameterSet");
         if (level.getBlockEntity(pos) instanceof DefaultColoredFlatLampBlockEntity be){
-            be.setParameterSet(tag);
+            if(stack.hasTag()) {
+                CompoundTag tag = stack.getTag();
+                if (tag.contains("BlockParameterSet")) {
+                    tag = tag.getCompound("BlockParameterSet");
+                    if (tag.contains("connection"))
+                        state = state.setValue(CONNECTION, tag.getInt("connection"));
+                    be.setParameterSet(tag);
+                }
+            }
+            be.setName(stack);
             be.setChanged();
-            level.sendBlockUpdated(pos, state, state, 3);
+            level.setBlock(pos, state, 3);
             level.scheduleTick(pos, state.getBlock(), 1);
         }
+    }
+    @Override
+    public List<ItemStack> getDrops(List<ItemStack> drops, BlockState state, BlockEntity entity) {
+        drops.clear();
+        ItemStack stack = new ItemStack(asItem());
+        if(entity instanceof DefaultColoredFlatLampBlockEntity sbe)
+            if(!sbe.CUSTOM_NAME.isEmpty())
+                stack.setHoverName(Component.literal(sbe.CUSTOM_NAME));
+        drops.add(stack);
+        return drops;
     }
 }

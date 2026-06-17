@@ -43,20 +43,14 @@ public class RedCuWireTransitionRenderEncoding {
         int axisBits = (code >> 2) & 0x3;
         int dirBits = code & 0x3;
         if(axisBits == 0 || dirBits == 0){return;}
-        double angle = switch (dirBits) {
-            case 0 -> 0;
-            case 1 -> Math.PI * 0.5;
-            case 2 -> Math.PI;
-            case 3 -> Math.PI * 1.5;
-            default -> 0;
-        };
+        float angle = RCGMatrix.ANGLES[dirBits];
         RCGQuaternion quat = switch (axisBits) {
-            case 1 -> RCGQuaternion.Vector3F.rotateXP((float) angle);
-            case 2 -> RCGQuaternion.Vector3F.rotateYP((float) angle);
-            case 3 -> RCGQuaternion.Vector3F.rotateZP((float) angle);
-            default -> RCGQuaternion.Vector3F.rotateYP((float) angle);
+            case 1 -> new RCGQuaternion().rotateX(angle);
+            case 2 -> new RCGQuaternion().rotateY(angle);
+            case 3 -> new RCGQuaternion().rotateZ(angle);
+            default -> new RCGQuaternion().rotateY(angle);
         };
-        poseStack.mulPose(quat.quaternion);
+        poseStack.mulPose(quat.getQuaternion());
     }
     public static int getModelId(int packed) {
         return packed & 0xF;

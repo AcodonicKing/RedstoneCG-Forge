@@ -1,0 +1,197 @@
+{
+    "variants": {
+        "orientation=0,waterlogged=false": {
+            "model": "redstonecg:block/coded_control_panel/o0", "x": 0, "y": 0},
+        "orientation=1,waterlogged=false": {
+            "model": "redstonecg:block/coded_control_panel/o0", "x": 90, "y": 180 },
+        "orientation=2,waterlogged=false": {
+            "model": "redstonecg:block/coded_control_panel/o0", "x": 90, "y": 270 },
+        "orientation=3,waterlogged=false": {
+            "model": "redstonecg:block/coded_control_panel/o0", "x": 90, "y": 0 },
+        "orientation=4,waterlogged=false": {
+            "model": "redstonecg:block/coded_control_panel/o0", "x": 90, "y": 90 },
+        "orientation=5,waterlogged=false": {
+            "model": "redstonecg:block/coded_control_panel/o0", "x": 180, "y": 0},
+
+
+        "orientation=6,waterlogged=false": {
+            "model": "redstonecg:block/coded_control_panel/o1f", "x": 0, "y": 0},
+        "orientation=7,waterlogged=false": {
+            "model": "redstonecg:block/coded_control_panel/o1f", "x": 0, "y": 90},
+        "orientation=8,waterlogged=false": {
+            "model": "redstonecg:block/coded_control_panel/o1f", "x": 0, "y": 180},
+        "orientation=9,waterlogged=false": {
+            "model": "redstonecg:block/coded_control_panel/o1f", "x": 0, "y": 270},
+
+        "orientation=10,waterlogged=false": {
+            "model": "redstonecg:block/coded_control_panel/o1w", "x": 0, "y": 90},
+        "orientation=11,waterlogged=false": {
+            "model": "redstonecg:block/coded_control_panel/o1w", "x": 90, "y": 90},
+        "orientation=12,waterlogged=false": {
+            "model": "redstonecg:block/coded_control_panel/o1w", "x": 180, "y": 90},
+        "orientation=13,waterlogged=false": {
+            "model": "redstonecg:block/coded_control_panel/o1w", "x": 270, "y": 90},
+
+        "orientation=14,waterlogged=false": {
+            "model": "redstonecg:block/coded_control_panel/o1w", "x": 0, "y": 180},
+        "orientation=15,waterlogged=false": {
+            "model": "redstonecg:block/coded_control_panel/o1w", "x": 90, "y": 180},
+        "orientation=16,waterlogged=false": {
+            "model": "redstonecg:block/coded_control_panel/o1w", "x": 180, "y": 180},
+        "orientation=17,waterlogged=false": {
+            "model": "redstonecg:block/coded_control_panel/o1w", "x": 270, "y": 180},
+
+        "orientation=18,waterlogged=false": {
+            "model": "redstonecg:block/coded_control_panel/o1w", "x": 0, "y": 270},
+        "orientation=19,waterlogged=false": {
+            "model": "redstonecg:block/coded_control_panel/o1w", "x": 90, "y": 270},
+        "orientation=20,waterlogged=false": {
+            "model": "redstonecg:block/coded_control_panel/o1w", "x": 180, "y": 270},
+        "orientation=21,waterlogged=false": {
+            "model": "redstonecg:block/coded_control_panel/o1w", "x": 270, "y": 270},
+
+        "orientation=22,waterlogged=false": {
+            "model": "redstonecg:block/coded_control_panel/o1w", "x": 0, "y": 0},
+        "orientation=23,waterlogged=false": {
+            "model": "redstonecg:block/coded_control_panel/o1w", "x": 90, "y": 0},
+        "orientation=24,waterlogged=false": {
+            "model": "redstonecg:block/coded_control_panel/o1w", "x": 180, "y": 0},
+        "orientation=25,waterlogged=false": {
+            "model": "redstonecg:block/coded_control_panel/o1w", "x": 270, "y": 0},
+
+        "orientation=26,waterlogged=false": {
+            "model": "redstonecg:block/coded_control_panel/o1f", "x": 180, "y": 0},
+        "orientation=27,waterlogged=false": {
+            "model": "redstonecg:block/coded_control_panel/o1f", "x": 180, "y": 90},
+        "orientation=28,waterlogged=false": {
+            "model": "redstonecg:block/coded_control_panel/o1f", "x": 180, "y": 180},
+        "orientation=29,waterlogged=false": {
+            "model": "redstonecg:block/coded_control_panel/o1f", "x": 180, "y": 270},
+
+
+        "orientation=30,waterlogged=false": {
+            "model": "redstonecg:block/coded_control_panel/o2f", "x": 0, "y": 0},
+        "orientation=31,waterlogged=false": {
+            "model": "redstonecg:block/coded_control_panel/o2f", "x": 0, "y": 90},
+        "orientation=32,waterlogged=false": {
+            "model": "redstonecg:block/coded_control_panel/o2f", "x": 0, "y": 180},
+        "orientation=33,waterlogged=false": {
+            "model": "redstonecg:block/coded_control_panel/o2f", "x": 0, "y": 270},
+
+        "orientation=34,waterlogged=false": {
+            "model": "redstonecg:block/coded_control_panel/o2w", "x": 0, "y": 0},
+        "orientation=35,waterlogged=false": {
+            "model": "redstonecg:block/coded_control_panel/o2w", "x": 0, "y": 90},
+        "orientation=36,waterlogged=false": {
+            "model": "redstonecg:block/coded_control_panel/o2w", "x": 0, "y": 180},
+        "orientation=37,waterlogged=false": {
+            "model": "redstonecg:block/coded_control_panel/o2w", "x": 0, "y": 270},
+
+        "orientation=38,waterlogged=false": {
+            "model": "redstonecg:block/coded_control_panel/o2f", "x": 180, "y": 180},
+        "orientation=39,waterlogged=false": {
+            "model": "redstonecg:block/coded_control_panel/o2f", "x": 180, "y": 270},
+        "orientation=40,waterlogged=false": {
+            "model": "redstonecg:block/coded_control_panel/o2f", "x": 180, "y": 0},
+        "orientation=41,waterlogged=false": {
+            "model": "redstonecg:block/coded_control_panel/o2f", "x": 180, "y": 90},
+
+
+
+        "orientation=0,waterlogged=true": {
+            "model": "redstonecg:block/coded_control_panel/o0", "x": 0, "y": 0},
+        "orientation=1,waterlogged=true": {
+            "model": "redstonecg:block/coded_control_panel/o0", "x": 90, "y": 0 },
+        "orientation=2,waterlogged=true": {
+            "model": "redstonecg:block/coded_control_panel/o0", "x": 90, "y": 90 },
+        "orientation=3,waterlogged=true": {
+            "model": "redstonecg:block/coded_control_panel/o0", "x": 90, "y": 180 },
+        "orientation=4,waterlogged=true": {
+            "model": "redstonecg:block/coded_control_panel/o0", "x": 90, "y": 270 },
+        "orientation=5,waterlogged=true": {
+            "model": "redstonecg:block/coded_control_panel/o0", "x": 180, "y": 0},
+
+
+        "orientation=6,waterlogged=true": {
+            "model": "redstonecg:block/coded_control_panel/o1f", "x": 0, "y": 0},
+        "orientation=7,waterlogged=true": {
+            "model": "redstonecg:block/coded_control_panel/o1f", "x": 0, "y": 90},
+        "orientation=8,waterlogged=true": {
+            "model": "redstonecg:block/coded_control_panel/o1f", "x": 0, "y": 180},
+        "orientation=9,waterlogged=true": {
+            "model": "redstonecg:block/coded_control_panel/o1f", "x": 0, "y": 270},
+
+        "orientation=10,waterlogged=true": {
+            "model": "redstonecg:block/coded_control_panel/o1w", "x": 0, "y": 90},
+        "orientation=11,waterlogged=true": {
+            "model": "redstonecg:block/coded_control_panel/o1w", "x": 90, "y": 90},
+        "orientation=12,waterlogged=true": {
+            "model": "redstonecg:block/coded_control_panel/o1w", "x": 180, "y": 90},
+        "orientation=13,waterlogged=true": {
+            "model": "redstonecg:block/coded_control_panel/o1w", "x": 270, "y": 90},
+
+        "orientation=14,waterlogged=true": {
+            "model": "redstonecg:block/coded_control_panel/o1w", "x": 0, "y": 180},
+        "orientation=15,waterlogged=true": {
+            "model": "redstonecg:block/coded_control_panel/o1w", "x": 90, "y": 180},
+        "orientation=16,waterlogged=true": {
+            "model": "redstonecg:block/coded_control_panel/o1w", "x": 180, "y": 180},
+        "orientation=17,waterlogged=true": {
+            "model": "redstonecg:block/coded_control_panel/o1w", "x": 270, "y": 180},
+
+        "orientation=18,waterlogged=true": {
+            "model": "redstonecg:block/coded_control_panel/o1w", "x": 0, "y": 270},
+        "orientation=19,waterlogged=true": {
+            "model": "redstonecg:block/coded_control_panel/o1w", "x": 90, "y": 270},
+        "orientation=20,waterlogged=true": {
+            "model": "redstonecg:block/coded_control_panel/o1w", "x": 180, "y": 270},
+        "orientation=21,waterlogged=true": {
+            "model": "redstonecg:block/coded_control_panel/o1w", "x": 270, "y": 270},
+
+        "orientation=22,waterlogged=true": {
+            "model": "redstonecg:block/coded_control_panel/o1w", "x": 0, "y": 0},
+        "orientation=23,waterlogged=true": {
+            "model": "redstonecg:block/coded_control_panel/o1w", "x": 90, "y": 0},
+        "orientation=24,waterlogged=true": {
+            "model": "redstonecg:block/coded_control_panel/o1w", "x": 180, "y": 0},
+        "orientation=25,waterlogged=true": {
+            "model": "redstonecg:block/coded_control_panel/o1w", "x": 270, "y": 0},
+
+        "orientation=26,waterlogged=true": {
+            "model": "redstonecg:block/coded_control_panel/o1f", "x": 180, "y": 0},
+        "orientation=27,waterlogged=true": {
+            "model": "redstonecg:block/coded_control_panel/o1f", "x": 180, "y": 90},
+        "orientation=28,waterlogged=true": {
+            "model": "redstonecg:block/coded_control_panel/o1f", "x": 180, "y": 180},
+        "orientation=29,waterlogged=true": {
+            "model": "redstonecg:block/coded_control_panel/o1f", "x": 180, "y": 270},
+        
+
+        "orientation=30,waterlogged=true": {
+            "model": "redstonecg:block/coded_control_panel/o2f", "x": 0, "y": 0},
+        "orientation=31,waterlogged=true": {
+            "model": "redstonecg:block/coded_control_panel/o2f", "x": 0, "y": 90},
+        "orientation=32,waterlogged=true": {
+            "model": "redstonecg:block/coded_control_panel/o2f", "x": 0, "y": 180},
+        "orientation=33,waterlogged=true": {
+            "model": "redstonecg:block/coded_control_panel/o2f", "x": 0, "y": 270},
+
+        "orientation=34,waterlogged=true": {
+            "model": "redstonecg:block/coded_control_panel/o2w", "x": 0, "y": 0},
+        "orientation=35,waterlogged=true": {
+            "model": "redstonecg:block/coded_control_panel/o2w", "x": 0, "y": 90},
+        "orientation=36,waterlogged=true": {
+            "model": "redstonecg:block/coded_control_panel/o2w", "x": 0, "y": 180},
+        "orientation=37,waterlogged=true": {
+            "model": "redstonecg:block/coded_control_panel/o2w", "x": 0, "y": 270},
+
+        "orientation=38,waterlogged=true": {
+            "model": "redstonecg:block/coded_control_panel/o2f", "x": 90, "y": 180},
+        "orientation=39,waterlogged=true": {
+            "model": "redstonecg:block/coded_control_panel/o2f", "x": 90, "y": 270},
+        "orientation=40,waterlogged=true": {
+            "model": "redstonecg:block/coded_control_panel/o2f", "x": 90, "y": 0},
+        "orientation=41,waterlogged=true": {
+            "model": "redstonecg:block/coded_control_panel/o2f", "x": 90, "y": 90}
+    }
+}

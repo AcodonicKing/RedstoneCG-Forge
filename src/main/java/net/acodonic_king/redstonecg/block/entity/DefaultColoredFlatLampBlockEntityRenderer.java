@@ -2,6 +2,7 @@ package net.acodonic_king.redstonecg.block.entity;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.acodonic_king.redstonecg.procedures.RCGMatrix;
 import net.acodonic_king.redstonecg.procedures.RCGQuaternion;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -13,12 +14,17 @@ import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.resources.model.ModelManager;
 import net.minecraft.world.level.block.state.BlockState;
 
+import static net.acodonic_king.redstonecg.block.entity.DefaultAnalogIndicatorBlockEntityRenderer.lampTextRender;
+
 public class DefaultColoredFlatLampBlockEntityRenderer implements BlockEntityRenderer<DefaultColoredFlatLampBlockEntity> {
     BlockEntityRendererProvider.Context context;
     public DefaultColoredFlatLampBlockEntityRenderer(BlockEntityRendererProvider.Context context){
         super();
         this.context = context;
     }
+
+    RCGMatrix.M4F transformer = new RCGMatrix.M4F();
+
     @Override
     public void render(DefaultColoredFlatLampBlockEntity blockEntity, float v, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, int packedOverlay) {
         BlockState blockState = blockEntity.getBlockState();
@@ -29,15 +35,11 @@ public class DefaultColoredFlatLampBlockEntityRenderer implements BlockEntityRen
         poseStack.pushPose();
         poseStack.translate(0.5, 0.5, 0.5);
 
-        switch (blockEntity.facingMode){
-            case 5 -> poseStack.mulPose(blockEntity.facing.quaternion);
-            case 0 -> {}
-            default -> {
-                poseStack.mulPose(blockEntity.facing.quaternion);
-                poseStack.mulPose(RCGQuaternion.Vector3F.rotateXP((float) (Math.PI * 0.5)).quaternion);
-            }
-        }
-        poseStack.mulPose(blockEntity.rotation.quaternion);
+        OrientationHolderBlockEntity.getPoseStackMatrix(
+                transformer.identity(),
+                blockEntity.combination
+        );
+        poseStack.mulPoseMatrix(transformer.getMatrix());
 
         poseStack.translate(-0.5, -0.5, -0.5);
 
@@ -82,6 +84,8 @@ public class DefaultColoredFlatLampBlockEntityRenderer implements BlockEntityRen
                     packedOverlay
             );
         }
+        if(!blockEntity.RENDER_TEXT.isEmpty())
+            lampTextRender(blockEntity, poseStack, bufferSource, packedLight);
         poseStack.popPose();
     }
 }

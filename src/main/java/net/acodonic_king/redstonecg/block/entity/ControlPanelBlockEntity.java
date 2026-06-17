@@ -1,9 +1,7 @@
 package net.acodonic_king.redstonecg.block.entity;
 
 import io.netty.buffer.Unpooled;
-import it.unimi.dsi.fastutil.Pair;
-import net.acodonic_king.redstonecg.RedstonecgMod;
-import net.acodonic_king.redstonecg.block.ControlPanelBlock;
+import net.acodonic_king.redstonecg.block.normal.interaction.ControlPanelBlock;
 import net.acodonic_king.redstonecg.block.control_panel.PanelLogicRegistry;
 import net.acodonic_king.redstonecg.block.control_panel.logic.DefaultPanelLogic;
 import net.acodonic_king.redstonecg.block.gui.control_panel.ControlPanelGUIMenu;
@@ -12,20 +10,25 @@ import net.acodonic_king.redstonecg.init.RedstonecgModBlockEntities;
 import net.acodonic_king.redstonecg.network.MessengerBlockEntityPigeon;
 import net.acodonic_king.redstonecg.procedures.BlockFrameTransformUtils;
 import net.acodonic_king.redstonecg.procedures.ConnectionFace;
+import net.acodonic_king.redstonecg.procedures.LittleTools;
 import net.acodonic_king.redstonecg.procedures.RCGMatrix;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.FloatTag;
+import net.minecraft.nbt.ListTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.ArrayList;
@@ -36,9 +39,16 @@ import static net.acodonic_king.redstonecg.block.gui.pinmark_configurator.Pinmar
 
 
 public class ControlPanelBlockEntity extends DefaultContainerBlockEntity {
+    public ControlPanelBlockEntity(BlockEntityType<?> type, BlockPos position, BlockState state, int container_size){
+        super(type, position, state, container_size);
+        PANELS = NonNullList.withSize(container_size, new DefaultPanelLogic(ItemStack.EMPTY, 0));
+        SLOT_ANGLES = new float[container_size];
+    }
+
     public ControlPanelBlockEntity(BlockPos position, BlockState state, int container_size) {
         super(RedstonecgModBlockEntities.CONTROL_PANEL.get(), position, state, container_size);
         PANELS = NonNullList.withSize(container_size, new DefaultPanelLogic(ItemStack.EMPTY, 0));
+        SLOT_ANGLES = new float[container_size];
     }
 
     @Override
@@ -72,15 +82,22 @@ public class ControlPanelBlockEntity extends DefaultContainerBlockEntity {
     }
 
     public NonNullList<DefaultPanelLogic> PANELS;
+    public float[] SLOT_ANGLES;
     public byte CONNECTION = 0; //WSEN WSEN
 
     @Override
     public void load(CompoundTag compound) {
         super.load(compound);
+        //RedstonecgMod.LOGGER.debug(compound);
         if(compound.contains("schedule"))
             loadSchedule(compound.getCompound("schedule"));
         if(compound.contains("connection"))
             CONNECTION = compound.getByte("connection");
+        if(compound.contains("slot_angles")){
+            ListTag list = compound.getList("slot_angles", CompoundTag.TAG_FLOAT);
+            for(int i = 0; i < Math.min(list.size(), SLOT_ANGLES.length); i++)
+                SLOT_ANGLES[i] = list.getFloat(i);
+        }
         initPanelLogic();
     }
 
@@ -89,6 +106,10 @@ public class ControlPanelBlockEntity extends DefaultContainerBlockEntity {
         super.saveAdditional(compound);
         compound.put("schedule", saveSchedule());
         compound.putByte("connection", CONNECTION);
+        ListTag list = new ListTag();
+        for(float v: SLOT_ANGLES)
+            list.add(FloatTag.valueOf(v));
+        compound.put("slot_angles", list);
     }
 
     @Override
@@ -97,6 +118,45 @@ public class ControlPanelBlockEntity extends DefaultContainerBlockEntity {
         if(tag.contains("schedule"))
             tag.remove("schedule");
         return tag;
+    }
+
+    public CompoundTag getParameterSet(){
+        CompoundTag tag = new CompoundTag();
+        tag.putByte("connection", CONNECTION);
+        ListTag list = new ListTag();
+        for(float v: SLOT_ANGLES)
+            list.add(FloatTag.valueOf(v));
+        tag.put("slot_angles", list);
+        ContainerHelper.saveAllItems(tag, this.stacks);
+        return tag;
+    }
+
+    public void setParameterSet(CompoundTag tag, LivingEntity entity){
+        if(tag.contains("connection"))
+            CONNECTION = tag.getByte("connection");
+        if(tag.contains("slot_angles")){
+            ListTag list = tag.getList("slot_angles", CompoundTag.TAG_FLOAT);
+            for(int i = 0; i < Math.min(list.size(), SLOT_ANGLES.length); i++)
+                SLOT_ANGLES[i] = list.getFloat(i);
+        }
+        NonNullList<ItemStack> inv = NonNullList.withSize(this.stacks.size(), ItemStack.EMPTY);
+        ContainerHelper.loadAllItems(tag, inv);
+        if(entity instanceof Player player) {
+            if (player.getAbilities().instabuild)
+                for (int i = 0; i < this.stacks.size(); i++)
+                    this.stacks.set(i, inv.get(i));
+            else {
+                for (int i = 0; i < this.stacks.size(); i++) {
+                    ItemStack loadStack = inv.get(i);
+                    if (loadStack.isEmpty())
+                        continue;
+                    if (LittleTools.hasItem(player, loadStack.getItem()) == 0)
+                        continue;
+                    this.stacks.set(i, LittleTools.popItem(player, loadStack.getItem()));
+                }
+            }
+        }
+        initPanelLogic();
     }
 
     public void setPinConfigLogicA(PinmarkConfiguratorLogic pcl){
@@ -162,6 +222,7 @@ public class ControlPanelBlockEntity extends DefaultContainerBlockEntity {
                 try {
                     PANELS.get(i).loadStack(stack);
                 } catch (IllegalArgumentException ignored) {
+                    //RedstonecgMod.LOGGER.debug(ignored);
                     PANELS.set(i, PanelLogicRegistry.get(stack, i));
                 }
                 continue;
@@ -171,7 +232,7 @@ public class ControlPanelBlockEntity extends DefaultContainerBlockEntity {
     }
 
     public DefaultPanelLogic get(int i) {
-        return PANELS.get(0);
+        return PANELS.get(i);
     }
 
     public int range() {
@@ -186,24 +247,24 @@ public class ControlPanelBlockEntity extends DefaultContainerBlockEntity {
             matrix = switch (orientation){
                 case 0 -> matrix;
                 case 5 -> matrix.rotateX(ANGLES[2]);
-                default -> matrix.rotateY(ANGLES[s0321(orientation - 1)]).rotateX(ANGLES[1]);
+                default -> matrix.rotateY(-ANGLES[orientation - 1]).rotateX(ANGLES[1]);
             };
         } else if (orientation < 10) {
-            matrix.rotateY(ANGLES[s0321(orientation - 6)]);
+            matrix.rotateY(-ANGLES[orientation - 6]);
         } else if (orientation < 26) {
             int o = orientation - 10;
             matrix
-                    .rotateY(ANGLES[s0321(o >> 2)])
-                    .rotateZ(ANGLES[s0321(o & 3)])
+                    .rotateY(-ANGLES[o >> 2])
+                    .rotateZ(-ANGLES[o & 3])
                     .rotateX(ANGLES[1]);
         } else if (orientation < 30) {
-            matrix.rotateY(ANGLES[s0321(orientation - 26)]).rotateX(ANGLES[2]);
+            matrix.rotateY(-ANGLES[orientation - 26]).rotateX(ANGLES[2]);
         } else if (orientation < 34) {
-            matrix.rotateY(ANGLES[s0321((orientation - 31) & 3)]);
+            matrix.rotateY(-ANGLES[(orientation - 31) & 3]);
         } else if (orientation < 38) {
-            matrix.rotateY(ANGLES[s0321((orientation - 35) & 3)]).rotateX(ANGLES[1]);
+            matrix.rotateY(-ANGLES[(orientation - 35) & 3]).rotateX(ANGLES[1]);
         } else if (orientation < 42) {
-            matrix.rotateY(ANGLES[s0321((orientation - 39) & 3)]).rotateX(ANGLES[2]);
+            matrix.rotateY(-ANGLES[(orientation - 39) & 3]).rotateX(ANGLES[2]);
         }
         return matrix.translate(-0.5f, -0.5f, -0.5f);
     }
@@ -212,11 +273,11 @@ public class ControlPanelBlockEntity extends DefaultContainerBlockEntity {
         if (orientation < 30) {
             return matrix.translate(-0.5f, -0.5f, -0.5f);
         } else if (orientation < 34) {
-            matrix.rotateY(ANGLES[s0321(orientation - 30)]).rotateZ(ANGLES[1]);
+            matrix.rotateY(-ANGLES[orientation - 30]).rotateZ(ANGLES[1]);
         } else if (orientation < 38) {
-            matrix.rotateY(ANGLES[s0321(orientation - 34)]);
+            matrix.rotateY(-ANGLES[orientation - 34]);
         } else if (orientation < 42) {
-            matrix.rotateY(ANGLES[s0321(orientation - 38)]).rotateZ(ANGLES[3]);
+            matrix.rotateY(-ANGLES[orientation - 38]).rotateZ(ANGLES[3]);
         }
         return matrix.rotateX(ANGLES[1]).translate(-0.5f, -0.5f, -0.5f);
     }
@@ -308,24 +369,24 @@ public class ControlPanelBlockEntity extends DefaultContainerBlockEntity {
             connection &= 0b1111;
             connection |= (CONNECTION >> 2) & 0b00010000;
             int o = orientation;
-            if (orientation > 5)
+            Direction primary = Direction.NORTH;
+            if (orientation > 5) {
+                primary = BlockFrameTransformUtils.decodeIntToDirection(((orientation - 6) & 3) + 1);
                 o = (orientation - 6) >> 2;
-            Direction f = BlockFrameTransformUtils.decodeIntToDirection(o);
-            Direction d = BlockFrameTransformUtils.getLocalDirectionFromWorld(Direction.NORTH, f, direction);
+            }
+            Direction secondary = BlockFrameTransformUtils.decodeIntToDirection(o);
+            Direction d = BlockFrameTransformUtils.getLocalDirectionFromWorld(primary, secondary, direction);
+            if(d == Direction.UP)
+                return new ConnectionFace(direction, 5);
             if(d == Direction.DOWN){
                 if((connection & 0b00010000) > 0)
-                    return new ConnectionFace(f, 4);
-                return new ConnectionFace(f, 5);
+                    return new ConnectionFace(direction, 4);
+                return new ConnectionFace(direction, 5);
             }
-            if (orientation > 10){
-                Direction r = BlockFrameTransformUtils.decodeIntToDirection(((orientation - 6) & 3) + 1);
-                d = BlockFrameTransformUtils.rotateDirectionCounterClockwiseY(d, r);
-            }
-            int i = BlockFrameTransformUtils.encodeDirectionToInt(d) - 1;
-            ConnectionFace face = new ConnectionFace(d, f);
-            if (((connection >> i) & 1) == 0)
-                face.CHANNEL = 5;
-            return face;
+            int s = BlockFrameTransformUtils.encodeDirectionToInt(d) - 1;
+            d = BlockFrameTransformUtils.rotateDirectionClockwiseY(d, primary);
+            if((connection & (1 << s)) > 0)
+                return new ConnectionFace(d, secondary);
         }
         Direction A = Direction.DOWN;
         Direction B = Direction.NORTH;
@@ -397,69 +458,76 @@ public class ControlPanelBlockEntity extends DefaultContainerBlockEntity {
     public static final int[][] O2SMA = {{0, 0b00000001}, {2, 0b00000100}, {3, 0b00001000}, {4, 0b10000000}};
     public static final int[][] O2SMB = {{0, 0b00010000}, {1, 0b00100000}, {2, 0b01000000}, {4, 0b00000010}};
 
-    public RCGMatrix.M4F slotTransform(RCGMatrix.M4F matrix, int i){
+    public RCGMatrix.M4F slotOrientationTransform(RCGMatrix.M4F matrix, int i){
         int orientation = this.getBlockState().getValue(ControlPanelBlock.ORIENTATION);
         matrix.identity().translate(0.5f, 0.5f, 0.5f);
         if (orientation < 6){
-            return (switch (orientation){
+            (switch (orientation){
                 case 0 -> matrix;
                 case 5 -> matrix.rotateX(ANGLES[2]);
-                default -> matrix.rotateY(ANGLES[s0321(orientation - 1)]).rotateX(ANGLES[1]);
+                default -> matrix.rotateY(-ANGLES[orientation - 1]).rotateX(ANGLES[1]);
             }).translate(-0.5f, 0.125f, -0.5f);
         } else if (orientation < 10) {
-            return matrix
-                    .rotateY(ANGLES[s0321(orientation - 6)])
+            matrix
+                    .rotateY(-ANGLES[orientation - 6])
                     .translate(-0.5f, 0.49f, -0.415f)
                     .rotateX(0.3926990817f)
-                    ;
+            ;
         } else if (orientation < 26) {
             int o = orientation - 10;
-            matrix.rotateY(ANGLES[s0321(o >> 2)]);
-            return switch (o & 3){
+            matrix.rotateY(-ANGLES[o >> 2]);
+            switch (o & 3){
                 case 0 -> matrix.translate(-0.5f, 0.415f, 0.49f).rotateX(0.3926990817f + ANGLES[1]);
-                case 1 -> matrix.translate( -0.51f, 0.5f, 0.115f).rotateY(-0.3926990817f).rotateX(ANGLES[1]);
-                case 2 -> matrix.translate( -0.5f, 0.51f, 0.115f).rotateX(ANGLES[1] - 0.3926990817f);
-                case 3 -> matrix.translate( -0.415f, 0.5f, 0.49f).rotateY(0.3926990817f).rotateX(ANGLES[1]);
-                default -> matrix;
-            };
+                case 1 -> matrix.translate(-0.51f, 0.5f, 0.115f).rotateY(-0.3926990817f).rotateX(ANGLES[1]);
+                case 2 -> matrix.translate(-0.5f, 0.51f, 0.115f).rotateX(ANGLES[1] - 0.3926990817f);
+                case 3 -> matrix.translate(-0.415f, 0.5f, 0.49f).rotateY(0.3926990817f).rotateX(ANGLES[1]);
+            }
         } else if (orientation < 30) {
-            return matrix
-                    .rotateY(ANGLES[s0321(orientation - 26)])
+            matrix
+                    .rotateY(-ANGLES[orientation - 26])
                     .translate(0.5f, -0.11f, -0.51f)
                     .rotateX(0.3926990817f + ANGLES[2])
                     .rotateY(ANGLES[2])
-                    ;
+            ;
         } else if (orientation < 34) {
-            return matrix
-                    .rotateY(ANGLES[s0321(orientation - 30)])
+            matrix
+                    .rotateY(-ANGLES[orientation - 30])
                     .translate(-0.5f, 0.44f, -0.27f)
                     .rotateX(ANGLES[1] * 0.5f)
-                    ;
+            ;
         } else if (orientation < 38) {
-            return matrix
-                    .rotateY(ANGLES[s0321(orientation - 34)])
+            matrix
+                    .rotateY(-ANGLES[orientation - 34])
                     .translate(-0.27f, 0.5f, 0.44f)
                     .rotateY(ANGLES[1] * 0.5f)
                     .rotateX(ANGLES[1])
-                    ;
+            ;
         } else if (orientation < 42) {
-            return matrix
-                    .rotateY(ANGLES[s0321(orientation - 38)])
+            matrix
+                    .rotateY(-ANGLES[orientation - 38])
                     .translate(-0.5f, 0.27f, 0.44f)
                     .rotateX(ANGLES[1] * 1.5f)
-                    ;
+            ;
         }
         return matrix;
     }
 
+    public float slotSizeX(int i){
+        return 1.0f;
+    }
+
+    public float slotSizeZ(int i){
+        return 1.0f;
+    }
+
+    public RCGMatrix.M4F slotTransform(RCGMatrix.M4F matrix, int i){
+        slotOrientationTransform(matrix, i);
+        float angle = -SLOT_ANGLES[i];
+        return matrix.translate(0.5f, 0.5f, 0.5f).rotateY(angle).translate(-0.5f, -0.5f, -0.5f);
+    }
+
     public static int s0321(int v){
-        return switch (v){
-            case 0 -> 0;
-            case 1 -> 3;
-            case 2 -> 2;
-            case 3 -> 1;
-            default -> v;
-        };
+        return (v * 3) & 3;
     }
 
     @Override
@@ -476,6 +544,10 @@ public class ControlPanelBlockEntity extends DefaultContainerBlockEntity {
         public ScheduledTick(int in, int slot){
             NEXT_IN = in;
             SLOT = slot;
+        }
+        @Override
+        public String toString(){
+            return "ScheduledTick{in= "+NEXT_IN+", slot= "+SLOT+"}";
         }
     }
 
@@ -543,6 +615,16 @@ public class ControlPanelBlockEntity extends DefaultContainerBlockEntity {
         return update;
     }
 
+    public boolean finishTick(LevelAccessor world, BlockPos pos){
+        boolean update = nextTick(world, pos);
+        if(SCHEDULED_UPDATES.isEmpty())
+            return update;
+        if(SCHEDULED_UPDATES.get(0).NEXT_IN == 0)
+            world.scheduleTick(pos, world.getBlockState(pos).getBlock(), 1);
+        //RedstonecgMod.LOGGER.debug("the "+SCHEDULED_UPDATES);
+        return update;
+    }
+
     public InteractionResult usePanelSlot(int slot, LevelAccessor world, BlockPos pos, Player player){
         /*DefaultPanelLogic logic = PANELS.get(slot);
         ItemStack stack = stacks.get(slot);
@@ -566,7 +648,10 @@ public class ControlPanelBlockEntity extends DefaultContainerBlockEntity {
     }
 
     public void syncInventory(BlockPos pos){
+        /*for(int i = 0; i < this.stacks.size(); i++)
+            this.stacks.set(i, PANELS.get(i).ITEM_STACK);*/
         CompoundTag tag = ContainerHelper.saveAllItems(new CompoundTag(), this.stacks);
+        //RedstonecgMod.LOGGER.debug(tag);
         MessengerBlockEntityPigeon.send(new MessengerBlockEntityPigeon(pos, tag), false);
     }
 

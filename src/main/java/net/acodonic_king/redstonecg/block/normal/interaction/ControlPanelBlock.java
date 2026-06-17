@@ -1,8 +1,7 @@
-package net.acodonic_king.redstonecg.block;
+package net.acodonic_king.redstonecg.block.normal.interaction;
 
 import io.netty.buffer.Unpooled;
 import net.acodonic_king.redstonecg.ModLoaderRider;
-import net.acodonic_king.redstonecg.RedstonecgMod;
 import net.acodonic_king.redstonecg.block.defaults.RedstoneSignalInterface;
 import net.acodonic_king.redstonecg.block.defaults.RotationBracketInterface;
 import net.acodonic_king.redstonecg.block.defaults.SuperBlock;
@@ -10,12 +9,10 @@ import net.acodonic_king.redstonecg.block.entity.ControlPanelBlockEntity;
 import net.acodonic_king.redstonecg.block.gui.control_panel.ControlPanelGUIMenu;
 import net.acodonic_king.redstonecg.init.RedstonecgModItems;
 import net.acodonic_king.redstonecg.init.RedstonecgModVersionRides;
-import net.acodonic_king.redstonecg.procedures.AdventureProcedure;
-import net.acodonic_king.redstonecg.procedures.BlockFrameTransformUtils;
-import net.acodonic_king.redstonecg.procedures.ConnectionFace;
-import net.acodonic_king.redstonecg.procedures.GetRedstoneSignalProcedure;
+import net.acodonic_king.redstonecg.procedures.*;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -25,6 +22,7 @@ import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.MenuProvider;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -33,10 +31,7 @@ import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.EntityBlock;
-import net.minecraft.world.level.block.SimpleWaterloggedBlock;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -47,12 +42,12 @@ import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.CollisionContext;
-import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 import java.util.List;
+
+import static net.acodonic_king.redstonecg.procedures.RightAngleRotation.*;
 
 public class ControlPanelBlock extends SuperBlock implements SimpleWaterloggedBlock, EntityBlock, RotationBracketInterface, RedstoneSignalInterface {
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
@@ -65,90 +60,137 @@ public class ControlPanelBlock extends SuperBlock implements SimpleWaterloggedBl
 
     @Override
     public VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
-        return getShape(state, world, pos, context, 4);
-    }
-
-    public VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context, int size) {
+        //return getShape(state, world, pos, context, 4);
         int orientation = state.getValue(ORIENTATION);
-        if(orientation < 6) {
-            return Shapes.join(switch (orientation) {
-                case 0 -> box(0, 0, 0, 16, 10, 16);
-                case 1 -> box(0, 0, 0, 16, 16, 10);
-                case 2 -> box(6, 0, 0, 16, 16, 16);
-                case 3 -> box(0, 0, 6, 16, 16, 16);
-                case 4 -> box(0, 0, 0, 10, 16, 16);
-                default -> box(0, 6, 0, 16, 16, 16);
-            }, getInteractionBox(orientation, size, 10, 14), BooleanOp.OR);
-        } else if (orientation < 30) {
-            int o = (orientation - 6) >> 2;
-            return Shapes.join(switch (o) {
-                case 0 -> box(0, 0, 0, 16, 11, 16);
-                case 1 -> box(0, 0, 0, 16, 16, 11);
-                case 2 -> box(5, 0, 0, 16, 16, 16);
-                case 3 -> box(0, 0, 5, 16, 16, 16);
-                case 4 -> box(0, 0, 0, 11, 16, 16);
-                default -> box(0, 5, 0, 16, 16, 16);
-            }, getInteractionBox(o, size, 11, 16), BooleanOp.OR);
-        } else if (orientation < 42) {
-        /*VoxelShape shape = switch (orientation){
-            case 30 -> box(0, 0, 0, 16, 8, 8);
-            case 31 -> box(8, 0, 0, 16, 8, 16);
-            case 32 -> box(0, 0, 8, 16, 8, 16);
-            case 33 -> box(0, 0, 0, 8, 8, 16);
+        VoxelShapeBuilder builder = getAllInteractionBox(orientation, 0);
+        applyBase(orientation, builder);
+        orientationTransform(orientation, builder);
+        return builder.build();
+    }
 
-            case 34 -> box(0, 0, 0, 8, 16, 8);
-            case 35 -> box(8, 0, 0, 16, 16, 8);
-            case 36 -> box(8, 0, 8, 16, 16, 16);
-            case 37 -> box(0, 0, 8, 8, 16, 16);
+    public VoxelShapeBuilder getInteractionBox(int orientation, int slot, float add){
+        VoxelShapeBuilder.BoxOperation box = new VoxelShapeBuilder.BoxOperation();
+        if (orientation < 6)
+            box.start(4-add, 10-add, 4-add).end(12+add, 14+add, 12+add);
+        else if (orientation < 30)
+            box.start(4-add, 11-add, 4-add).end(12+add, 16+add, 12+add);
+        else
+            box.start(4-add, 4-add, 4-add).end(12+add, 12+add, 12+add);
+        return new VoxelShapeBuilder().first(box);
+    }
 
-            case 38 -> box(0, 8, 0, 16, 16, 8);
-            case 39 -> box(8, 8, 0, 16, 16, 16);
-            case 40 -> box(0, 8, 8, 16, 16, 16);
-            case 41 -> box(0, 8, 0, 8, 16, 16);
+    public VoxelShapeBuilder getAllInteractionBox(int orientation, float add){
+        return getInteractionBox(orientation, 0, add);
+    }
 
-            default -> box(0, 0, 0, 16, 16, 16);
-        };*/
-            VoxelShape shape1;
-            if(orientation < 34)
-                shape1 = box(0, 0, 0, 16, 2, 16);
-            else if (orientation < 38)
-                shape1 = getWall(orientation - 34);
+    public VoxelShapeBuilder applyBase(int orientation, VoxelShapeBuilder builder){
+        if (orientation < 6)
+            builder.OR(0, 0, 0, 16, 10, 16);
+        else if (orientation < 30)
+            builder.OR(0, 0, 0, 16, 11, 16);
+        else {
+            if (orientation > 33 && orientation < 38)
+                builder.OR(0, 0, 0, 2, 16, 16);
             else
-                shape1 = box(0, 14, 0, 16, 16, 16);
-
-            VoxelShape shape2;
-            if(orientation < 34)
-                shape2 = getWall(orientation - 30);
-            else if (orientation < 38)
-                shape2 = getWall(orientation - 35);
-            else
-                shape2 = getWall(orientation - 38);
-
-            return Shapes.join(Shapes.join(shape1, shape2, BooleanOp.OR), getInteractionBox(6, size, 4, 12), BooleanOp.OR);
+                builder.OR(0, 0, 0, 16, 2, 16);
+            builder.OR(0, 0, 0, 16, 16, 2);
         }
-        return box(0, 0, 0, 16, 16, 16);
+        return builder;
     }
 
-    private VoxelShape getWall(int o){
-        return switch (o & 3){
-            case 0 -> box(0, 0, 0, 16, 16, 2);
-            case 1 -> box(14, 0, 0, 16, 16, 16);
-            case 2 -> box(0, 0, 14, 16, 16, 16);
-            case 3 -> box(0, 0, 0, 2, 16, 16);
-            default -> box(0, 0, 0, 16, 2, 16);
-        };
+    public VoxelShapeBuilder orientationTransform(int orientation, VoxelShapeBuilder builder){
+        if (orientation < 6) {
+            if(orientation == 5)
+                builder.rotateX(CW2, 8, 8, 8);
+            else if(orientation > 0) {
+                builder.rotateX(CW1, 8, 8, 8);
+                builder.rotateY(CCW_MAP[orientation - 1], 8, 8, 8);
+            }
+        } else if (orientation < 30) {
+            orientation -= 6;
+            builder.rotateY(CCW_MAP[orientation & 3], 8, 8, 8);
+            orientation >>= 2;
+            if(orientation == 5)
+                builder.rotateX(CW2, 8, 8, 8);
+            else if(orientation > 0) {
+                builder.rotateX(CW1, 8, 8, 8);
+                builder.rotateY(CCW_MAP[orientation - 1], 8, 8, 8);
+            }
+        } else {
+            if(orientation > 37)
+                builder.rotateX(CW1, 8, 8, 8);
+            builder.rotateY(CCW_MAP[(orientation - 30) & 3], 8, 8, 8);
+        }
+        return builder;
     }
 
-    public VoxelShape getInteractionBox(int orientation, int size, int ys, int ye){
-        return switch (orientation) {
-            case 0 -> box(8-size, ys, 8-size, 8+size, ye, 8+size);
-            case 1 -> box(8-size, 8-size, ys, 8+size, 8+size, ye);
-            case 2 -> box(16-ye, 8-size, 8-size, 16-ys, 8+size, 8+size);
-            case 3 -> box(8-size, 8-size, 16-ye, 8+size, 8+size, 16-ys);
-            case 4 -> box(ys, 8-size, 8-size, ye, 8+size, 8+size);
-            case 5 -> box(8-size, 16-ye, 8-size, 8+size, 16-ys, 8+size);
-            default -> box(8-size, 8-size, 8-size, 8+size, 8+size, 8+size);
-        };
+    public VoxelShape getFinalInteractionBox(int orientation, int slot, float add){
+        return orientationTransform(orientation, getInteractionBox(orientation, slot, add)).build();
+    }
+
+    public int getModel(int orientation){
+        if(orientation < 6)
+            return 0;
+        if(orientation < 30)
+            return 1;
+        return 2;
+    }
+    public int getModel(BlockState blockState){
+        return getModel(blockState.getValue(ORIENTATION));
+    }
+    public static int getModelStatic(int orientation){
+        if(orientation < 6)
+            return 0;
+        if(orientation < 30)
+            return 1;
+        return 2;
+    }
+    public void changeModel(LevelAccessor world, BlockState blockstate, BlockPos pos){
+        changeModel(world, blockstate, pos, (getModel(blockstate) + 1) % 3);
+    }
+    public void changeModel(LevelAccessor world, BlockState blockstate, BlockPos pos, int model){
+        int orientation = blockstate.getValue(ORIENTATION);
+        if(model == getModel(orientation))
+            return;
+        if(orientation < 6) {
+            if(model == 1)
+                orientation = (orientation << 2) + 6;
+            if(model == 2)
+                orientation = switch (orientation){
+                    case 0 -> 30;
+                    case 5 -> 38;
+                    default -> 33 + orientation;
+                };
+        } else if (orientation < 30) {
+            if(model == 0)
+                orientation = (orientation - 6) >> 2;
+            if(model == 2) {
+                int o = (orientation - 6) >> 2;
+                orientation = switch (o) {
+                    case 0 -> 30;
+                    case 5 -> 38;
+                    default -> o + 33;
+                };
+            }
+        } else {
+            if(model == 0) {
+                if (orientation < 34)
+                    orientation = 0;
+                else if (orientation < 38)
+                    orientation -= 34;
+                else
+                    orientation = 5;
+            }
+            if(model == 1) {
+                if (orientation < 34)
+                    orientation -= 24;
+                else if (orientation < 38){
+                    orientation = ((orientation - 34) << 2) + 13;
+
+                }
+            }
+        }
+        world.setBlock(pos, blockstate.setValue(ORIENTATION, orientation), 3);
     }
 
     @Override
@@ -204,59 +246,24 @@ public class ControlPanelBlock extends SuperBlock implements SimpleWaterloggedBl
     public InteractionResult use(BlockState blockstate, Level world, BlockPos pos, Player entity, InteractionHand hand, BlockHitResult hit) {
         super.use(blockstate, world, pos, entity, hand, hit);
         ItemStack itemStack = entity.getItemInHand(hand);
-        if(AdventureProcedure.valueConfig(world, entity)) {
-            Vec3 hitPos = hit.getLocation().subtract(RedstonecgModVersionRides.getBlockPosCenter(pos));
-            hitPos = hitPos.scale(0.99).add(0.5, 0.5, 0.5);
-            VoxelShape hitBox = getInteractionBox(6, 4, 4, 12);
-            int orientation = blockstate.getValue(ORIENTATION);
-            if(orientation < 6)
-                hitBox = getInteractionBox(orientation, 4, 10, 14);
-            else if (orientation < 30) {
-                int o = (orientation - 6) >> 2;
-                hitBox = getInteractionBox(o, 4, 11, 16);
-            }
-            //RedstonecgMod.LOGGER.debug(hitBox.bounds()+" "+hitPos);
-            if(hitBox.bounds().contains(hitPos)){
-            //if((-0.25 <= hitPos.x && hitPos.x <= 0.25) && (-0.25 <= hitPos.z && hitPos.z <= 0.25)){
-                if(world.getBlockEntity(pos) instanceof ControlPanelBlockEntity be) {
-                    InteractionResult result = be.usePanelSlot(0, world, pos, entity);
-                    if(result != InteractionResult.PASS){
-                        be.syncInventory(pos);
-                        be.setChanged();
-                        world.updateNeighborsAt(pos, blockstate.getBlock());
-                        //world.sendBlockUpdated(pos, blockstate, blockstate, 3);
-                        return result;
-                    }
-                }
-            }
-        }
+        InteractionResult result = useSlot(blockstate, world, pos, entity, hand, hit);
+        if(result != InteractionResult.PASS)
+            return result;
         if(!itemStack.isEmpty()) {
             if (itemStack.is(RedstonecgModItems.ROTATION_BRACKET.get()))
                 return InteractionResult.FAIL;
-            if (itemStack.is(RedstonecgModItems.CONTROL_PANEL.get())){
-                int orientation = blockstate.getValue(ORIENTATION);
-                if(orientation < 6)
-                    orientation = (orientation << 2) + 6;
-                else if (orientation < 30) {
-                    int o = (orientation - 6) >> 2;
-                    orientation = switch (o){
-                        case 0 -> 30;
-                        case 1 -> 34;
-                        case 2 -> 35;
-                        case 3 -> 36;
-                        case 4 -> 37;
-                        case 5 -> 38;
-                        default -> 30;
-                    };
-                } else if (orientation < 34)
-                    orientation = 0;
-                else if (orientation < 38)
-                    orientation -= 34;
-                else
-                    orientation = 5;
-                world.setBlock(pos, blockstate.setValue(ORIENTATION, orientation), 3);
+            if (itemStack.is(RedstonecgModItems.CONTROL_PANEL.get()) || itemStack.is(RedstonecgModItems.CODED_CONTROL_PANEL.get())){
+                //changeModel(world, blockstate, pos);
+                if(world.getBlockEntity(pos) instanceof ControlPanelBlockEntity be){
+                    CompoundTag tag = be.getParameterSet();
+                    tag.putByte("orientation", (byte) ((int) blockstate.getValue(ORIENTATION)));
+                    itemStack.getOrCreateTag().put("BlockParameterSet", tag);
+                }
                 return InteractionResult.SUCCESS;
             }
+        } else if(entity.isCrouching() && AdventureProcedure.pinConfig(world, entity)){
+            changeModel(world, blockstate, pos);
+            return InteractionResult.SUCCESS;
         }
         if(AdventureProcedure.gateGUI(world, entity))
             if (entity instanceof ServerPlayer player) {
@@ -276,9 +283,49 @@ public class ControlPanelBlock extends SuperBlock implements SimpleWaterloggedBl
     }
 
     @Override
+    public void setPlacedBy(Level level, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack) {
+        if (level.isClientSide) return;
+        if(level.getBlockEntity(pos) instanceof ControlPanelBlockEntity be){
+            if(stack.hasTag()) {
+                CompoundTag tag = stack.getTag();
+                if (tag.contains("BlockParameterSet")) {
+                    tag = tag.getCompound("BlockParameterSet");
+                    if(tag.contains("orientation"))
+                        state = state.setValue(ORIENTATION, tag.getByte("orientation") & 0xFF);
+                    be.setParameterSet(tag, placer);
+                }
+            }
+            be.setChanged();
+            level.setBlock(pos, state, 3);
+            level.scheduleTick(pos, state.getBlock(), 1);
+        }
+    }
+
+    public InteractionResult useSlot(BlockState blockstate, Level world, BlockPos pos, Player entity, InteractionHand hand, BlockHitResult hit){
+        if(AdventureProcedure.valueConfig(world, entity)) {
+            Vec3 hitPos = hit.getLocation().subtract(RedstonecgModVersionRides.getBlockPosCenter(pos));
+            hitPos = hitPos.add(0.5, 0.5, 0.5);
+            VoxelShape hitBox = getFinalInteractionBox(blockstate.getValue(ORIENTATION), 0, 0.1f);
+            if(hitBox.bounds().contains(hitPos)){
+                if(world.getBlockEntity(pos) instanceof ControlPanelBlockEntity be) {
+                    InteractionResult result = be.usePanelSlot(0, world, pos, entity);
+                    if(result != InteractionResult.PASS){
+                        be.syncInventory(pos);
+                        be.setChanged();
+                        world.updateNeighborsAt(pos, blockstate.getBlock());
+                        //world.sendBlockUpdated(pos, blockstate, blockstate, 3);
+                        return result;
+                    }
+                }
+            }
+        }
+        return InteractionResult.PASS;
+    }
+
+    @Override
     public void tick(BlockState blockState, ServerLevel level, BlockPos pos, RandomSource random){
         if(level.getBlockEntity(pos) instanceof ControlPanelBlockEntity be)
-            if(be.nextTick(level, pos)) {
+            if(be.finishTick(level, pos)) {
                 be.syncInventory(pos);
                 level.updateNeighborsAt(pos, blockState.getBlock());
             }
@@ -306,20 +353,18 @@ public class ControlPanelBlock extends SuperBlock implements SimpleWaterloggedBl
         onRedstone(blockstate, world, pos);
     }
 
-    public void onRedstone(BlockState blockstate, LevelAccessor world, BlockPos pos){
+    public int onRedstone(BlockState blockstate, LevelAccessor world, BlockPos pos){
+        int power = 0;
         if(world.isClientSide())
-            return;
+            return 0;
         if(world.getBlockEntity(pos) instanceof ControlPanelBlockEntity be){
             List<ConnectionFace> connectionFaces = be.getConnectionFaces(blockstate.getValue(ORIENTATION));
-            int power = 0;
-            for(ConnectionFace connectionFace: connectionFaces) {
-                //RedstonecgMod.LOGGER.debug(connectionFace);
+            for(ConnectionFace connectionFace: connectionFaces)
                 power = Math.max(power, GetRedstoneSignalProcedure.execute(world, pos, connectionFace));
-            }
-            if(be.receiveRedstone(world, pos, power)) {
+            if(be.receiveRedstone(world, pos, power))
                 be.syncInventory(pos);
-            }
         }
+        return power;
     }
 
     @Override
@@ -408,5 +453,56 @@ public class ControlPanelBlock extends SuperBlock implements SimpleWaterloggedBl
         if(world.getBlockEntity(pos) instanceof ControlPanelBlockEntity be)
             return be.provideRedstone(world, pos);
         return 0;
+    }
+
+    public static Direction getFacing(int orientation){
+        if(orientation < 6)
+            return BlockFrameTransformUtils.decodeIntToDirection(orientation);
+        if(orientation < 30)
+            return BlockFrameTransformUtils.decodeIntToDirection((orientation - 6) >> 2);
+        if(orientation < 34)
+            return Direction.DOWN;
+        if(orientation < 38)
+            return BlockFrameTransformUtils.decodeIntToDirection(orientation - 33);
+        return Direction.UP;
+    }
+
+    public static int setFacing(int orientation, Direction facing){
+        int f = BlockFrameTransformUtils.encodeDirectionToInt(facing);
+        if(orientation < 6)
+            return f;
+        if(orientation < 30)
+            return (((orientation - 6) & 3) | (f << 2)) + 6;
+        int o = (orientation - 30) & 3;
+        if(f == 0)
+            return 30 + o;
+        if(f == 5)
+            return 38 + o;
+        return 33 + f;
+    }
+
+    public static Direction getRotation(int orientation){
+        if(orientation < 6)
+            return Direction.NORTH;
+        return BlockFrameTransformUtils.decodeIntToDirection(((orientation - 6) & 3) + 1);
+    }
+
+    public static int setRotation(int orientation, Direction rotation){
+        if(orientation < 6)
+            return orientation;
+        int r = BlockFrameTransformUtils.encodeDirectionToInt(rotation) - 1;
+        return ((orientation - 6) & 12) | r;
+    }
+
+    @Override
+    public BlockState rotate(BlockState state, Rotation rot) {
+        int orientation = state.getValue(ORIENTATION);
+        Direction facing = getFacing(orientation);
+        if (facing.getAxis() == Direction.Axis.Y){
+            orientation = setRotation(orientation, rot.rotate(getRotation(orientation)));
+        } else {
+            orientation = setFacing(orientation, rot.rotate(facing));
+        }
+        return state.setValue(ORIENTATION, orientation);
     }
 }

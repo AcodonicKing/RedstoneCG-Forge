@@ -1,7 +1,9 @@
 package net.acodonic_king.redstonecg.block.control_panel.logic;
 
 import net.acodonic_king.redstonecg.ModLoaderRider;
+import net.acodonic_king.redstonecg.block.control_panel.ComposedTextInterface;
 import net.acodonic_king.redstonecg.block.entity.ControlPanelBlockEntity;
+import net.acodonic_king.redstonecg.procedures.TextFormatProcedure;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
@@ -9,7 +11,7 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.LevelAccessor;
 
-public class ArrowIndicatorPanelLogic extends DefaultPanelLogic{
+public class ArrowIndicatorPanelLogic extends DefaultPanelLogic implements ComposedTextInterface {
     public byte MODEL = 0;
     public ResourceLocation BLOCK;
     public String BASE_MODEL = "connection=0,waterlogged=false";
@@ -18,6 +20,7 @@ public class ArrowIndicatorPanelLogic extends DefaultPanelLogic{
     public float[] ANGLE_CONVERSION = new float[]{(float) ((Math.PI * 1.5) / 255.0f), (float) (Math.PI * 1.75)};
     public int[] VALUE_RANGE = new int[]{0, 255};
     public int POWER = 0;
+    public TextFormatProcedure.ComposedText RENDER_TEXT = new TextFormatProcedure.ComposedText();
 
     public ArrowIndicatorPanelLogic(ItemStack itemStack, int slot) {
         super(itemStack, slot);
@@ -51,9 +54,14 @@ public class ArrowIndicatorPanelLogic extends DefaultPanelLogic{
                     setRange(tag.getIntArray("range"));
                 if(tag.contains("power"))
                     POWER = tag.getInt("power");
-                setRedCuSignal(POWER);
             }
         }
+        setRedCuSignal(POWER);
+        String name = TextFormatProcedure.getCustomItemName(itemStack);
+        if(name.isEmpty())
+            RENDER_TEXT.clear();
+        else
+            RENDER_TEXT.load(name);
     }
 
     public void setModel(int model){
@@ -118,5 +126,10 @@ public class ArrowIndicatorPanelLogic extends DefaultPanelLogic{
         setRedCuSignal(power);
         saveStack();
         return true;
+    }
+
+    @Override
+    public TextFormatProcedure.ComposedText getComposedText() {
+        return RENDER_TEXT;
     }
 }

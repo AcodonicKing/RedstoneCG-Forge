@@ -5,6 +5,67 @@ plugins {
     id 'net.minecraftforge.gradle' version '[6.0,6.2)'
 }
 
+def versionMap = [
+        "1.19": [
+                forge: "41.1.0",
+                jei:   "11.1.1.239",
+                forgeRange: "[41,)",
+                loaderRange: "[41,)",
+                mcRange: "[1.19,)",
+                mc: "1.19"
+        ],
+        "1.19.1": [
+                forge: "42.0.9",
+                jei:   "11.2.0.244",
+                forgeRange: "[42,)",
+                loaderRange: "[42,)",
+                mcRange: "[1.19.1,)",
+                mc: "1.19.1"
+        ],
+        "1.19.2": [
+                forge: "43.5.0",
+                jei:   "11.5.0.297",
+                forgeRange: "[43,)",
+                loaderRange: "[43,)",
+                mcRange: "[1.19.2,)",
+                mc: "1.19.2"
+        ],
+        "1.19.3": [
+                forge: "44.1.0",
+                jei:   "12.4.0.22",
+                forgeRange: "[44,)",
+                loaderRange: "[44,)",
+                mcRange: "[1.19.3,)",
+                mc: "1.19.3"
+        ],
+        "1.19.4": [
+                forge: "45.4.0",
+                jei:   "13.1.0.9",
+                forgeRange: "[45,)",
+                loaderRange: "[45,)",
+                mcRange: "[1.19.4,)",
+                mc: "1.19.4"
+        ],
+        "1.20": [
+                forge: "46.0.14",
+                jei:   "14.0.0.11",
+                forgeRange: "[46,)",
+                loaderRange: "[46,)",
+                mcRange: "[1.20,)",
+                mc: "1.20"
+        ],
+        "1.20.1": [
+                forge: "47.4.10",
+                jei:   "15.20.0.112",
+                forgeRange: "[47,)",
+                loaderRange: "[47,)",
+                mcRange: "[1.20.1,)",
+                mc: "1.20.1"
+        ]
+]
+
+def cfg = versionMap[minecraft_version]
+
 version = mod_version
 group = mod_group_id
 
@@ -30,7 +91,7 @@ minecraft {
     //
     // Use non-default mappings at your own risk. They may not always work.
     // Simply re-run your setup task after changing the mappings to update your workspace.
-    mappings channel: mapping_channel, version: minecraft_version
+    mappings channel: mapping_channel, version: cfg.mc
 
     // When true, this property will have all Eclipse/IntelliJ IDEA run configurations run the "prepareX" task for the given run configuration before launching the game.
     // In most cases, it is not necessary to enable.
@@ -135,16 +196,16 @@ sourceSets{
     sp1_19_4{java {srcDir 'src/sp1_19_4/java'}}
 }
 //sourceSets.main.java.srcDirs += sourceSets.submain.java.srcDirs
-if (minecraft_version in ["1.19", "1.19.1", "1.19.2", "1.19.3", "1.19.4"]){sourceSets.main.java.srcDirs += sourceSets.core1_19.java.srcDirs}
-if (minecraft_version in ["1.19", "1.19.1", "1.19.2", "1.19.3"]){sourceSets.main.java.srcDirs += sourceSets.sp1_19_4.java.srcDirs}
-if (minecraft_version in ["1.19", "1.19.1", "1.19.2"]){sourceSets.main.java.srcDirs += sourceSets.sp1_19_2.java.srcDirs}
-if (minecraft_version in ["1.19.3", "1.19.4"]){sourceSets.main.java.srcDirs += sourceSets.sa1_19_3.java.srcDirs}
-if (minecraft_version == "1.19") {sourceSets.main.java.srcDirs += sourceSets.v1_19.java.srcDirs}
-if (minecraft_version == "1.19.1") {sourceSets.main.java.srcDirs += sourceSets.v1_19_1.java.srcDirs}
-if (minecraft_version == "1.19.2") {sourceSets.main.java.srcDirs += sourceSets.v1_19_2.java.srcDirs}
-if (minecraft_version == "1.19.3") {sourceSets.main.java.srcDirs += sourceSets.v1_19_3.java.srcDirs}
-if (minecraft_version == "1.19.4") {sourceSets.main.java.srcDirs += sourceSets.v1_19_4.java.srcDirs}
-if (minecraft_version in ["1.20", "1.20.1"]) {
+if (cfg.mc in ["1.19", "1.19.1", "1.19.2", "1.19.3", "1.19.4"]){sourceSets.main.java.srcDirs += sourceSets.core1_19.java.srcDirs}
+if (cfg.mc in ["1.19", "1.19.1", "1.19.2", "1.19.3"]){sourceSets.main.java.srcDirs += sourceSets.sp1_19_4.java.srcDirs}
+if (cfg.mc in ["1.19", "1.19.1", "1.19.2"]){sourceSets.main.java.srcDirs += sourceSets.sp1_19_2.java.srcDirs}
+if (cfg.mc in ["1.19.3", "1.19.4"]){sourceSets.main.java.srcDirs += sourceSets.sa1_19_3.java.srcDirs}
+if (cfg.mc == "1.19") {sourceSets.main.java.srcDirs += sourceSets.v1_19.java.srcDirs}
+if (cfg.mc == "1.19.1") {sourceSets.main.java.srcDirs += sourceSets.v1_19_1.java.srcDirs}
+if (cfg.mc == "1.19.2") {sourceSets.main.java.srcDirs += sourceSets.v1_19_2.java.srcDirs}
+if (cfg.mc == "1.19.3") {sourceSets.main.java.srcDirs += sourceSets.v1_19_3.java.srcDirs}
+if (cfg.mc == "1.19.4") {sourceSets.main.java.srcDirs += sourceSets.v1_19_4.java.srcDirs}
+if (cfg.mc in ["1.20", "1.20.1"]) {
     sourceSets.main.java.srcDirs += sourceSets.v1_20.java.srcDirs
 }
 
@@ -180,7 +241,7 @@ dependencies {
     // The "userdev" classifier will be requested and setup by ForgeGradle.
     // If the group id is "net.minecraft" and the artifact id is one of ["client", "server", "joined"],
     // then special handling is done to allow a setup of a vanilla dependency without the use of an external repository.
-    minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
+    minecraft "net.minecraftforge:forge:${cfg.mc}-${cfg.forge}"
 
     // Real mod deobf dependency examples - these get remapped to your current mappings
     // compileOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}:api") // Adds JEI API as a compile dependency
@@ -197,10 +258,10 @@ dependencies {
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
 
     // compile against the JEI API but do not include it at runtime
-    compileOnly(fg.deobf("mezz.jei:jei-${minecraft_version}-common-api:${jei_version}"))
-    compileOnly(fg.deobf("mezz.jei:jei-${minecraft_version}-forge-api:${jei_version}"))
+    compileOnly(fg.deobf("mezz.jei:jei-${cfg.mc}-common-api:${cfg.jei}"))
+    compileOnly(fg.deobf("mezz.jei:jei-${cfg.mc}-forge-api:${cfg.jei}"))
     // at runtime, use the full JEI jar for Forge
-    runtimeOnly(fg.deobf("mezz.jei:jei-${minecraft_version}-forge:${jei_version}"))
+    runtimeOnly(fg.deobf("mezz.jei:jei-${cfg.mc}-forge:${cfg.jei}"))
 }
 
 // This block of code expands all declared replace properties in the specified resource targets.
@@ -209,9 +270,9 @@ dependencies {
 // See https://docs.gradle.org/current/dsl/org.gradle.language.jvm.tasks.ProcessResources.html
 tasks.named('processResources', ProcessResources).configure {
     var replaceProperties = [
-            minecraft_version: minecraft_version, minecraft_version_range: minecraft_version_range,
-            forge_version: forge_version, forge_version_range: forge_version_range,
-            loader_version_range: loader_version_range,
+            minecraft_version: cfg.mc, minecraft_version_range: cfg.mcRange,
+            forge_version: cfg.forge, forge_version_range: cfg.forgeRange,
+            loader_version_range: cfg.loaderRange,
             mod_id: mod_id, mod_name: mod_name, mod_license: mod_license, mod_version: mod_version,
             mod_authors: mod_authors, mod_description: mod_description,
     ]

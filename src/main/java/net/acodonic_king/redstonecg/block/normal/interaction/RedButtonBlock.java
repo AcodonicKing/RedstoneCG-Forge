@@ -1,5 +1,6 @@
 package net.acodonic_king.redstonecg.block.normal.interaction;
 
+import net.acodonic_king.redstonecg.procedures.RCGMatrix;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
@@ -25,5 +26,14 @@ public class RedButtonBlock extends RedSwitchBlock {
     @Override
     public void tick(BlockState blockState, ServerLevel level, BlockPos pos, RandomSource random){
         setState(level, blockState, pos, null, false);
+    }
+
+    @Override
+    public RCGMatrix.M4F stateTransformer(RCGMatrix.M4F mat, boolean state){
+        if(state)
+            mat.translate(0,0,-0.0625f);
+        else
+            mat.translate(0,0,-0.125f);
+        return mat;
     }
 }

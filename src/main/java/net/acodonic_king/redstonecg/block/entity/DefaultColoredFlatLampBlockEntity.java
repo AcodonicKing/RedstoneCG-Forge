@@ -16,6 +16,7 @@ public class DefaultColoredFlatLampBlockEntity extends DefaultAnalogIndicatorBlo
     public Item ITEM = null;
     public DefaultColoredFlatLampBlockEntity(BlockPos pos, BlockState state) {
         super(RedstonecgModBlockEntities.DEFAULT_COLORED_FLAT_LAMP.get(), pos, state);
+        TEXT_Z = 0.094f;
     }
     @Override
     public void saveAdditional(CompoundTag tag) {

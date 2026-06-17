@@ -16,6 +16,11 @@ public class PinmarkConfiguratorLogic {
     
     public PinmarkConfiguratorLogic(){}
 
+    public PinmarkConfiguratorLogic reset(){
+        SETTING = 0;
+        return this;
+    }
+
     public PinmarkConfiguratorLogic setState(int a, boolean s){
         if(s)
             SETTING |= (short) (1 << a);

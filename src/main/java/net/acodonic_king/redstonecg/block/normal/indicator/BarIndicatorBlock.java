@@ -13,13 +13,13 @@ public class BarIndicatorBlock extends DefaultIndicatorRedstoneInteractableGate 
     @Override
     public VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
         if (world.getBlockEntity(pos) instanceof DefaultAnalogIndicatorBlockEntity be) {
-            return switch (be.FACING) {
-                case DOWN -> box(0, 0, 0, 16, 6, 16);
-                case NORTH -> box(0, 0, 0, 16, 16, 6);
-                case EAST -> box(12, 0, 0, 16, 16, 16);
-                case SOUTH -> box(0, 0, 12, 16, 16, 16);
-                case WEST -> box(0, 0, 0, 6, 16, 16);
-                case UP -> box(0, 12, 0, 16, 16, 16);
+            return switch (be.getFacingIndex()) {
+                case 0 -> box(0, 0, 0, 16, 6, 16);
+                case 1 -> box(0, 0, 0, 16, 16, 6);
+                case 2 -> box(12, 0, 0, 16, 16, 16);
+                case 3 -> box(0, 0, 12, 16, 16, 16);
+                case 4 -> box(0, 0, 0, 6, 16, 16);
+                default -> box(0, 12, 0, 16, 16, 16);
             };
         }
         return box(0, 0, 0, 16, 6, 16);

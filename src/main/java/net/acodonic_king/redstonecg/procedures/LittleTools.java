@@ -64,6 +64,11 @@ public class LittleTools {
         if (_bs.getBlock().getStateDefinition().getProperty(_name) instanceof BooleanProperty _booleanProp)
             world.setBlock(_pos, _bs.setValue(_booleanProp, _state), flags);
     }
+    public static BlockState setBooleanProperty(BlockState _bs, boolean _state, String _name){
+        if (_bs.getBlock().getStateDefinition().getProperty(_name) instanceof BooleanProperty _booleanProp)
+            return  _bs.setValue(_booleanProp, _state);
+        return _bs;
+    }
     public static boolean getBooleanProperty(BlockState _bs, String _name){
         return _bs.getBlock().getStateDefinition().getProperty(_name) instanceof BooleanProperty _getbp6 && _bs.getValue(_getbp6);
     }
@@ -105,6 +110,18 @@ public class LittleTools {
                 }
             }
         }
+    }
+    public static ItemStack popItem(Player player, Item item){
+        for (int i = 0; i < player.getInventory().getContainerSize(); i++) {
+            ItemStack invStack = player.getInventory().getItem(i);
+            if (invStack.is(item)) {
+                ItemStack stack = invStack.copy();
+                stack.setCount(1);
+                invStack.shrink(1);
+                return stack;
+            }
+        }
+        return ItemStack.EMPTY;
     }
     /*public static ItemStack getItemStackFromBlock(LevelAccessor world, BlockPos pos, int slotid) {
         AtomicReference<ItemStack> _retval = new AtomicReference<>(ItemStack.EMPTY);

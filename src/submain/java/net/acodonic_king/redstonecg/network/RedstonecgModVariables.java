@@ -92,6 +92,7 @@ public class RedstonecgModVariables {
 		public int hangingRedCuWireMaxDistance = 16;
 		public int gateChainLimit = 1024;
 		public int wireChainLimit = 1024;
+		public int parallelChainLimit = 256;
 
 		public static MapVariables load(CompoundTag tag) {
 			MapVariables data = new MapVariables();
@@ -121,6 +122,7 @@ public class RedstonecgModVariables {
 			hangingRedCuWireMaxDistance = readInt(nbt, "hanging_redcu_wire_max_distance", 16);
 			gateChainLimit = readInt(nbt, "gate_chain_limit", 1024);
 			wireChainLimit = readInt(nbt, "wire_chain_limit", 1024);
+			parallelChainLimit = readInt(nbt, "parallel_chain_limit", 256);
 		}
 
 		@Override
@@ -134,6 +136,7 @@ public class RedstonecgModVariables {
 			nbt.putInt("hanging_redcu_wire_max_distance", hangingRedCuWireMaxDistance);
 			nbt.putInt("gate_chain_limit", gateChainLimit);
 			nbt.putInt("wire_chain_limit", wireChainLimit);
+			nbt.putInt("parallel_chain_limit", parallelChainLimit);
 			return nbt;
 		}
 

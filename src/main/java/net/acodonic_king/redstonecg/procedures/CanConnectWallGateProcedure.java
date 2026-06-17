@@ -74,7 +74,7 @@ public class CanConnectWallGateProcedure {
     }
     public static int To1_4GateConnectionFilter(int connection){
         connection ++;
-        return connection;
+        return connection & 0b1111;
     }
     public static int To1_3GateConnectionFilter(int connection){
         connection ++;

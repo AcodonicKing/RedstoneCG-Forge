@@ -55,8 +55,10 @@ public class RotationBracket extends SuperItem {
                 world.scheduleTick(pos, block, 1);
                 return InteractionResult.SUCCESS;
             } else if (world.getBlockEntity(pos) instanceof DefaultAnalogIndicatorBlockEntity be){
-                be.ROTATION = rotateBlockDirection(be.ROTATION, player);
-                be.modelUpdate();
+                /*be.ROTATION = rotateBlockDirection(be.ROTATION, player);
+                be.modelUpdate();*/
+
+                be.setRotation(rotateBlockDirection(be.getRotation(), player));
                 be.setChanged();
                 world.sendBlockUpdated(pos, blockState, blockState, 3);
                 world.scheduleTick(pos, block, 1);

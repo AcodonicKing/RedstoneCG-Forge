@@ -31,6 +31,10 @@ public class ScreenTools {
         RenderSystem.setShaderTexture(0, image);
         the.blit(ms.stack, x, y, 0, 0, w, h, w, h);
     }
+    public static void blitTexture(Screen the, AbstractContainerScreenRide.ScreenStack ms, int x, int y, int layer, int w, int h, ResourceLocation image){
+        RenderSystem.setShaderTexture(0, image);
+        the.blit(ms.stack, x, y, layer, 0f, 0f, w, h, w, h);
+    }
     public static void drawString(Font font, AbstractContainerScreenRide.ScreenStack ms, String text, int x, int y, int c){
         font.drawShadow(ms.stack, text, x, y, c);
     }
@@ -80,7 +84,7 @@ public class ScreenTools {
     }
 
     public static class ImageButton{
-        int OnScreenLeft, OnScreenTop, RenderWidthPx, RenderHeightPx, ImageWidth, ImageHeight;
+        public int OnScreenLeft, OnScreenTop, RenderWidthPx, RenderHeightPx, ImageWidth, ImageHeight;
         ResourceLocation atlas;
         public ImageButton(int OnScreenLeft, int OnScreenTop, int RenderWidthPx, int RenderHeightPx, String atlas, int ImageWidth, int ImageHeight){
             this.OnScreenLeft = OnScreenLeft;

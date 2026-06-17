@@ -2,12 +2,17 @@ package net.acodonic_king.redstonecg.block.gui.arrow_indicator;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.acodonic_king.redstonecg.block.entity.ArrowIndicatorBlockEntity;
+import net.acodonic_king.redstonecg.block.gui.analog_source.AnalogSourceGUIButtonMessage;
+import net.acodonic_king.redstonecg.block.gui.pinmark_configurator.PinmarkConfiguratorLogic;
+import net.acodonic_king.redstonecg.block.gui.pinmark_configurator.PinmarkConfiguratorWidget;
+import net.acodonic_king.redstonecg.block.normal.analog.AnalogSourceBlock;
 import net.acodonic_king.redstonecg.block.normal.indicator.ArrowIndicatorBlock;
 import net.acodonic_king.redstonecg.default_gui_classes.AbstractContainerScreenRide;
 import net.acodonic_king.redstonecg.default_gui_classes.ScreenTools;
 import net.acodonic_king.redstonecg.default_gui_classes.TypingBox;
 import net.acodonic_king.redstonecg.init.RedstonecgModVersionRides;
 import net.acodonic_king.redstonecg.procedures.AdventureProcedure;
+import net.acodonic_king.redstonecg.procedures.RotatableQuad;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
@@ -35,7 +40,8 @@ public class ArrowIndicatorGUIScreen extends AbstractContainerScreenRide<ArrowIn
     TypingBox range_box_start;
     TypingBox range_box_end;
     private static List<buttonImage> renderableButtons = new ArrayList<>();
-
+    private final RotatableQuad arrow_quad = new RotatableQuad().cx(8.4f).cy(8.4f).h(16.8f);
+    public final PinmarkConfiguratorWidget pinConfig = new PinmarkConfiguratorWidget();
 
     public ArrowIndicatorGUIScreen(ArrowIndicatorGUIMenu container, Inventory inventory, Component text) {
         super(container, inventory, text);
@@ -54,46 +60,18 @@ public class ArrowIndicatorGUIScreen extends AbstractContainerScreenRide<ArrowIn
     private static final ResourceLocation h_arrow = ScreenTools.getImage("redstonecg","textures/screens/arrow_indicator_gui/h_arrow.png");
     private static final ResourceLocation platesHQ = ScreenTools.getImage("redstonecg", "textures/screens/arrow_indicator_gui/plates.png");
     private static final ResourceLocation selected = ScreenTools.getImage("redstonecg", "textures/screens/arrow_indicator_gui/selected.png");
-    private static float[][] arrow_rectoid = new float[][]{
-            { 0f,  0f, 0f, 1f},
-            {57f,  0f, 0f, 0f},
-            {57f, 21f, 1f, 0f},
-            { 0f, 21f, 1f, 1f}
-    };
 
-    private float rotateX(float x, float y, double ang_cos, double ang_sin){
-        return (float) (x * ang_cos - y * ang_sin);
-    }
-    private float rotateY(float x, float y, double ang_cos, double ang_sin){
-        return (float) (x * ang_sin + y * ang_cos);
-    }
-    private void setArrowRectoid(float[] arrow_model_position, float length, int x, int y, boolean isLong){
-        //63.5f or 46.5f
-        final float corn = 8.4f;
+    public void setQuad(float[] arrow_model_position, float length, boolean isLong){
         final float qPI = (float) (Math.PI * 0.5);
         float angle = qPI - arrow_model_position[3];
         if(isLong)
             angle -= qPI;
-        double ang_cos = Math.cos(angle);
-        double ang_sin = Math.sin(angle);
-        arrow_rectoid[0][0] = rotateX(-corn, -corn, ang_cos, ang_sin);
-        arrow_rectoid[0][1] = rotateY(-corn, -corn, ang_cos, ang_sin);
-
-        arrow_rectoid[3][0] = rotateX(length, -corn, ang_cos, ang_sin);
-        arrow_rectoid[3][1] = rotateY(length, -corn, ang_cos, ang_sin);
-
-        arrow_rectoid[2][0] = rotateX(length, corn, ang_cos, ang_sin);
-        arrow_rectoid[2][1] = rotateY(length, corn, ang_cos, ang_sin);
-
-        arrow_rectoid[1][0] = rotateX(-corn, corn, ang_cos, ang_sin);
-        arrow_rectoid[1][1] = rotateY(-corn, corn, ang_cos, ang_sin);
-
-        float add_x = this.leftPos + x + arrow_model_position[0] * 112;
-        float add_y = this.topPos + y + arrow_model_position[2] * 112;
-        for(int i = 0; i < arrow_rectoid.length; i++){
-            arrow_rectoid[i][0] += add_x;
-            arrow_rectoid[i][1] += add_y;
-        }
+        arrow_quad
+                .px(this.leftPos + 8 + arrow_model_position[0] * 112)
+                .py(this.topPos + 8 + arrow_model_position[2] * 112)
+                .w(length + arrow_quad.cx())
+                .radians(angle)
+                .transform();
     }
 
     @Override
@@ -123,6 +101,7 @@ public class ArrowIndicatorGUIScreen extends AbstractContainerScreenRide<ArrowIn
             ScreenTools.blitTexture(this, ms, lp, tp+24, sz, sz, pinmark_b);
         if ((connection & 8) > 0)
             ScreenTools.blitTexture(this, ms, lp-24, tp, sz, sz, pinmark_l);
+        pinConfig.LOGIC.setStates(connection);
         if(world.getBlockEntity(pos) instanceof ArrowIndicatorBlockEntity be){
             int model = be.MODEL;
             if(AdventureProcedure.valueConfig(world, entity)) {
@@ -138,25 +117,27 @@ public class ArrowIndicatorGUIScreen extends AbstractContainerScreenRide<ArrowIn
                         ScreenTools.blitTexture(this, ms, btn.x - 1, btn.y - 1, 18, 18, selected);
                 }
             }
-            if(AdventureProcedure.pinConfig(world, entity)) {
+            pinConfig.LOGIC.stateDown(be.BASE_READ);
+            /*if(AdventureProcedure.pinConfig(world, entity)) {
                 buttonImage btn = renderableButtons.get(4);
                 btn.button.render(ms, gx, gy);
                 if(be.BASE_READ)
                     ScreenTools.blitTexture(this, ms, btn.x - 1, btn.y - 1, 18, 18, selected);
-            }
+            }*/
             model = be.MODEL;
             model %= 3;
             ScreenTools.setTexture(platesHQ);
             ScreenTools.blitSetTextureRegion(ms, 22 + this.leftPos, 22 + this.topPos, 84, 84, model * 84, 0, 252, 84);
             if(model == 2) {
-                setArrowRectoid(be.ARROW_MODEL_POSITION, 55.6f, 8, 8, true);
+                setQuad(be.ARROW_MODEL_POSITION, 55.6f, true);
                 ScreenTools.setTexture(f_arrow);
             } else {
-                setArrowRectoid(be.ARROW_MODEL_POSITION, 37.2f, 8, 8, false);
+                setQuad(be.ARROW_MODEL_POSITION, 37.2f, false);
                 ScreenTools.setTexture(h_arrow);
             }
-            ScreenTools.blitSetTextureRectaroid(ms, arrow_rectoid, 1);
+            ScreenTools.blitSetTextureRectaroid(ms, arrow_quad.RECTOID, 1);
         }
+        pinConfig.render(this, ms, this.leftPos + 140, this.topPos + 91, gx, gy);
         RenderSystem.disableBlend();
     }
 
@@ -178,11 +159,24 @@ public class ArrowIndicatorGUIScreen extends AbstractContainerScreenRide<ArrowIn
             range_box_end.setFocused(false);
             return true;
         }
-        if(button == 0){
+        if(button == 0 && pos != null){
             for(buttonImage btn: renderableButtons)
                 btn.button.checkClick((int) mouseX, (int) mouseY);
+            if(AdventureProcedure.pinConfig(world, entity)){
+                int s = pinConfig.onMouse(true);
+                if(s != -1){
+                    ScreenTools.playClickSound();
+                    ArrowIndicatorGUIButtonMessage.sendAndHandle(entity, 8 + s, this.pos);
+                }
+            }
         }
         return super.mouseClicked(mouseX, mouseY, button);
+    }
+
+    @Override
+    public boolean mouseReleased(double mouseX, double mouseY, int button){
+        pinConfig.onMouse(false);
+        return super.mouseReleased(mouseX, mouseY, button);
     }
 
     @Override
@@ -242,12 +236,13 @@ public class ArrowIndicatorGUIScreen extends AbstractContainerScreenRide<ArrowIn
         int lp = this.leftPos + 126;
         int tp = this.topPos + this.imageHeight - 25;
         renderableButtons = new ArrayList<>();
-        button_change = RedstonecgModVersionRides.createButton(lp, tp, 60, 20, "gui.redstonecg.arrow_indicator_gui.button_change", e -> {
+        /*button_change = RedstonecgModVersionRides.createButton(lp, tp, 60, 20, "gui.redstonecg.arrow_indicator_gui.button_change", e -> {
             ArrowIndicatorGUIButtonMessage.sendAndHandle(entity, 2, this.pos);
         });
-        guistate.put("button:button_change", button_change);
+        guistate.put("button:button_change", button_change);*/
         if(AdventureProcedure.pinConfig(world, entity)){
-            this.addRenderableWidget(button_change);
+            //this.addRenderableWidget(button_change);
+            pinConfig.LOGIC.pinAll(PinmarkConfiguratorLogic.PINMARK_A);
         }
         int[] range = new int[]{0,0};
         if(this.world.getBlockEntity(this.pos) instanceof ArrowIndicatorBlockEntity be)

@@ -50,6 +50,7 @@
   "block.redstonecg.red_switch": "Red Switch",
   "block.redstonecg.red_button": "Red Button",
   "block.redstonecg.control_panel": "Control Panel",
+  "block.redstonecg.coded_control_panel": "Coded Control Panel",
 
   "block.redstonecg.parallel_and": "Parallel AND Gate",
   "block.redstonecg.parallel_or": "Parallel OR Gate",
@@ -125,11 +126,14 @@
   "tooltip.redstonecg.hanging_redcu_wire_connector.set": "Place Hanging RedCu Wire Connector or\nright-click on Hanging RedCu Wire Connector to copy it's position.",
 
   "tooltip.redstonecg.colored_lamp.placing": "Upon placement, the block will:",
-  "tooltip.redstonecg.colored_lamp.stained_item": "Get stained by %s;",
-  "tooltip.redstonecg.colored_lamp.stained_color": "Get colored to #%06X ;",
+  "tooltip.redstonecg.colored_lamp.stained_item": "- Get stained by %s;",
+  "tooltip.redstonecg.colored_lamp.stained_color": "- Get colored to #%06X ;",
   "tooltip.redstonecg.colored_lamp.reset": "Click on air to reset, or hold a staining item in offhand to stain it.",
   "tooltip.redstonecg.colored_lamp.set": "Place a block, or crouch-right-click a block or use with staining item in offhand to stain it.",
 
+  "tooltip.redstonecg.control_panel.placing": "Upon placement, the block will:",
+  "tooltip.redstonecg.control_panel.panel": "- install %s rotated %.2f°;",
+  "tooltip.redstonecg.control_panel.shape": "- take the %d shape;",
   "tooltip.redstonecg.control_panel.reset": "Click on air to reset.",
   "tooltip.redstonecg.control_panel.set": "Place a block, or right-click a block to change type.",
 

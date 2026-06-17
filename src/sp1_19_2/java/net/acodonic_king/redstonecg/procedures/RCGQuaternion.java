@@ -24,6 +24,35 @@ public class RCGQuaternion {
     public RCGQuaternion zRotationTo(float x, float y, float z){
         return rotationTo(0, 0, 1, x, y, z);
     }
+    @Override
+    public RCGQuaternion clone(){
+        RCGQuaternion inst = new RCGQuaternion();
+        inst.quaternion.set(this.quaternion.i(), this.quaternion.j(), this.quaternion.k(), this.quaternion.r());
+        return inst;
+    }
+    public RCGQuaternion set(RCGQuaternion quat){
+        quaternion.set(this.quaternion.i(), this.quaternion.j(), this.quaternion.k(), this.quaternion.r());
+        return this;
+    }
+    public RCGQuaternion rotateX(float angle){
+        quaternion.mul(Vector3f.XP.rotation(angle));
+        return this;
+    }
+    public RCGQuaternion rotateY(float angle){
+        quaternion.mul(Vector3f.YP.rotation(angle));
+        return this;
+    }
+    public RCGQuaternion rotateZ(float angle){
+        quaternion.mul(Vector3f.ZP.rotation(angle));
+        return this;
+    }
+    public RCGQuaternion identity(){
+        quaternion.set(0, 0, 0, 1);
+        return this;
+    }
+    public Quaternion getQuaternion(){
+        return quaternion;
+    }
     public RCGQuaternion rotationTo(float fromDirX, float fromDirY, float fromDirZ, float toDirX, float toDirY, float toDirZ){
         float fn = (float) (1.0 / Math.sqrt(Math.fma(fromDirX, fromDirX, Math.fma(fromDirY, fromDirY, fromDirZ * fromDirZ))));
         float tn = (float) (1.0 / Math.sqrt(Math.fma(toDirX, toDirX, Math.fma(toDirY, toDirY, toDirZ * toDirZ))));

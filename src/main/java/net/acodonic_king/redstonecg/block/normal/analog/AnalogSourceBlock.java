@@ -23,7 +23,6 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.LevelAccessor;
 
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.phys.BlockHitResult;
@@ -37,7 +36,6 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.Containers;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.FriendlyByteBuf;
@@ -52,6 +50,9 @@ import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class AnalogSourceBlock extends DefaultRedstoneActionGate implements EntityBlock, PinMarkConnectionInterface {
 	public static final IntegerProperty CONNECTION = IntegerProperty.create("connection",0,14);
@@ -106,16 +107,19 @@ public class AnalogSourceBlock extends DefaultRedstoneActionGate implements Enti
 	@Override
 	public void setPlacedBy(Level level, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack) {
 		if (level.isClientSide) return;
-		if (!stack.hasTag()) return;
-		CompoundTag tag = stack.getTag();
-		if (!tag.contains("BlockParameterSet")) return;
-		tag = tag.getCompound("BlockParameterSet");
 		if (level.getBlockEntity(pos) instanceof AnalogSourceBlockEntity be){
-			if (tag.contains("connection"))
-				state = state.setValue(CONNECTION, tag.getInt("connection"));
-			be.setParameterSet(tag);
+			if(stack.hasTag()) {
+				CompoundTag tag = stack.getTag();
+				if (tag.contains("BlockParameterSet")) {
+					tag = tag.getCompound("BlockParameterSet");
+					if (tag.contains("connection"))
+						state = state.setValue(CONNECTION, tag.getInt("connection"));
+					be.setParameterSet(tag);
+				}
+			}
+			be.setName(stack);
 			be.setChanged();
-			level.sendBlockUpdated(pos, state, state, 3);
+			level.setBlock(pos, state, 3);
 			level.scheduleTick(pos, state.getBlock(), 1);
 		}
 	}
@@ -269,5 +273,15 @@ public class AnalogSourceBlock extends DefaultRedstoneActionGate implements Enti
 			return String.format("%1d",blockEntity.POWER);
 		}
 		return "";
+	}
+	@Override
+	public List<ItemStack> getDrops(List<ItemStack> drops, BlockState state, BlockEntity entity) {
+		drops.clear();
+		ItemStack stack = new ItemStack(asItem());
+		if(entity instanceof AnalogSourceBlockEntity sbe)
+			if(!sbe.CUSTOM_NAME.isEmpty())
+				stack.setHoverName(Component.literal(sbe.CUSTOM_NAME));
+		drops.add(stack);
+		return drops;
 	}
 }

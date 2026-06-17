@@ -199,13 +199,13 @@ public class DelayerBlockBase extends SuperBlock implements SimpleWaterloggedBlo
     @Override
     public VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
         if (world.getBlockEntity(pos) instanceof DelayerBlockEntity be) {
-            return switch (be.FACING) {
-                case DOWN -> box(0, 0, 0, 16, 2, 16);
-                case NORTH -> box(0, 0, 0, 16, 16, 2);
-                case EAST -> box(14, 0, 0, 16, 16, 16);
-                case SOUTH -> box(0, 0, 14, 16, 16, 16);
-                case WEST -> box(0, 0, 0, 2, 16, 16);
-                case UP -> box(0, 14, 0, 16, 16, 16);
+            return switch (be.getFacingIndex()) {
+                case 0 -> box(0, 0, 0, 16, 2, 16);
+                case 1 -> box(0, 0, 0, 16, 16, 2);
+                case 2 -> box(14, 0, 0, 16, 16, 16);
+                case 3 -> box(0, 0, 14, 16, 16, 16);
+                case 4 -> box(0, 0, 0, 2, 16, 16);
+                default -> box(0, 14, 0, 16, 16, 16);
             };
         }
         return box(0, 0, 0, 16, 2, 16);
@@ -214,11 +214,11 @@ public class DelayerBlockBase extends SuperBlock implements SimpleWaterloggedBlo
     @Override
     public int floorIt(Level level, BlockPos pos) {
         if(level.getBlockEntity(pos) instanceof DelayerBlockEntity be){
-            Direction facing = be.FACING;
+            Direction facing = be.getFacing();
             if(facing.getAxis() != Direction.Axis.Y){
-                be.ROTATION = facing;
+                be.setRotation(facing);
             }
-            be.FACING = Direction.DOWN;
+            be.setFacing(Direction.DOWN);
             be.setChanged();
             level.sendBlockUpdated(pos, be.getBlockState(), be.getBlockState(), 2);
             return 1;
@@ -273,7 +273,7 @@ public class DelayerBlockBase extends SuperBlock implements SimpleWaterloggedBlo
         if(RedstonecgModVariables.MapVariables.get((LevelAccessor) worldIn).canSurviveAnyCase){return true;}
         if (worldIn instanceof LevelAccessor world) {
             if (world.getBlockEntity(pos) instanceof DefaultAnalogIndicatorBlockEntity be) {
-                return GateBlockValidPlacementConditionProcedure.execute(world, pos, be.FACING);
+                return GateBlockValidPlacementConditionProcedure.execute(world, pos, be.getFacing());
             }
         }
         return super.canSurvive(blockstate, worldIn, pos);
@@ -300,7 +300,8 @@ public class DelayerBlockBase extends SuperBlock implements SimpleWaterloggedBlo
                 if(context == null){return;}
                 Direction clickedFace = context.getClickedFace().getOpposite();
                 Direction lookDirection = context.getHorizontalDirection();
-                be.FACING = clickedFace;
+
+                /*be.FACING = clickedFace;
                 if(clickedFace == Direction.UP){
                     be.ROTATION = switch (lookDirection){
                         case NORTH, SOUTH -> lookDirection.getOpposite();
@@ -309,27 +310,23 @@ public class DelayerBlockBase extends SuperBlock implements SimpleWaterloggedBlo
                 } else if (clickedFace == Direction.DOWN){
                     be.ROTATION = lookDirection;
                 }
-                //RedstonecgMod.LOGGER.debug("{} {}",be.FACING,be.ROTATION);
-                be.modelUpdate();
+                be.modelUpdate();*/
+
+                be.setFacing(clickedFace);
+                if(clickedFace == Direction.UP){
+                    be.setRotation(switch (lookDirection){
+                        case NORTH, SOUTH -> lookDirection.getOpposite();
+                        default -> lookDirection;
+                    });
+                } else if (clickedFace == Direction.DOWN){
+                    be.setRotation(lookDirection);
+                }
+
                 be.setChanged();
                 level.sendBlockUpdated(pos, state, state, 2);
             }
             LocalThreadValueHolders.BlockPlaceContextHolder.clear();
         }
-    }
-
-    public Direction getFacing(LevelAccessor level, BlockPos pos){
-        if(level.getBlockEntity(pos) instanceof DelayerBlockEntity be){
-            return be.FACING;
-        }
-        return null;
-    }
-
-    public Direction getRotation(LevelAccessor level, BlockPos pos){
-        if(level.getBlockEntity(pos) instanceof DelayerBlockEntity be){
-            return be.ROTATION;
-        }
-        return null;
     }
 
     @Override

@@ -3,7 +3,7 @@ package net.acodonic_king.redstonecg.block.entity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.acodonic_king.redstonecg.block.defaults.PinMarkConnectionInterface;
-import net.acodonic_king.redstonecg.procedures.RCGQuaternion;
+import net.acodonic_king.redstonecg.procedures.RCGMatrix;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -15,6 +15,8 @@ import net.minecraft.client.resources.model.ModelManager;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.state.BlockState;
+
+import static net.acodonic_king.redstonecg.block.entity.DefaultAnalogIndicatorBlockEntityRenderer.lampTextRender;
 
 public class ArrowIndicatorBlockEntityRenderer implements BlockEntityRenderer<ArrowIndicatorBlockEntity> {
     BlockEntityRendererProvider.Context context;
@@ -29,6 +31,8 @@ public class ArrowIndicatorBlockEntityRenderer implements BlockEntityRenderer<Ar
         super();
         this.context = context;
     }
+    RCGMatrix.M4F transformer = new RCGMatrix.M4F();
+    RCGMatrix.M4F transformer2 = new RCGMatrix.M4F();
     @Override
     public void render(ArrowIndicatorBlockEntity blockEntity, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, int packedOverlay) {
         ModelManager modelManager = Minecraft.getInstance().getModelManager();
@@ -37,7 +41,11 @@ public class ArrowIndicatorBlockEntityRenderer implements BlockEntityRenderer<Ar
         BakedModel model;
         VertexConsumer vc = bufferSource.getBuffer(RenderType.cutoutMipped());
 
-        renderPose(blockEntity, poseStack);
+        OrientationHolderBlockEntity.getPoseStackMatrix(
+                transformer.identity(),
+                blockEntity.combination
+        );
+        renderPose(poseStack);
         model = modelManager.getModel(DefaultAnalogIndicatorBlockEntityRenderer.SMOOTH_STONE_PLATE);
         renderModel(blockEntity, modelRenderer, vc, blockState, model, poseStack, packedLight, packedOverlay);
         model = modelManager.getModel(new ModelResourceLocation(blockEntity.BLOCK, blockEntity.BASE_MODEL));
@@ -62,23 +70,20 @@ public class ArrowIndicatorBlockEntityRenderer implements BlockEntityRenderer<Ar
                 blockEntity.ARROW_MODEL_POSITION[1],
                 blockEntity.ARROW_MODEL_POSITION[2]
         );
-        poseStack.mulPose(RCGQuaternion.Vector3F.rotateYP(blockEntity.ARROW_MODEL_POSITION[3]).quaternion);
+        poseStack.mulPoseMatrix(transformer2.identity().rotateY(blockEntity.ARROW_MODEL_POSITION[3]).getMatrix());
         model = modelManager.getModel(new ModelResourceLocation(blockEntity.BLOCK, blockEntity.ARROW_MODEL));
         renderModel(blockEntity, modelRenderer, vc, blockState, model, poseStack, packedLight, packedOverlay);
         poseStack.popPose();
+
+        renderPose(poseStack);
+        if(!blockEntity.RENDER_TEXT.isEmpty())
+            lampTextRender(blockEntity, poseStack, bufferSource, packedLight);
+        poseStack.popPose();
     }
-    private void renderPose(ArrowIndicatorBlockEntity blockEntity, PoseStack poseStack){
+    private void renderPose(PoseStack poseStack){
         poseStack.pushPose();
         poseStack.translate(0.5, 0.5, 0.5);
-        switch (blockEntity.facingMode){
-            case 5 -> poseStack.mulPose(blockEntity.facing.quaternion);
-            case 0 -> {}
-            default -> {
-                poseStack.mulPose(blockEntity.facing.quaternion);
-                poseStack.mulPose(RCGQuaternion.Vector3F.rotateXP((float) (Math.PI * 0.5)).quaternion);
-            }
-        }
-        poseStack.mulPose(blockEntity.rotation.quaternion);
+        poseStack.mulPoseMatrix(transformer.getMatrix());
         poseStack.translate(-0.5, -0.5, -0.5);
     }
     private void renderModel(

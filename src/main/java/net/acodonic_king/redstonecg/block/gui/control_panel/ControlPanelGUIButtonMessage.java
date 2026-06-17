@@ -2,6 +2,7 @@
 package net.acodonic_king.redstonecg.block.gui.control_panel;
 
 import net.acodonic_king.redstonecg.RedstonecgMod;
+import net.acodonic_king.redstonecg.block.normal.interaction.ControlPanelBlock;
 import net.acodonic_king.redstonecg.block.entity.ControlPanelBlockEntity;
 import net.acodonic_king.redstonecg.default_gui_classes.ButtonMessage;
 import net.acodonic_king.redstonecg.init.RedstonecgModVersionRides;
@@ -11,6 +12,7 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.HashMap;
 
@@ -46,6 +48,19 @@ public class ControlPanelGUIButtonMessage extends ButtonMessage {
 			if(world.getBlockEntity(pos) instanceof ControlPanelBlockEntity be) {
 				CompoundTag compoundTag = this.tag;
 				be.CONNECTION = compoundTag.getByte("connection");
+				be.setChanged();
+				world.updateNeighborsAt(pos, be.getBlockState().getBlock());
+			}
+		} else if (buttonID < 4) {
+			int i = buttonID - 1;
+			BlockState blockState = world.getBlockState(pos);
+			((ControlPanelBlock)blockState.getBlock()).changeModel(world, blockState, pos, i);
+		}
+		if (buttonID >= 10){
+			if(world.getBlockEntity(pos) instanceof ControlPanelBlockEntity be) {
+				CompoundTag compoundTag = this.tag;
+				int i = buttonID - 10;
+				be.SLOT_ANGLES[i] = compoundTag.getFloat("slot_angle");
 				be.setChanged();
 				world.updateNeighborsAt(pos, be.getBlockState().getBlock());
 			}

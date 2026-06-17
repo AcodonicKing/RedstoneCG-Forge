@@ -15,6 +15,9 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import org.apache.commons.lang3.tuple.Pair;
 
+import static net.acodonic_king.redstonecg.block.defaults.DefaultParallelGate.getParallelChainLimit;
+import static net.acodonic_king.redstonecg.block.defaults.DefaultParallelGate.sendRedstoneUpdateParallel;
+
 public class ParallelDelayerBlock extends DelayerBlockBase implements ParallelGateInterface, PinMarkConnectionInterface {
     public static final IntegerProperty CONNECTION = IntegerProperty.create("connection",0,1);
     public ParallelDelayerBlock(){
@@ -48,12 +51,12 @@ public class ParallelDelayerBlock extends DelayerBlockBase implements ParallelGa
     @Override
     public void neighborChanged(BlockState thisState, Level world, BlockPos thisPos, Block neighborBlock, BlockPos fromPos, boolean moving) {
         super.neighborChanged(thisState, world, thisPos, neighborBlock, fromPos, moving);
-        world.scheduleTick(thisPos, thisState.getBlock(), 1);
         Direction updateDirection = BlockFrameTransformUtils.directionFromPositions(fromPos, thisPos);
         Direction direction = BlockFrameTransformUtils.getLocalDirectionFromWorld(world, thisPos, updateDirection);
         if(direction.getAxis() == Direction.Axis.X && !breakParallelLine(world, thisState, thisPos, updateDirection, false)){
-            sendRedstoneUpdateInDirection(world, thisState.getBlock(), thisPos, updateDirection, 0);
+            sendRedstoneUpdateParallel(world, thisState.getBlock(), thisPos, updateDirection, 1);
         }
+        world.scheduleTick(thisPos, thisState.getBlock(), 1);
     }
 
     @Override
@@ -63,6 +66,20 @@ public class ParallelDelayerBlock extends DelayerBlockBase implements ParallelGa
 
     @Override
     public int breakParallelLineSignal(LevelAccessor world, BlockState thisState, BlockPos thisPos, Direction directedTo) {
+        return 0;
+    }
+
+    @Override
+    public int onRedstoneUpdate(LevelAccessor world, BlockState thisState, BlockPos thisPos, BlockPos fromPos, int recursion) {
+        Direction updateDirection = BlockFrameTransformUtils.directionFromPositions(fromPos, thisPos);
+        Direction direction = BlockFrameTransformUtils.getLocalDirectionFromWorld(thisState, updateDirection);
+        if(direction.getAxis() == Direction.Axis.X && !breakParallelLine(world, thisState, thisPos, updateDirection, false)){
+            recursion++;
+            if(recursion > getParallelChainLimit(world))
+                return 0;
+            sendRedstoneUpdateParallel(world, thisState.getBlock(), thisPos, updateDirection, recursion);
+        }
+        world.scheduleTick(thisPos, thisState.getBlock(), 1);
         return 0;
     }
 

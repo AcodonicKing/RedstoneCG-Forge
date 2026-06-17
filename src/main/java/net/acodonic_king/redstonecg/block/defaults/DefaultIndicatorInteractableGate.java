@@ -1,5 +1,6 @@
 package net.acodonic_king.redstonecg.block.defaults;
 
+import net.acodonic_king.redstonecg.block.entity.AnalogSourceBlockEntity;
 import net.acodonic_king.redstonecg.block.entity.DefaultAnalogIndicatorBlockEntity;
 import net.acodonic_king.redstonecg.init.RedstonecgModItems;
 import net.acodonic_king.redstonecg.init.RedstonecgModVersionRides;
@@ -7,10 +8,12 @@ import net.acodonic_king.redstonecg.network.RedstonecgModVariables;
 import net.acodonic_king.redstonecg.procedures.*;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -33,6 +36,8 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.ToIntFunction;
 
 public class DefaultIndicatorInteractableGate extends SuperBlock implements SimpleWaterloggedBlock, EntityBlock, FlooringInterface, RedstoneSignalInterface, PinMarkConnectionInterface {
@@ -86,13 +91,13 @@ public class DefaultIndicatorInteractableGate extends SuperBlock implements Simp
     @Override
     public VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
         if (world.getBlockEntity(pos) instanceof DefaultAnalogIndicatorBlockEntity be) {
-            return switch (be.FACING) {
-                case DOWN -> box(0, 0, 0, 16, 2, 16);
-                case NORTH -> box(0, 0, 0, 16, 16, 2);
-                case EAST -> box(14, 0, 0, 16, 16, 16);
-                case SOUTH -> box(0, 0, 14, 16, 16, 16);
-                case WEST -> box(0, 0, 0, 2, 16, 16);
-                case UP -> box(0, 14, 0, 16, 16, 16);
+            return switch (be.getFacingIndex()) {
+                case 0 -> box(0, 0, 0, 16, 2, 16);
+                case 1 -> box(0, 0, 0, 16, 16, 2);
+                case 2 -> box(14, 0, 0, 16, 16, 16);
+                case 3 -> box(0, 0, 14, 16, 16, 16);
+                case 4 -> box(0, 0, 0, 2, 16, 16);
+                default -> box(0, 14, 0, 16, 16, 16);
             };
         }
         return box(0, 0, 0, 16, 2, 16);
@@ -124,17 +129,17 @@ public class DefaultIndicatorInteractableGate extends SuperBlock implements Simp
                 if(context == null){return;}
                 Direction clickedFace = context.getClickedFace().getOpposite();
                 Direction lookDirection = context.getHorizontalDirection();
-                be.FACING = clickedFace;
+                be.setFacing(clickedFace);
                 if(clickedFace == Direction.UP){
-                    be.ROTATION = switch (lookDirection){
+                    be.setRotation(switch (lookDirection){
                         case NORTH, SOUTH -> lookDirection.getOpposite();
                         default -> lookDirection;
-                    };
+                    });
                 } else if (clickedFace == Direction.DOWN){
-                    be.ROTATION = lookDirection;
+                    be.setRotation(lookDirection);
                 }
                 //RedstonecgMod.LOGGER.debug("{} {}",be.FACING,be.ROTATION);
-                be.modelUpdate();
+                //be.modelUpdate();
                 be.setChanged();
                 this.redstoneUpdate(level, pos);
                 level.sendBlockUpdated(pos, state, state, 2);
@@ -143,11 +148,32 @@ public class DefaultIndicatorInteractableGate extends SuperBlock implements Simp
         }
     }
     @Override
+    public void setPlacedBy(Level level, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack) {
+        if (level.isClientSide) return;
+        if (level.getBlockEntity(pos) instanceof DefaultAnalogIndicatorBlockEntity be) {
+            be.setName(stack);
+            be.setChanged();
+            level.setBlock(pos, state, 3);
+        }
+    }
+
+    @Override
+    public List<ItemStack> getDrops(List<ItemStack> drops, BlockState state, BlockEntity entity) {
+        drops.clear();
+        ItemStack stack = new ItemStack(asItem());
+        if(entity instanceof DefaultAnalogIndicatorBlockEntity sbe)
+            if(!sbe.CUSTOM_NAME.isEmpty())
+                stack.setHoverName(Component.literal(sbe.CUSTOM_NAME));
+        drops.add(stack);
+        return drops;
+    }
+
+    @Override
     public boolean canSurvive(BlockState blockstate, LevelReader worldIn, BlockPos pos) {
         if(RedstonecgModVariables.MapVariables.get((LevelAccessor) worldIn).canSurviveAnyCase){return true;}
         if (worldIn instanceof LevelAccessor world) {
             if (world.getBlockEntity(pos) instanceof DefaultAnalogIndicatorBlockEntity be) {
-                return GateBlockValidPlacementConditionProcedure.execute(world, pos, be.FACING);
+                return GateBlockValidPlacementConditionProcedure.execute(world, pos, be.getFacing());
             }
         }
         return super.canSurvive(blockstate, worldIn, pos);
@@ -172,7 +198,7 @@ public class DefaultIndicatorInteractableGate extends SuperBlock implements Simp
             ConnectionFace connectionFaceB = BlockFrameTransformUtils.canConnectRedstoneTargetConnectionFace(world, pos, side);
             int connection = LittleTools.getIntegerProperty(blockState, "connection");
             connection ++;
-            return CanConnectWallGateProcedure.execute(be.ROTATION, be.FACING, connection, connectionFaceB);
+            return CanConnectWallGateProcedure.execute(be.getRotation(), be.getFacing(), connection, connectionFaceB);
         }
         return false;
     }
@@ -185,11 +211,11 @@ public class DefaultIndicatorInteractableGate extends SuperBlock implements Simp
             BlockState ThisBlock = (world.getBlockState(pos));
             int power = 0;
             for (Direction side : GetGateInputSidesProcedure.Get1_4GateForth(ThisBlock)) {
-                ConnectionFace connectionFaceA = BlockFrameTransformUtils.getConnectionFace(be.ROTATION,be.FACING,side);
+                ConnectionFace connectionFaceA = BlockFrameTransformUtils.getConnectionFace(be.getRotation(),be.getFacing(),side);
                 power = Math.max(power, GetRedstoneSignalProcedure.execute(world, pos, connectionFaceA));
             }
             if(be.BASE_READ){
-                ConnectionFace connectionFaceA = BlockFrameTransformUtils.getConnectionFace(be.ROTATION,be.FACING,Direction.DOWN);
+                ConnectionFace connectionFaceA = BlockFrameTransformUtils.getConnectionFace(be.getRotation(),be.getFacing(),Direction.DOWN);
                 connectionFaceA.CHANNEL = 4;
                 //RedstonecgMod.LOGGER.debug(connectionFaceA+" "+GetRedstoneSignalProcedure.execute(world, pos, connectionFaceA));
                 power = Math.max(power, GetRedstoneSignalProcedure.execute(world, pos, connectionFaceA));
@@ -244,28 +270,14 @@ public class DefaultIndicatorInteractableGate extends SuperBlock implements Simp
         return new DefaultAnalogIndicatorBlockEntity(pos, state);
     }
 
-    public Direction getFacing(LevelAccessor level, BlockPos pos){
-        if(level.getBlockEntity(pos) instanceof DefaultAnalogIndicatorBlockEntity be){
-            return be.FACING;
-        }
-        return null;
-    }
-
-    public Direction getRotation(LevelAccessor level, BlockPos pos){
-        if(level.getBlockEntity(pos) instanceof DefaultAnalogIndicatorBlockEntity be){
-            return be.ROTATION;
-        }
-        return null;
-    }
-
     @Override
     public int floorIt(Level level, BlockPos pos) {
         if(level.getBlockEntity(pos) instanceof DefaultAnalogIndicatorBlockEntity be){
-            Direction facing = be.FACING;
+            Direction facing = be.getFacing();
             if(facing.getAxis() != Direction.Axis.Y){
-                be.ROTATION = facing;
+                be.setRotation(facing);
             }
-            be.FACING = Direction.DOWN;
+            be.setFacing(Direction.DOWN);
             be.setChanged();
             level.sendBlockUpdated(pos, be.getBlockState(), be.getBlockState(), 2);
             return 1;

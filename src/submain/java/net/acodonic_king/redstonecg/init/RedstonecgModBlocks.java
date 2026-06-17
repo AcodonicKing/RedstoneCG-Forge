@@ -2,7 +2,8 @@ package net.acodonic_king.redstonecg.init;
 
 import net.acodonic_king.redstonecg.RedstonecgMod;
 import net.acodonic_king.redstonecg.block.*;
-import net.acodonic_king.redstonecg.block.ControlPanelBlock;
+import net.acodonic_king.redstonecg.block.normal.interaction.CodedControlPanelBlock;
+import net.acodonic_king.redstonecg.block.normal.interaction.ControlPanelBlock;
 import net.acodonic_king.redstonecg.block.normal.hybrid.*;
 import net.acodonic_king.redstonecg.block.normal.analog.*;
 import net.acodonic_king.redstonecg.block.normal.digital.*;
@@ -78,7 +79,7 @@ public class RedstonecgModBlocks {
 	public static final RegistryObject<Block> RED_SWITCH = REGISTRY.register("red_switch", RedSwitchBlock::new);
 	public static final RegistryObject<Block> RED_BUTTON = REGISTRY.register("red_button", RedButtonBlock::new);
 	public static final RegistryObject<Block> CONTROL_PANEL = REGISTRY.register("control_panel", ControlPanelBlock::new);
-
+	public static final RegistryObject<Block> CODED_CONTROL_PANEL = REGISTRY.register("coded_control_panel", CodedControlPanelBlock::new);
 	//Parallel Digital
 	public static final RegistryObject<Block> PARALLEL_AND = REGISTRY.register("parallel_and", ParallelAndBlock::new);
 	public static final RegistryObject<Block> PARALLEL_OR = REGISTRY.register("parallel_or", ParallelOrBlock::new);

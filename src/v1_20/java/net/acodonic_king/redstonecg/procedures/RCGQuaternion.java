@@ -1,8 +1,6 @@
 package net.acodonic_king.redstonecg.procedures;
 
-import org.joml.Math;
 import org.joml.Quaternionf;
-import org.joml.Vector3f;
 
 public class RCGQuaternion {
     public Quaternionf quaternion;
@@ -12,20 +10,38 @@ public class RCGQuaternion {
     public RCGQuaternion(Quaternionf q){
         this.quaternion = q;
     }
-    public static class Vector3F{
-        public static RCGQuaternion rotateXP(float angle){
-            return new RCGQuaternion(new Quaternionf().rotateX(angle));
-        }
-        public static RCGQuaternion rotateYP(float angle){
-            return new RCGQuaternion(new Quaternionf().rotateY(angle));
-        }
-        public static RCGQuaternion rotateZP(float angle){
-            return new RCGQuaternion(new Quaternionf().rotateZ(angle));
-        }
-    }
     public RCGQuaternion zRotationTo(float x, float y, float z){
         this.quaternion.rotationTo(0, 0, 1, x, y, z);
         return this;
+    }
+    @Override
+    public RCGQuaternion clone(){
+        RCGQuaternion inst = new RCGQuaternion();
+        inst.quaternion.set(this.quaternion);
+        return inst;
+    }
+    public RCGQuaternion set(RCGQuaternion quat){
+        quaternion.set(quat.quaternion);
+        return this;
+    }
+    public RCGQuaternion rotateX(float angle){
+        quaternion.rotateX(angle);
+        return this;
+    }
+    public RCGQuaternion rotateY(float angle){
+        quaternion.rotateY(angle);
+        return this;
+    }
+    public RCGQuaternion rotateZ(float angle){
+        quaternion.rotateZ(angle);
+        return this;
+    }
+    public RCGQuaternion identity(){
+        quaternion.identity();
+        return this;
+    }
+    public Quaternionf getQuaternion(){
+        return quaternion;
     }
     /*public RCGQuaternion rotationTo(float fromDirX, float fromDirY, float fromDirZ, float toDirX, float toDirY, float toDirZ){
         float fn = Math.invsqrt(Math.fma(fromDirX, fromDirX, Math.fma(fromDirY, fromDirY, fromDirZ * fromDirZ)));

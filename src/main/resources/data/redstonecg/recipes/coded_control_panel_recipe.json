@@ -1,0 +1,12 @@
+{
+    "type": "redstonecg:redcu_crafting",
+    "designation": "interaction/normal",
+    "ingredients": [
+        { "item": "redstonecg:control_panel"},
+        { "item": "redstonecg:normal_binary_encoder" },
+        { "item": "redstonecg:normal_binary_decoder" }
+    ],
+    "outputs": [
+        { "id": "redstonecg:coded_control_panel", "Count": 1, "count": 1 }
+    ]
+}

@@ -134,6 +134,15 @@ public class RedstonecgModBlockEntities {
 			(BlockPos position, BlockState state) -> new ControlPanelBlockEntity(position, state, 1),
 			RedstonecgModBlocks.CONTROL_PANEL.get()
 	).build(null));
+	public static final RegistryObject<BlockEntityType<CodedControlPanelBlockEntity>> CODED_CONTROL_PANEL = REGISTRY.register("coded_control_panel", () -> BlockEntityType.Builder.of(
+			(BlockPos position, BlockState state) -> new CodedControlPanelBlockEntity(position, state, 4),
+			RedstonecgModBlocks.CODED_CONTROL_PANEL.get()
+	).build(null));
+	public static final RegistryObject<BlockEntityType<RedToggleBlockEntity>> RED_TOGGLE = REGISTRY.register("red_toggle", () -> BlockEntityType.Builder.of(
+			RedToggleBlockEntity::new,
+			RedstonecgModBlocks.RED_SWITCH.get(),
+			RedstonecgModBlocks.RED_BUTTON.get()
+	).build(null));
 
 	private static RegistryObject<BlockEntityType<?>> register(String registryname, RegistryObject<Block> block, BlockEntityType.BlockEntitySupplier<?> supplier) {
 		return REGISTRY.register(registryname, () -> BlockEntityType.Builder.of(supplier, block.get()).build(null));

@@ -65,13 +65,22 @@ public class AnalogSourceGUIButtonMessage extends ButtonMessage {
 		if (buttonID >= 8) {
 			BlockState ThisBlock = world.getBlockState(pos);
 			if (ThisBlock.getBlock() instanceof AnalogSourceBlock b) {
-				b.setPower(world, ThisBlock, pos, entity, range[0] + buttonID - 8);
+				b.setPower(world, ThisBlock, pos, entity, buttonID - 8);
 			}
 		}
-		if (buttonID == 2) {
-			OnBlockRightClickedProcedure.execute(world, pos);
+		if (buttonID > 2 && buttonID < 7) {
+			//OnBlockRightClickedProcedure.execute(world, pos);
+			BlockState ThisBlock = world.getBlockState(pos);
+			int i = buttonID - 3;
+			int connection = ThisBlock.getValue(AnalogSourceBlock.CONNECTION) + 1;
+			connection ^= 1 << i;
+			connection--;
+			if(connection < 0)
+				connection = 14;
+			ThisBlock = ThisBlock.setValue(AnalogSourceBlock.CONNECTION, connection);
+			world.setBlock(pos, ThisBlock, 3);
 		}
-		if (buttonID == 3) {
+		if (buttonID == 2) {
 			boolean be_changed = false;
 			EditBox range_box_start = (EditBox)guistate.get("box:range_box_start");
 			EditBox range_box_end = (EditBox)guistate.get("box:range_box_end");

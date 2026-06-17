@@ -1,0 +1,7 @@
+{
+  "parent": "redstonecg:custom/control_panel/o2f",
+  "textures": {
+    "2": "redstonecg:block/coded_control_panel_face"
+  },
+  "render_type": "solid"
+}

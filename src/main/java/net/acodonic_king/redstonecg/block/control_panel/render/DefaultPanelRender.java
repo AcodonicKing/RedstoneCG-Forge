@@ -5,4 +5,5 @@ import net.acodonic_king.redstonecg.block.entity.ControlPanelBlockEntityRenderer
 
 public interface DefaultPanelRender {
     void render(ControlPanelBlockEntityRenderer ber, DefaultPanelLogic dpl);
+    default void renderText(ControlPanelBlockEntityRenderer ber, DefaultPanelLogic dpl){}
 }

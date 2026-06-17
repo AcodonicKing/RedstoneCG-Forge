@@ -17,7 +17,7 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import javax.annotation.Nullable;
 
 public class DefaultParallelDigitalAGate extends DefaultParallelGate implements EntityBlock {
-    //public static final BooleanProperty OUTPUT = BooleanProperty.create("output");
+    //public static final BooleanProperty STATE = BooleanProperty.create("output");
     public static final BooleanProperty VISIBLE_STATE = BooleanProperty.create("visible_state");
     public DefaultParallelDigitalAGate(){
         super();

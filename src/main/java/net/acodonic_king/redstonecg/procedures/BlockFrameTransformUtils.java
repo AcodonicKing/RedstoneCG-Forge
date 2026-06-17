@@ -20,6 +20,11 @@ public class BlockFrameTransformUtils {
     public static final Direction CW180 = Direction.SOUTH;
     public static final Direction CW270 = Direction.WEST;
 
+    public static final Direction CCW0 = Direction.NORTH;
+    public static final Direction CCW90 = Direction.WEST;
+    public static final Direction CCW180 = Direction.SOUTH;
+    public static final Direction CCW270 = Direction.EAST;
+
     public static Direction[] all(BlockState blockState){
         Direction directionA = LittleTools.getDirection(blockState);
         Direction directionB = LittleTools.getDirectionB(blockState);
@@ -370,11 +375,11 @@ public class BlockFrameTransformUtils {
         };
     }
 
-    public static double getRadiansFromDirectionY(Direction dir) {
+    public static float getRadiansFromDirectionY(Direction dir) {
         return switch (dir) {
-            case EAST -> Math.PI * 0.5;
-            case SOUTH -> Math.PI;
-            case WEST -> Math.PI * 1.5;
+            case EAST -> RCGMatrix.ANGLES[1];
+            case SOUTH -> RCGMatrix.ANGLES[2];
+            case WEST -> RCGMatrix.ANGLES[3];
             default -> 0;
         };
     }

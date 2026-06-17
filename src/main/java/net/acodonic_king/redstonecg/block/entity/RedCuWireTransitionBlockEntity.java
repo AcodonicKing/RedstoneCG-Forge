@@ -2,6 +2,7 @@ package net.acodonic_king.redstonecg.block.entity;
 
 import net.acodonic_king.redstonecg.block.gui.redcu_wire_transition.RedCuWireTransitionGUIMenu;
 import io.netty.buffer.Unpooled;
+import net.acodonic_king.redstonecg.block.normal.wire.RedCuWireTransitionBlock;
 import net.acodonic_king.redstonecg.init.RedstonecgModBlockEntities;
 import net.acodonic_king.redstonecg.procedures.RedCuWireTransitionPathFinder;
 import net.acodonic_king.redstonecg.procedures.RedCuWireTransitionRenderEncoding;
@@ -13,6 +14,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.*;
@@ -157,6 +159,14 @@ public class RedCuWireTransitionBlockEntity extends DefaultContainerBlockEntity 
         WALLS = tag.getByte("walls");
         //RedstonecgMod.LOGGER.debug("loading additional {} {} {} {} {} {}", (int)DOWN, (int)NORTH, (int)EAST, (int)SOUTH, (int)WEST, (int)UP);
         pathFind();
+        /*Level level = this.getLevel();
+        if(level != null) {
+            BlockState blockState = this.getBlockState();
+            int m = blockState.getValue(RedCuWireTransitionBlock.MODEL);
+            m++;
+            m &= 1;
+            this.getLevel().sendBlockUpdated(this.getBlockPos(), blockState, blockState.setValue(RedCuWireTransitionBlock.MODEL, m), 3);
+        }*/
     }
 
     public void pathFind(){

@@ -1,8 +1,27 @@
 package net.acodonic_king.redstonecg.procedures;
 
+import org.joml.Matrix3f;
 import org.joml.Matrix4f;
 
 public class RCGMatrix {
+    public static float[] ANGLES = new float[]{
+            (float) (Math.PI * 0.0),
+            (float) (Math.PI * 0.5),
+            (float) (Math.PI * 1.0),
+            (float) (Math.PI * 1.5),
+    };
+
+    public static class M3F extends Matrix3f{
+        public M3F(){
+            super();
+        }
+        public M3F(Matrix3f pose){super(pose);}
+        public M3F set(Matrix3f pose){
+            super.set(pose);
+            return this;
+        }
+        public Matrix3f getMatrix(){return this;}
+    }
     public static class M4F extends Matrix4f{
         public M4F(){
             super();
@@ -10,6 +29,16 @@ public class RCGMatrix {
 
         public M4F(Matrix4f pose) {
             super(pose);
+        }
+
+        public M4F set(Matrix4f pose){
+            super.set(pose);
+            return this;
+        }
+
+        public M4F set(M4F pose){
+            super.set(pose);
+            return this;
         }
 
         public Matrix4f getMatrix(){

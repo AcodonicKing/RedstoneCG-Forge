@@ -25,6 +25,8 @@ public class RedCuWireTransitionBlockEntityRenderer implements BlockEntityRender
         this.context = context;
     }
 
+    RCGQuaternion rotater = new RCGQuaternion();
+
     @Override
     public void render(RedCuWireTransitionBlockEntity blockEntity, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, int packedOverlay) {
         ModelManager modelManager = Minecraft.getInstance().getModelManager();
@@ -39,7 +41,7 @@ public class RedCuWireTransitionBlockEntityRenderer implements BlockEntityRender
             blockEntity.ticks %= (float) (Math.PI * 20);
             poseStack.pushPose();
             poseStack.translate(0.5, 0.5, 0.5);
-            poseStack.mulPose(RCGQuaternion.Vector3F.rotateYP(blockEntity.ticks / 20).quaternion);
+            poseStack.mulPose(rotater.identity().rotateY(blockEntity.ticks / 20).getQuaternion());
             //poseStack.translate(-0.5, -0.5, -0.5);
             ItemRenderer itemRenderer = Minecraft.getInstance().getItemRenderer();
             RedstonecgModVersionRides.renderStaticItem(

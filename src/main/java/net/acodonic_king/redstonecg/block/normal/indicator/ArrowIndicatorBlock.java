@@ -6,13 +6,11 @@ import net.acodonic_king.redstonecg.block.defaults.FlooringInterface;
 import net.acodonic_king.redstonecg.block.defaults.PinMarkConnectionInterface;
 import net.acodonic_king.redstonecg.block.defaults.RedstoneSignalInterface;
 import net.acodonic_king.redstonecg.block.defaults.SuperBlock;
+import net.acodonic_king.redstonecg.block.entity.AnalogSourceBlockEntity;
 import net.acodonic_king.redstonecg.block.entity.ArrowIndicatorBlockEntity;
-import net.acodonic_king.redstonecg.block.entity.DefaultAnalogIndicatorBlockEntity;
-import net.acodonic_king.redstonecg.block.gui.analog_source.AnalogSourceGUIMenu;
 import net.acodonic_king.redstonecg.block.gui.arrow_indicator.ArrowIndicatorGUIMenu;
 import net.acodonic_king.redstonecg.init.RedstonecgModItems;
 import net.acodonic_king.redstonecg.init.RedstonecgModVersionRides;
-import net.acodonic_king.redstonecg.network.MessengerBlockEntityPigeon;
 import net.acodonic_king.redstonecg.network.RedstonecgModVariables;
 import net.acodonic_king.redstonecg.procedures.*;
 import net.minecraft.core.BlockPos;
@@ -51,6 +49,8 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ArrowIndicatorBlock extends SuperBlock implements SimpleWaterloggedBlock, EntityBlock, FlooringInterface, RedstoneSignalInterface, PinMarkConnectionInterface {
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
@@ -85,13 +85,13 @@ public class ArrowIndicatorBlock extends SuperBlock implements SimpleWaterlogged
     @Override
     public VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
         if (world.getBlockEntity(pos) instanceof ArrowIndicatorBlockEntity be) {
-            return switch (be.FACING) {
-                case DOWN -> box(0, 0, 0, 16, 2, 16);
-                case NORTH -> box(0, 0, 0, 16, 16, 2);
-                case EAST -> box(14, 0, 0, 16, 16, 16);
-                case SOUTH -> box(0, 0, 14, 16, 16, 16);
-                case WEST -> box(0, 0, 0, 2, 16, 16);
-                case UP -> box(0, 14, 0, 16, 16, 16);
+            return switch (be.getFacingIndex()) {
+                case 0 -> box(0, 0, 0, 16, 2, 16);
+                case 1 -> box(0, 0, 0, 16, 16, 2);
+                case 2 -> box(14, 0, 0, 16, 16, 16);
+                case 3 -> box(0, 0, 14, 16, 16, 16);
+                case 4 -> box(0, 0, 0, 2, 16, 16);
+                default -> box(0, 14, 0, 16, 16, 16);
             };
         }
         return box(0, 0, 0, 16, 2, 16);
@@ -124,16 +124,17 @@ public class ArrowIndicatorBlock extends SuperBlock implements SimpleWaterlogged
                 if(context == null){return;}
                 Direction clickedFace = context.getClickedFace().getOpposite();
                 Direction lookDirection = context.getHorizontalDirection();
-                be.FACING = clickedFace;
+
+                be.setFacing(clickedFace);
                 if(clickedFace == Direction.UP){
-                    be.ROTATION = switch (lookDirection){
+                    be.setRotation(switch (lookDirection){
                         case NORTH, SOUTH -> lookDirection.getOpposite();
                         default -> lookDirection;
-                    };
+                    });
                 } else if (clickedFace == Direction.DOWN){
-                    be.ROTATION = lookDirection;
+                    be.setRotation(lookDirection);
                 }
-                be.modelUpdate();
+
                 be.setChanged();
                 this.redstoneUpdate(level, pos);
             }
@@ -143,25 +144,39 @@ public class ArrowIndicatorBlock extends SuperBlock implements SimpleWaterlogged
     @Override
     public void setPlacedBy(Level level, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack) {
         if (level.isClientSide) return;
-        if (!stack.hasTag()) return;
-        CompoundTag tag = stack.getTag();
-        if (!tag.contains("BlockParameterSet")) return;
-        tag = tag.getCompound("BlockParameterSet");
         if (level.getBlockEntity(pos) instanceof ArrowIndicatorBlockEntity be){
-            if (tag.contains("connection"))
-                state = state.setValue(CONNECTION, tag.getInt("connection"));
-            be.setParameterSet(tag);
+            if(stack.hasTag()) {
+                CompoundTag tag = stack.getTag();
+                if (tag.contains("BlockParameterSet")) {
+                    tag = tag.getCompound("BlockParameterSet");
+                    if (tag.contains("connection"))
+                        state = state.setValue(CONNECTION, tag.getInt("connection"));
+                    be.setParameterSet(tag);
+                }
+            }
+            be.setName(stack);
             be.setChanged();
-            level.sendBlockUpdated(pos, state, state, 3);
+            level.setBlock(pos, state, 3);
             level.scheduleTick(pos, state.getBlock(), 1);
         }
     }
+    @Override
+    public List<ItemStack> getDrops(List<ItemStack> drops, BlockState state, BlockEntity entity) {
+        drops.clear();
+        ItemStack stack = new ItemStack(asItem());
+        if(entity instanceof ArrowIndicatorBlockEntity sbe)
+            if(!sbe.CUSTOM_NAME.isEmpty())
+                stack.setHoverName(Component.literal(sbe.CUSTOM_NAME));
+        drops.add(stack);
+        return drops;
+    }
+
     @Override
     public boolean canSurvive(BlockState blockstate, LevelReader worldIn, BlockPos pos) {
         if(RedstonecgModVariables.MapVariables.get((LevelAccessor) worldIn).canSurviveAnyCase){return true;}
         if (worldIn instanceof LevelAccessor world) {
             if (world.getBlockEntity(pos) instanceof ArrowIndicatorBlockEntity be) {
-                return GateBlockValidPlacementConditionProcedure.execute(world, pos, be.FACING);
+                return GateBlockValidPlacementConditionProcedure.execute(world, pos, be.getFacing());
             }
         }
         return super.canSurvive(blockstate, worldIn, pos);
@@ -186,7 +201,7 @@ public class ArrowIndicatorBlock extends SuperBlock implements SimpleWaterlogged
             ConnectionFace connectionFaceB = BlockFrameTransformUtils.canConnectRedstoneTargetConnectionFace(world, pos, side);
             int connection = blockState.getValue(CONNECTION);
             connection ++;
-            return CanConnectWallGateProcedure.execute(be.ROTATION, be.FACING, connection, connectionFaceB);
+            return CanConnectWallGateProcedure.execute(be.getRotation(), be.getFacing(), connection, connectionFaceB);
         }
         return false;
     }
@@ -199,11 +214,11 @@ public class ArrowIndicatorBlock extends SuperBlock implements SimpleWaterlogged
             BlockState ThisBlock = (world.getBlockState(pos));
             int power = 0;
             for (Direction side : GetGateInputSidesProcedure.Get1_4GateForth(ThisBlock)) {
-                ConnectionFace connectionFaceA = BlockFrameTransformUtils.getConnectionFace(be.ROTATION,be.FACING,side);
+                ConnectionFace connectionFaceA = BlockFrameTransformUtils.getConnectionFace(be.getRotation(),be.getFacing(),side);
                 power = Math.max(power, GetRedstoneSignalProcedure.executeWire(world, pos, connectionFaceA));
             }
             if(be.BASE_READ){
-                ConnectionFace connectionFaceA = BlockFrameTransformUtils.getConnectionFace(be.ROTATION,be.FACING,Direction.DOWN);
+                ConnectionFace connectionFaceA = BlockFrameTransformUtils.getConnectionFace(be.getRotation(),be.getFacing(),Direction.DOWN);
                 connectionFaceA.CHANNEL = 4;
                 power = Math.max(power, GetRedstoneSignalProcedure.executeWire(world, pos, connectionFaceA));
             }
@@ -270,28 +285,14 @@ public class ArrowIndicatorBlock extends SuperBlock implements SimpleWaterlogged
         return new ArrowIndicatorBlockEntity(pos, state);
     }
 
-    public Direction getFacing(LevelAccessor level, BlockPos pos){
-        if(level.getBlockEntity(pos) instanceof ArrowIndicatorBlockEntity be){
-            return be.FACING;
-        }
-        return null;
-    }
-
-    public Direction getRotation(LevelAccessor level, BlockPos pos){
-        if(level.getBlockEntity(pos) instanceof ArrowIndicatorBlockEntity be){
-            return be.ROTATION;
-        }
-        return null;
-    }
-
     @Override
     public int floorIt(Level level, BlockPos pos) {
         if(level.getBlockEntity(pos) instanceof ArrowIndicatorBlockEntity be){
-            Direction facing = be.FACING;
+            Direction facing = be.getFacing();
             if(facing.getAxis() != Direction.Axis.Y){
-                be.ROTATION = facing;
+                be.setRotation(facing);
             }
-            be.FACING = Direction.DOWN;
+            be.setFacing(Direction.DOWN);
             be.setChanged();
             level.sendBlockUpdated(pos, be.getBlockState(), be.getBlockState(), 2);
             return 1;

@@ -1,12 +1,16 @@
 package net.acodonic_king.redstonecg.block.gui.analog_source;
 
 import net.acodonic_king.redstonecg.block.entity.AnalogSourceBlockEntity;
+import net.acodonic_king.redstonecg.block.gui.control_panel.ControlPanelGUIButtonMessage;
+import net.acodonic_king.redstonecg.block.gui.pinmark_configurator.PinmarkConfiguratorLogic;
+import net.acodonic_king.redstonecg.block.gui.pinmark_configurator.PinmarkConfiguratorWidget;
 import net.acodonic_king.redstonecg.block.normal.analog.AnalogSourceBlock;
 import net.acodonic_king.redstonecg.default_gui_classes.AbstractContainerScreenRide;
 import net.acodonic_king.redstonecg.default_gui_classes.ScreenTools;
 import net.acodonic_king.redstonecg.default_gui_classes.TypingBox;
 import net.acodonic_king.redstonecg.init.RedstonecgModVersionRides;
 import net.acodonic_king.redstonecg.procedures.AdventureProcedure;
+import net.acodonic_king.redstonecg.procedures.RotatableQuad;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.entity.player.Player;
@@ -26,11 +30,13 @@ public class AnalogSourceGUIScreen extends AbstractContainerScreenRide<AnalogSou
 	private final Level world;
 	private final BlockPos pos;
 	private final Player entity;
-	Button button_add;
-	Button button_sub;
-	Button button_change;
-	TypingBox range_box_start;
-	TypingBox range_box_end;
+	private Button button_add;
+	private Button button_sub;
+	private Button button_change;
+	private TypingBox range_box_start;
+	private TypingBox range_box_end;
+	private final RotatableQuad crank_quad = new RotatableQuad().cx(32f).cy(32f).w(64f).h(64f);
+	public final PinmarkConfiguratorWidget pinConfig = new PinmarkConfiguratorWidget();
 
 	public AnalogSourceGUIScreen(AnalogSourceGUIMenu container, Inventory inventory, Component text) {
 		super(container, inventory, text);
@@ -47,43 +53,6 @@ public class AnalogSourceGUIScreen extends AbstractContainerScreenRide<AnalogSou
 	private static final ResourceLocation pinmark_r = ScreenTools.getImage("redstonecg","textures/block/pins/r.png");
 	private static final ResourceLocation pinmark_b = ScreenTools.getImage("redstonecg","textures/block/pins/b.png");
 	private static final ResourceLocation pinmark_l = ScreenTools.getImage("redstonecg","textures/block/pins/l.png");
-
-	private static float[][] crank_rectoid = new float[][]{
-			{ 0f,  0f, 0f, 1f},
-			{57f,  0f, 0f, 0f},
-			{57f, 21f, 1f, 0f},
-			{ 0f, 21f, 1f, 1f}
-	};
-
-	private float rotateX(float x, float y, double ang_cos, double ang_sin){
-		return (float) (x * ang_cos - y * ang_sin);
-	}
-	private float rotateY(float x, float y, double ang_cos, double ang_sin){
-		return (float) (x * ang_sin + y * ang_cos);
-	}
-	private void setCrankRectoid(int x, int y, float angle){
-		final float corn = 32f;
-		double ang_cos = Math.cos(-angle);
-		double ang_sin = Math.sin(-angle);
-		crank_rectoid[0][0] = rotateX(-corn, -corn, ang_cos, ang_sin);
-		crank_rectoid[0][1] = rotateY(-corn, -corn, ang_cos, ang_sin);
-
-		crank_rectoid[3][0] = rotateX(corn, -corn, ang_cos, ang_sin);
-		crank_rectoid[3][1] = rotateY(corn, -corn, ang_cos, ang_sin);
-
-		crank_rectoid[2][0] = rotateX(corn, corn, ang_cos, ang_sin);
-		crank_rectoid[2][1] = rotateY(corn, corn, ang_cos, ang_sin);
-
-		crank_rectoid[1][0] = rotateX(-corn, corn, ang_cos, ang_sin);
-		crank_rectoid[1][1] = rotateY(-corn, corn, ang_cos, ang_sin);
-
-		float add_x = this.leftPos + x;
-		float add_y = this.topPos + y;
-		for(int i = 0; i < crank_rectoid.length; i++){
-			crank_rectoid[i][0] += add_x;
-			crank_rectoid[i][1] += add_y;
-		}
-	}
 
 	@Override
 	public void render(ScreenStack ms, int mouseX, int mouseY, float partialTicks) {
@@ -120,10 +89,12 @@ public class AnalogSourceGUIScreen extends AbstractContainerScreenRide<AnalogSou
 			//tp = this.topPos + ((this.imageHeight - 64) / 2);
 			//int power = be.POWER;
 			//ScreenTools.blitSetTextureRegion(ms,lp,tp,64,64,power * 64,0,1024,64);
-			setCrankRectoid(65, 64, be.ANGLE);
-			ScreenTools.blitSetTextureRectaroid(ms, crank_rectoid, 1);
+			crank_quad.px(this.leftPos + 65).py(this.topPos + 64).radians(-be.ANGLE).transform();
+			//setCrankRectoid(65, 64, be.ANGLE);
+			ScreenTools.blitSetTextureRectaroid(ms, crank_quad.RECTOID, 1);
 		}
-
+		pinConfig.LOGIC.setStates(connection);
+		pinConfig.render(this, ms, this.leftPos + 140, this.topPos + 91, gx, gy);
 		RenderSystem.disableBlend();
 	}
 
@@ -140,7 +111,7 @@ public class AnalogSourceGUIScreen extends AbstractContainerScreenRide<AnalogSou
 			range_box_end.setFocused(false);
 			return true;
 		}
-		if(button == 0) {
+		if(button == 0 && pos != null) {
 			if(AdventureProcedure.valueConfig(world, entity)) {
 				int lp = this.leftPos + 65;
 				int tp = this.topPos + (this.imageHeight / 2);
@@ -148,21 +119,43 @@ public class AnalogSourceGUIScreen extends AbstractContainerScreenRide<AnalogSou
 				tp = (int) (mouseY - tp);
 				int ra = lp * lp + tp * tp;
 				if (ra <= 47 * 47) {
+					if(world.getBlockEntity(pos) instanceof AnalogSourceBlockEntity be) {
+						ScreenTools.playClickSound();
+						int rs = be.POWER_RANGE[0];
+						int re = be.POWER_RANGE[1];
+						int size = Math.abs(re-rs) + 1;
+						double angle = Math.atan2(tp, lp);
+						angle /= 2 * Math.PI;
+						angle += 1.25;
+						angle += 0.5 / ((double) size);
+						angle %= 1;
+						int sec = (int) (angle * size);
+						if(rs > re) {
+							sec = rs - sec + 1;
+							if(sec > rs)
+								sec = re;
+						} else
+							sec = rs + sec;
+						sec += 8;
+						AnalogSourceGUIButtonMessage.sendAndHandle(entity, sec, this.pos);
+					}
+				}
+			}
+			if(AdventureProcedure.pinConfig(world, entity)){
+				int s = pinConfig.onMouse(true);
+				if(s != -1){
 					ScreenTools.playClickSound();
-					double angle = Math.atan2(tp, lp);
-					if (angle > 0)
-						angle += Math.PI / 16;
-					else if (angle < 0)
-						angle -= Math.PI / 16;
-					int sec = (int) (angle / (Math.PI / 8));
-					sec += 20;
-					sec &= 15;
-					sec += 8;
-					AnalogSourceGUIButtonMessage.sendAndHandle(entity, sec, this.pos);
+					AnalogSourceGUIButtonMessage.sendAndHandle(entity, 3 + s, this.pos);
 				}
 			}
 		}
 		return super.mouseClicked(mouseX, mouseY, button);
+	}
+
+	@Override
+	public boolean mouseReleased(double mouseX, double mouseY, int button){
+		pinConfig.onMouse(false);
+		return super.mouseReleased(mouseX, mouseY, button);
 	}
 
 	@Override
@@ -173,7 +166,7 @@ public class AnalogSourceGUIScreen extends AbstractContainerScreenRide<AnalogSou
 		}
 		if (key == GLFW.GLFW_KEY_ENTER || key == GLFW.GLFW_KEY_KP_ENTER) {
 			if (range_box_start.isFocused() || range_box_end.isFocused()){
-				AnalogSourceGUIButtonMessage msg = new AnalogSourceGUIButtonMessage(3, pos);
+				AnalogSourceGUIButtonMessage msg = new AnalogSourceGUIButtonMessage(2, pos);
 				msg.tag.putString("range_start", range_box_start.getValue());
 				msg.tag.putString("range_end", range_box_end.getValue());
 				AnalogSourceGUIButtonMessage.sendAndHandle(entity, msg);
@@ -205,8 +198,12 @@ public class AnalogSourceGUIScreen extends AbstractContainerScreenRide<AnalogSou
 			int lp = 64 - 2;
 			int tp = 64 - 4;
 			float angle = 0;
-			float da = (float) ((2 * Math.PI) / (be.POWER_RANGE[1] - be.POWER_RANGE[0] + 1));
-			for(int r = be.POWER_RANGE[0]; r <= be.POWER_RANGE[1]; r++){
+			int rs = Math.min(be.POWER_RANGE[0],be.POWER_RANGE[1]);
+			int re = Math.max(be.POWER_RANGE[0],be.POWER_RANGE[1]);
+			float da = (float) ((2 * Math.PI) / (re - rs + 1));
+			if(be.POWER_RANGE[0] > be.POWER_RANGE[1])
+				da = -da;
+			for(int r = rs; r <= re; r++){
 				int x = (int) (lp + Math.sin(angle) * 40);
 				int y = (int) (tp - Math.cos(angle) * 40);
 				if(r > 9)
@@ -222,6 +219,7 @@ public class AnalogSourceGUIScreen extends AbstractContainerScreenRide<AnalogSou
 		super.init();
 		int lp = this.leftPos + 152;
 		int[] range = new int[]{0,15};
+		BlockState blockState = world.getBlockState(pos);
 		if(world.getBlockEntity(pos) instanceof AnalogSourceBlockEntity be)
 			range = be.POWER_RANGE;
 
@@ -253,11 +251,13 @@ public class AnalogSourceGUIScreen extends AbstractContainerScreenRide<AnalogSou
 		if(AdventureProcedure.pinConfig(world, entity)){
 			lp -= 11;
 			int tp = this.topPos + this.imageHeight - 25;
-			button_change = RedstonecgModVersionRides.createButton(lp, tp, 56, 20, "gui.redstonecg.analog_source_gui.button_change", e -> {
+			/*button_change = RedstonecgModVersionRides.createButton(lp, tp, 56, 20, "gui.redstonecg.analog_source_gui.button_change", e -> {
 				AnalogSourceGUIButtonMessage.sendAndHandle(entity, 2, this.pos);
 			});
 			guistate.put("button:button_change", button_change);
-			this.addRenderableWidget(button_change);
+			this.addRenderableWidget(button_change);*/
+			pinConfig.LOGIC.pinAll(PinmarkConfiguratorLogic.PINMARK_A).pinDown(PinmarkConfiguratorLogic.DISABLED_TYPE);
+			pinConfig.LOGIC.setStates(blockState.getValue(AnalogSourceBlock.CONNECTION) + 1);
 		}
 	}
 }

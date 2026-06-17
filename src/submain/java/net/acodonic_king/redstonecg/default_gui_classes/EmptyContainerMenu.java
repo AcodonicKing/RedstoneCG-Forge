@@ -23,8 +23,8 @@ import java.util.function.Supplier;
 
 public class EmptyContainerMenu extends AbstractContainerMenu implements Supplier<Map<Integer, Slot>> {
     public final static HashMap<String, Object> guistate = new HashMap<>();
-    public final Level world;
-    public final Player entity;
+    public Level world;
+    public Player entity;
     public int container_size;
     public BlockPos pos;
     public ContainerLevelAccess access = ContainerLevelAccess.NULL;
@@ -35,6 +35,9 @@ public class EmptyContainerMenu extends AbstractContainerMenu implements Supplie
     public Entity boundEntity = null;
     public BlockEntity boundBlockEntity = null;
 
+    public EmptyContainerMenu(MenuType<?> gui_menu, int id){
+        super(gui_menu, id);
+    }
     public EmptyContainerMenu(MenuType<?> gui_menu, int container_size, int id, Inventory inv, FriendlyByteBuf extraData) {
         super(gui_menu, id);
         this.entity = inv.player;

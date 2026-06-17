@@ -8,4 +8,5 @@ import net.minecraft.world.level.block.state.BlockState;
 public interface ParallelGateInterface {
     boolean breakParallelLine(LevelAccessor world, BlockState thisState, BlockPos thisPos, Direction directedTo, boolean readOut);
     int breakParallelLineSignal(LevelAccessor world, BlockState thisState, BlockPos thisPos, Direction directedTo);
+    int onRedstoneUpdate(LevelAccessor world, BlockState thisState, BlockPos thisPos, BlockPos fromPos, int recursion);
 }

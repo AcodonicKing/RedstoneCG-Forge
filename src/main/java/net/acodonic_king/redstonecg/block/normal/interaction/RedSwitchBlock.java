@@ -2,21 +2,28 @@ package net.acodonic_king.redstonecg.block.normal.interaction;
 
 import net.acodonic_king.redstonecg.block.defaults.DefaultRedstoneActionGate;
 import net.acodonic_king.redstonecg.block.defaults.PinMarkConnectionInterface;
+import net.acodonic_king.redstonecg.block.entity.AnalogSourceBlockEntity;
+import net.acodonic_king.redstonecg.block.entity.RedToggleBlockEntity;
 import net.acodonic_king.redstonecg.init.RedstonecgModItems;
 import net.acodonic_king.redstonecg.init.RedstonecgModVersionRides;
 import net.acodonic_king.redstonecg.procedures.*;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.EntityBlock;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
@@ -28,7 +35,10 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-public class RedSwitchBlock extends DefaultRedstoneActionGate implements PinMarkConnectionInterface {
+import java.util.ArrayList;
+import java.util.List;
+
+public class RedSwitchBlock extends DefaultRedstoneActionGate implements EntityBlock, PinMarkConnectionInterface {
     public static final IntegerProperty CONNECTION = IntegerProperty.create("connection",0,14);
     public static final BooleanProperty STATE = BooleanProperty.create("state");
 
@@ -151,5 +161,50 @@ public class RedSwitchBlock extends DefaultRedstoneActionGate implements PinMark
     @Override
     public String getMeasurement(LevelAccessor world, BlockState blockState, BlockPos pos){
         return String.format("%1d",blockState.getValue(STATE) ? 15 : 0);
+    }
+
+    @Override
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+        return new RedToggleBlockEntity(pos, state);
+    }
+
+    @Override
+    public boolean triggerEvent(BlockState state, Level world, BlockPos pos, int eventID, int eventParam) {
+        super.triggerEvent(state, world, pos, eventID, eventParam);
+        BlockEntity blockEntity = world.getBlockEntity(pos);
+        return blockEntity == null ? false : blockEntity.triggerEvent(eventID, eventParam);
+    }
+
+    @Override
+    public void setPlacedBy(Level level, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack) {
+        if (level.isClientSide) return;
+        if (level.getBlockEntity(pos) instanceof RedToggleBlockEntity be){
+            be.setName(stack);
+            be.setChanged();
+            level.setBlock(pos, state, 3);
+            level.scheduleTick(pos, state.getBlock(), 1);
+        }
+    }
+
+    @Override
+    public List<ItemStack> getDrops(List<ItemStack> drops, BlockState state, BlockEntity entity) {
+        drops.clear();
+        ItemStack stack = new ItemStack(asItem());
+        if(entity instanceof RedToggleBlockEntity sbe)
+            if(!sbe.CUSTOM_NAME.isEmpty())
+                stack.setHoverName(Component.literal(sbe.CUSTOM_NAME));
+        drops.add(stack);
+        return drops;
+    }
+
+    public RCGMatrix.M4F stateTransformer(RCGMatrix.M4F mat, BlockState state){
+        return stateTransformer(mat, state.getValue(STATE));
+    }
+
+    public RCGMatrix.M4F stateTransformer(RCGMatrix.M4F mat, boolean state){
+        if(state)
+            mat.rotateZ(RCGMatrix.ANGLES[1] * 0.5f);
+        mat.translate(0,0,-0.125f);
+        return mat;
     }
 }

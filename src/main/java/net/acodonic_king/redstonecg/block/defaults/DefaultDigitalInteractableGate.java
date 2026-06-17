@@ -21,7 +21,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import javax.annotation.Nullable;
 
 public class DefaultDigitalInteractableGate extends DefaultRedstoneActionGate implements EntityBlock {
-    //public static final BooleanProperty OUTPUT = BooleanProperty.create("output");
+    //public static final BooleanProperty STATE = BooleanProperty.create("output");
     public static final BooleanProperty VISIBLE_STATE = BooleanProperty.create("visible_state");
     public DefaultDigitalInteractableGate(){super();}
     @Override

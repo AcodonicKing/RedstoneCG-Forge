@@ -110,6 +110,13 @@ public class RedstonecgModItems {
 					RedstonecgModVersionRides.getDefaultItemProperties()
 			)
 	);
+	public static final RegistryObject<Item> CODED_CONTROL_PANEL = itemBlock(
+			RedstonecgModBlocks.CODED_CONTROL_PANEL,
+			() -> new ControlPanelItem(
+					RedstonecgModBlocks.CODED_CONTROL_PANEL.get(),
+					RedstonecgModVersionRides.getDefaultItemProperties()
+			)
+	);
 	//Parallel Digital
 	public static final RegistryObject<Item> PARALLEL_AND = block(RedstonecgModBlocks.PARALLEL_AND);
 	public static final RegistryObject<Item> PARALLEL_OR = block(RedstonecgModBlocks.PARALLEL_OR);

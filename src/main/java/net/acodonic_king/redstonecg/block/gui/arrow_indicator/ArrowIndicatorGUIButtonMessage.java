@@ -2,6 +2,8 @@ package net.acodonic_king.redstonecg.block.gui.arrow_indicator;
 
 import net.acodonic_king.redstonecg.RedstonecgMod;
 import net.acodonic_king.redstonecg.block.entity.ArrowIndicatorBlockEntity;
+import net.acodonic_king.redstonecg.block.normal.analog.AnalogSourceBlock;
+import net.acodonic_king.redstonecg.block.normal.indicator.ArrowIndicatorBlock;
 import net.acodonic_king.redstonecg.default_gui_classes.ButtonMessage;
 import net.acodonic_king.redstonecg.init.RedstonecgModVersionRides;
 import net.acodonic_king.redstonecg.network.MessengerBlockEntityPigeon;
@@ -14,6 +16,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.HashMap;
 
@@ -67,6 +70,29 @@ public class ArrowIndicatorGUIButtonMessage extends ButtonMessage {
                 be.BASE_READ = !be.BASE_READ;
                 be_changed = true;
             }
+        if (buttonID > 7 && buttonID < 13) {
+            //OnBlockRightClickedProcedure.execute(world, pos);
+            int i = buttonID - 8;
+            if(i == 4){
+                if (blockEntity instanceof ArrowIndicatorBlockEntity be) {
+                    be.BASE_READ = !be.BASE_READ;
+                    be_changed = true;
+                }
+            } else {
+                BlockState ThisBlock = world.getBlockState(pos);
+                int connection = ThisBlock.getValue(ArrowIndicatorBlock.CONNECTION) + 1;
+                if(connection == 16)
+                    connection = 0;
+                //RedstonecgMod.LOGGER.debug(connection+" "+i);
+                connection ^= 1 << i;
+                connection--;
+                if (connection < 0) {
+                    connection = 15;
+                }
+                ThisBlock = ThisBlock.setValue(ArrowIndicatorBlock.CONNECTION, connection);
+                world.setBlock(pos, ThisBlock, 3);
+            }
+        }
         if (buttonID == 0) {
             EditBox range_box_start = (EditBox)guistate.get("box:range_box_start");
             EditBox range_box_end = (EditBox)guistate.get("box:range_box_end");

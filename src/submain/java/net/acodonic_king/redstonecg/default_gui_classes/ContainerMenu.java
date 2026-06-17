@@ -9,12 +9,21 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.SlotItemHandler;
 import org.jetbrains.annotations.NotNull;
 
 public class ContainerMenu extends EmptyContainerMenu{
+    public ContainerMenu(MenuType<?> gui_menu, int id){
+        super(gui_menu, id);
+    }
+
     public ContainerMenu(MenuType<?> gui_menu, int container_size, int id, Inventory inv, FriendlyByteBuf extraData) {
         super(gui_menu, container_size, id, inv, extraData);
+    }
+
+    public void setInternal(){
+        this.internal = new ItemStackHandler(this.container_size);
     }
 
     public void checkForBind(FriendlyByteBuf extraData){

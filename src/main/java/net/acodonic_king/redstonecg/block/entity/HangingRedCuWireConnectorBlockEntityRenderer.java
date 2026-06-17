@@ -52,9 +52,9 @@ public class HangingRedCuWireConnectorBlockEntityRenderer implements BlockEntity
                 continue;
             poseStack.pushPose();
             poseStack.translate(
-                    target.POSITION[0]-thisPos.getX()+0.5,
-                    target.POSITION[1]-thisPos.getY()+0.5,
-                    target.POSITION[2]-thisPos.getZ()+0.5
+                    target.RELATIVE[0]+0.5,
+                    target.RELATIVE[1]+0.5,
+                    target.RELATIVE[2]+0.5
             );
             poseStack.mulPose(target.ROTATION.quaternion);
             poseStack.scale(1f, 1f, target.DISTANCE);
@@ -85,7 +85,7 @@ public class HangingRedCuWireConnectorBlockEntityRenderer implements BlockEntity
     private void renderPose(HangingRedCuWireConnectorBlockEntity blockEntity, PoseStack poseStack){
         poseStack.pushPose();
         poseStack.translate(0.5, 0.5, 0.5);
-        OrientationHolderBlockEntity.setFacingPoseStack(poseStack, blockEntity.facingMode, blockEntity.facing);
+        HangingRedCuWireConnectorBlockEntity.setFacingPoseStack(poseStack, blockEntity.facingMode, blockEntity.facing);
         poseStack.translate(-0.5, -0.5, -0.5);
     }
     private void renderModel(
