@@ -2,11 +2,8 @@
 package net.acodonic_king.redstonecg.block.normal.analog;
 
 import net.acodonic_king.redstonecg.ModLoaderRider;
-import net.acodonic_king.redstonecg.RedstonecgMod;
-import net.acodonic_king.redstonecg.block.defaults.DefaultEmitting1_4Gate;
 import net.acodonic_king.redstonecg.block.defaults.DefaultRedstoneActionGate;
 import net.acodonic_king.redstonecg.block.defaults.PinMarkConnectionInterface;
-import net.acodonic_king.redstonecg.block.entity.ArrowIndicatorBlockEntity;
 import net.acodonic_king.redstonecg.init.RedstonecgModItems;
 import net.acodonic_king.redstonecg.init.RedstonecgModVersionRides;
 import net.acodonic_king.redstonecg.procedures.AdventureProcedure;
@@ -51,7 +48,6 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class AnalogSourceBlock extends DefaultRedstoneActionGate implements EntityBlock, PinMarkConnectionInterface {
@@ -69,17 +65,16 @@ public class AnalogSourceBlock extends DefaultRedstoneActionGate implements Enti
 
 	@Override
 	public boolean canConnectRedstone(BlockState state, BlockGetter world, BlockPos pos, Direction side) {
-		ConnectionFace connectionFaceB = BlockFrameTransformUtils.canConnectRedstoneTargetConnectionFace(world, pos, side);
+		byte connectionFaceB = BlockFrameTransformUtils.canConnectRedstoneTargetConnectionFace(world, pos, side);
 		return CanConnectWallGateProcedure.To1_4Gate(state, connectionFaceB);
 	}
 
 	@Override
-	public ConnectionFace getOutputConnectionFace(LevelAccessor world, BlockPos pos, ConnectionFace requesterFace) {
+	public byte getOutputConnectionFace(LevelAccessor world, BlockPos pos, byte requesterFace) {
 		BlockState blockState = world.getBlockState(pos);
-		ConnectionFace connectionFaceA = requesterFace.getConnectable();
 		if(!CanConnectWallGateProcedure.To1_4Gate(blockState, requesterFace))
-			connectionFaceA.CHANNEL = 5;
-		return connectionFaceA;
+			return ConnectionFace.setChannelMask(ConnectionFace.getConnectable(requesterFace), ConnectionFace.MASK_NONE);
+		return BlockFrameTransformUtils.getConnectionFaceForRequester(blockState, requesterFace);
 	}
 
 	@Override
@@ -258,7 +253,7 @@ public class AnalogSourceBlock extends DefaultRedstoneActionGate implements Enti
 		return 0;
 	}
 	@Override
-	public int getRedstonePower(LevelAccessor world, BlockPos pos, ConnectionFace requesterFace) {
+	public int getRedstonePower(LevelAccessor world, BlockPos pos, byte requesterFace) {
 		BlockState blockState = world.getBlockState(pos);
 		if(!CanConnectWallGateProcedure.To1_4Gate(blockState, requesterFace))
 			return 0;

@@ -1,5 +1,6 @@
 package net.acodonic_king.redstonecg.block.normal.interaction;
 
+import net.acodonic_king.redstonecg.RedstonecgMod;
 import net.acodonic_king.redstonecg.block.entity.CodedControlPanelBlockEntity;
 import net.acodonic_king.redstonecg.block.entity.ControlPanelBlockEntity;
 import net.acodonic_king.redstonecg.init.RedstonecgModVersionRides;
@@ -31,8 +32,16 @@ public class CodedControlPanelBlock extends ControlPanelBlock{
         int group_index;
         if (orientation < 6)
             group_index = 0;
-        else if (orientation < 30)
+        else if (orientation < 30) {
             group_index = 1;
+            if(orientation > 25){
+                slot = 3-slot;
+            } else if (orientation > 10){
+                slot = (0b10011100 >> (slot << 1)) & 3;
+                slot = (orientation - 6 + slot) & 3;
+                slot = (0b00001100 >> slot) & 3;
+            }
+        }
         else if (orientation > 33 && orientation < 38)
             group_index = 2;
         else
@@ -78,6 +87,7 @@ public class CodedControlPanelBlock extends ControlPanelBlock{
                 for (int i = 0; i < 4; i++) {
                     VoxelShape hitBox = getFinalInteractionBox(blockstate.getValue(ORIENTATION), i, 0.1f);
                     if (hitBox.bounds().contains(hitPos)) {
+                        //RedstonecgMod.LOGGER.debug("pressed "+i);
                         InteractionResult resultB = be.usePanelSlot(i, world, pos, entity);
                         if(result == InteractionResult.PASS)
                             result = resultB;
@@ -107,8 +117,8 @@ public class CodedControlPanelBlock extends ControlPanelBlock{
         if(world.isClientSide())
             return 0;
         if(world.getBlockEntity(pos) instanceof CodedControlPanelBlockEntity be){
-            List<ConnectionFace> connectionFaces = be.getConnectionFaces(blockstate.getValue(ORIENTATION));
-            for(ConnectionFace connectionFace: connectionFaces)
+            List<Byte> connectionFaces = be.getConnectionFaces(blockstate.getValue(ORIENTATION));
+            for(byte connectionFace: connectionFaces)
                 power = Math.max(power, GetRedstoneSignalProcedure.execute(world, pos, connectionFace));
             if(be.receiveRedstone(world, pos, power)) {
                 be.setChanged();

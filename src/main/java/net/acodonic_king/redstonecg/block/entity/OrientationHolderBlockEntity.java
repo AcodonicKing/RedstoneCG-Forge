@@ -1,23 +1,21 @@
 package net.acodonic_king.redstonecg.block.entity;
 
+import net.acodonic_king.redstonecg.block.defaults.PrimarySecondaryDirectionInterface;
 import net.acodonic_king.redstonecg.procedures.BlockFrameTransformUtils;
 import net.acodonic_king.redstonecg.procedures.RCGMatrix;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import org.apache.commons.lang3.tuple.Pair;
 
-public class OrientationHolderBlockEntity extends SuperBlockEntity{
+public class OrientationHolderBlockEntity extends SuperBlockEntity {
     public byte combination = 0;
 
     public OrientationHolderBlockEntity(BlockEntityType blockEntityType, BlockPos position, BlockState state) {
         super(blockEntityType, position, state);
-    }
-
-    public Pair<Direction, Direction> getPrimarySecondaryDirections(){
-        return Pair.of(getRotation(combination), getFacing(combination));
     }
 
     @Override
@@ -143,5 +141,17 @@ public class OrientationHolderBlockEntity extends SuperBlockEntity{
 
     public static RCGMatrix.M4F getPoseStackMatrix(byte combination){
         return COMBINED_MATRIX[combination];
+    }
+
+    public Direction getPrimaryDirection() {
+        return getRotation(combination);
+    }
+
+    public Direction getSecondaryDirection() {
+        return getFacing(combination);
+    }
+
+    public Pair<Direction, Direction> getPrimarySecondaryDirections(){
+        return Pair.of(getPrimaryDirection(), getSecondaryDirection());
     }
 }

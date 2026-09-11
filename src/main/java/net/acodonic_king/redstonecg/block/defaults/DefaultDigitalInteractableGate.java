@@ -83,9 +83,9 @@ public class DefaultDigitalInteractableGate extends DefaultRedstoneActionGate im
         return "";
     }
     @Override
-    public int getRedstonePower(LevelAccessor world, BlockPos pos, ConnectionFace sourceFace) {
-        ConnectionFace thisFace = getOutputConnectionFace(world, pos, sourceFace);
-        if(thisFace.canConnect(sourceFace)){
+    public int getRedstonePower(LevelAccessor world, BlockPos pos, byte sourceFace) {
+        byte thisFace = getOutputConnectionFace(world, pos, sourceFace);
+        if(ConnectionFace.canConnect(thisFace,sourceFace)){
             if(world.getBlockEntity(pos) instanceof DefaultDigitalGateBlockEntity be){
                 return be.OUTPUT ? 15 : 0;
             }

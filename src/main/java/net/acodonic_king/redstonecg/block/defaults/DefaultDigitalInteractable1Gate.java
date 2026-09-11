@@ -22,7 +22,7 @@ public class DefaultDigitalInteractable1Gate extends DefaultDigitalInteractableG
 
     @Override
     public boolean canConnectRedstone(BlockState state, BlockGetter world, BlockPos pos, Direction side) {
-        ConnectionFace connectionFaceB = BlockFrameTransformUtils.canConnectRedstoneTargetConnectionFace(world, pos, side);
+        byte connectionFaceB = BlockFrameTransformUtils.canConnectRedstoneTargetConnectionFace(world, pos, side);
         return CanConnectWallGateProcedure.To1Gate(state, connectionFaceB);
     }
     public boolean redstoneOutputOperation(int SidePower){return false;}
@@ -30,7 +30,7 @@ public class DefaultDigitalInteractable1Gate extends DefaultDigitalInteractableG
     @Override
     public int onRedstoneUpdate(LevelAccessor world, BlockState blockState, BlockPos pos, int recursion){
         Direction Side = GetGateInputSidesProcedure.Get1GateForth(blockState);
-        ConnectionFace thisFace = BlockFrameTransformUtils.getConnectionFace(blockState, Side);
+        byte thisFace = BlockFrameTransformUtils.getConnectionFace(blockState, Side);
         int SidePower = GetRedstoneSignalProcedure.execute(world, pos, thisFace);
         boolean output = this.redstoneOutputOperation(SidePower);
         setOutput(world, blockState, pos, output, recursion);

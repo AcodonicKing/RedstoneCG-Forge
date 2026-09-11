@@ -86,13 +86,11 @@ public class DefaultAnalogInteractableGate extends DefaultRedstoneActionGate imp
         return "";
     }
     @Override
-    public int getRedstonePower(LevelAccessor world, BlockPos pos, ConnectionFace sourceFace) {
-        ConnectionFace thisFace = getOutputConnectionFace(world, pos, sourceFace);
-        if(thisFace.canConnect(sourceFace)){
-            if(world.getBlockEntity(pos) instanceof DefaultAnalogGateBlockEntity be){
+    public int getRedstonePower(LevelAccessor world, BlockPos pos, byte sourceFace) {
+        byte thisFace = getOutputConnectionFace(world, pos, sourceFace);
+        if(ConnectionFace.canConnect(thisFace, sourceFace))
+            if(world.getBlockEntity(pos) instanceof DefaultAnalogGateBlockEntity be)
                 return be.POWER;
-            }
-        }
         return 0;
     }
     @Override

@@ -1,7 +1,7 @@
 package net.acodonic_king.redstonecg.block.defaults;
 
-import net.acodonic_king.redstonecg.block.entity.AnalogSourceBlockEntity;
 import net.acodonic_king.redstonecg.block.entity.DefaultAnalogIndicatorBlockEntity;
+import net.acodonic_king.redstonecg.block.entity.OrientationHolderBlockEntity;
 import net.acodonic_king.redstonecg.init.RedstonecgModItems;
 import net.acodonic_king.redstonecg.init.RedstonecgModVersionRides;
 import net.acodonic_king.redstonecg.network.RedstonecgModVariables;
@@ -34,13 +34,13 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import org.apache.commons.lang3.tuple.Pair;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.function.ToIntFunction;
 
-public class DefaultIndicatorInteractableGate extends SuperBlock implements SimpleWaterloggedBlock, EntityBlock, FlooringInterface, RedstoneSignalInterface, PinMarkConnectionInterface {
+public class DefaultIndicatorInteractableGate extends SuperBlock implements SimpleWaterloggedBlock, EntityBlock, FlooringInterface, RedstoneSignalInterface, PinMarkConnectionInterface, PrimarySecondaryDirectionInterface {
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
     public static final IntegerProperty CONNECTION = IntegerProperty.create("connection",0,15);
     //public static final IntegerProperty POWER = IntegerProperty.create("power",0,15);
@@ -195,7 +195,7 @@ public class DefaultIndicatorInteractableGate extends SuperBlock implements Simp
     @Override
     public boolean canConnectRedstone(BlockState blockState, BlockGetter world, BlockPos pos, Direction side) {
         if (world.getBlockEntity(pos) instanceof DefaultAnalogIndicatorBlockEntity be) {
-            ConnectionFace connectionFaceB = BlockFrameTransformUtils.canConnectRedstoneTargetConnectionFace(world, pos, side);
+            byte connectionFaceB = BlockFrameTransformUtils.canConnectRedstoneTargetConnectionFace(world, pos, side);
             int connection = LittleTools.getIntegerProperty(blockState, "connection");
             connection ++;
             return CanConnectWallGateProcedure.execute(be.getRotation(), be.getFacing(), connection, connectionFaceB);
@@ -211,12 +211,13 @@ public class DefaultIndicatorInteractableGate extends SuperBlock implements Simp
             BlockState ThisBlock = (world.getBlockState(pos));
             int power = 0;
             for (Direction side : GetGateInputSidesProcedure.Get1_4GateForth(ThisBlock)) {
-                ConnectionFace connectionFaceA = BlockFrameTransformUtils.getConnectionFace(be.getRotation(),be.getFacing(),side);
+                byte connectionFaceA = BlockFrameTransformUtils.getConnectionFace(be.getRotation(),be.getFacing(),side);
                 power = Math.max(power, GetRedstoneSignalProcedure.execute(world, pos, connectionFaceA));
             }
             if(be.BASE_READ){
-                ConnectionFace connectionFaceA = BlockFrameTransformUtils.getConnectionFace(be.getRotation(),be.getFacing(),Direction.DOWN);
-                connectionFaceA.CHANNEL = 4;
+                byte connectionFaceA = BlockFrameTransformUtils.getConnectionFace(be.getRotation(),be.getFacing(),Direction.DOWN);
+                connectionFaceA = ConnectionFace.setChannelMask(connectionFaceA, ConnectionFace.MASK_ALL);
+                //connectionFaceA.channel(ConnectionFace.CHANNEL_ALL);
                 //RedstonecgMod.LOGGER.debug(connectionFaceA+" "+GetRedstoneSignalProcedure.execute(world, pos, connectionFaceA));
                 power = Math.max(power, GetRedstoneSignalProcedure.execute(world, pos, connectionFaceA));
             }
@@ -286,22 +287,18 @@ public class DefaultIndicatorInteractableGate extends SuperBlock implements Simp
     }
 
     @Override
-    public int getRedstonePower(LevelAccessor world, BlockPos pos, ConnectionFace requesterFace) {
+    public int getRedstonePower(LevelAccessor world, BlockPos pos, byte requesterFace) {
         return 0;
     }
 
     @Override
-    public ConnectionFace getOutputConnectionFace(LevelAccessor world, BlockPos pos, ConnectionFace requesterFace) {
-        ConnectionFace connectionFace = requesterFace.getConnectable();
-        connectionFace.CHANNEL = 5;
-        return connectionFace;
+    public byte getOutputConnectionFace(LevelAccessor world, BlockPos pos, byte requesterFace) {
+        return ConnectionFace.setChannelMask(ConnectionFace.getConnectable(requesterFace), ConnectionFace.MASK_NONE);
     }
 
     @Override
-    public ConnectionFace getAnyConnectionFace(LevelAccessor world, BlockPos pos, ConnectionFace requesterFace) {
-        BlockState blockState = world.getBlockState(pos);
-        Direction localDirection = BlockFrameTransformUtils.getLocalDirectionFromWorld(blockState,requesterFace.FACE.getOpposite());
-        return BlockFrameTransformUtils.getConnectionFace(blockState,localDirection);
+    public byte getAnyConnectionFace(LevelAccessor world, BlockPos pos, byte requesterFace) {
+        return BlockFrameTransformUtils.getConnectionFaceForRequester(world, pos, requesterFace);
     }
 
     @Override
@@ -333,5 +330,26 @@ public class DefaultIndicatorInteractableGate extends SuperBlock implements Simp
     @Override
     public int connectionFilter(int connection) {
         return CanConnectWallGateProcedure.To1_4GateConnectionFilter(connection);
+    }
+
+    @Override
+    public Pair<Direction, Direction> getPrimarySecondaryDirections(LevelAccessor world, BlockPos pos) {
+        if(world.getBlockEntity(pos) instanceof OrientationHolderBlockEntity be)
+            return be.getPrimarySecondaryDirections();
+        return PrimarySecondaryDirectionInterface.super.getPrimarySecondaryDirections(world, pos);
+    }
+
+    @Override
+    public Direction getPrimaryDirection(LevelAccessor world, BlockPos pos) {
+        if(world.getBlockEntity(pos) instanceof OrientationHolderBlockEntity be)
+            return be.getPrimaryDirection();
+        return Direction.NORTH;
+    }
+
+    @Override
+    public Direction getSecondaryDirection(LevelAccessor world, BlockPos pos) {
+        if(world.getBlockEntity(pos) instanceof OrientationHolderBlockEntity be)
+            return be.getSecondaryDirection();
+        return Direction.DOWN;
     }
 }

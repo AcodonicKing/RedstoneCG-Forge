@@ -27,8 +27,9 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import org.apache.commons.lang3.tuple.Pair;
 
-public class DefaultGate extends SuperBlock implements SimpleWaterloggedBlock, FlooringInterface {
+public class DefaultGate extends SuperBlock implements SimpleWaterloggedBlock, FlooringInterface, PrimarySecondaryDirectionInterface, PrimarySecondaryDirectionBlockInterface {
     public static final DirectionProperty FACING = DirectionProperty.create("facing", new Direction[]{Direction.DOWN,Direction.NORTH,Direction.EAST,Direction.SOUTH,Direction.WEST,Direction.UP});
     public static final DirectionProperty ROTATION = DirectionProperty.create("rotation", Direction.Plane.HORIZONTAL);
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
@@ -205,5 +206,33 @@ public class DefaultGate extends SuperBlock implements SimpleWaterloggedBlock, F
     @Override
     public boolean hasAnalogOutputSignal(BlockState state) {
         return true;
+    }
+
+    @Override
+    public Pair<Direction, Direction> getPrimarySecondaryDirections(LevelAccessor world, BlockPos pos) {
+        BlockState blockState = world.getBlockState(pos);
+        return Pair.of(getPrimaryDirection(blockState), getSecondaryDirection(blockState));
+    }
+
+    @Override
+    public Direction getPrimaryDirection(LevelAccessor world, BlockPos pos) {
+        BlockState blockState = world.getBlockState(pos);
+        return blockState.getValue(ROTATION);
+    }
+
+    @Override
+    public Direction getSecondaryDirection(LevelAccessor world, BlockPos pos) {
+        BlockState blockState = world.getBlockState(pos);
+        return blockState.getValue(FACING);
+    }
+
+    @Override
+    public DirectionProperty primaryDirectionProperty() {
+        return ROTATION;
+    }
+
+    @Override
+    public DirectionProperty secondaryDirectionProperty() {
+        return FACING;
     }
 }

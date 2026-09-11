@@ -14,12 +14,12 @@ public class RedstonecgModTabs {
     public static final DeferredRegister<CreativeModeTab> REGISTRY = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, MODID);
     public static final RegistryObject<CreativeModeTab> TAB_REDSTONE_CG_CREATIVE_TAB = REGISTRY.register("tab",
             () -> CreativeModeTab.builder().title(Component.translatable("itemGroup.tab_redstone_cg_creative_tab")).icon(() -> new ItemStack(RedstonecgModBlocks.REDCU_CRAFTER.get())).displayItems((parameters, tabData) -> {
-                accept(tabData, RedstonecgModItems.RED_CU_METER);
-                accept(tabData, RedstonecgModItems.RED_CU_CRAFTER);
-                accept(tabData, RedstonecgModItems.RED_CU_METER);
-                accept(tabData, RedstonecgModItems.RED_CU_MIXTURE);
-                accept(tabData, RedstonecgModItems.RED_CU_INGOT);
-                accept(tabData, RedstonecgModItems.RED_CU_CRAFTER);
+                accept(tabData, RedstonecgModItems.REDCU_METER);
+                accept(tabData, RedstonecgModItems.REDCU_CRAFTER);
+                accept(tabData, RedstonecgModItems.REDCU_METER);
+                accept(tabData, RedstonecgModItems.REDCU_MIXTURE);
+                accept(tabData, RedstonecgModItems.REDCU_INGOT);
+                accept(tabData, RedstonecgModItems.REDCU_CRAFTER);
                 accept(tabData, RedstonecgModItems.SMOOTH_STONE_PLATE);
                 accept(tabData, RedstonecgModItems.ROTATION_BRACKET);
                 //==== Floor ====

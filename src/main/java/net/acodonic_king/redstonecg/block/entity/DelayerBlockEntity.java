@@ -13,7 +13,8 @@ public class DelayerBlockEntity extends DefaultAnalogIndicatorBlockEntity {
     }
     @Override
     public void saveAdditional(CompoundTag tag) {
-        super.saveAdditional(tag);
+        //super.saveAdditional(tag);
+        tag.putByte("state", getState(combination));
         tag.putInt("signals", SIGNALS);
     }
     @Override

@@ -1,6 +1,7 @@
 package net.acodonic_king.redstonecg.procedures;
 
-import net.acodonic_king.redstonecg.block.defaults.CustomBlockPrimarySecondaryDirectionInterface;
+import net.acodonic_king.redstonecg.block.defaults.PrimarySecondaryDirectionBlockInterface;
+import net.acodonic_king.redstonecg.block.defaults.PrimarySecondaryDirectionInterface;
 import net.acodonic_king.redstonecg.block.defaults.RedstoneSignalInterface;
 import net.acodonic_king.redstonecg.init.RedstonecgModVersionRides;
 import net.minecraft.core.BlockPos;
@@ -15,19 +16,18 @@ import net.minecraft.world.level.block.state.properties.Property;
 import org.apache.commons.lang3.tuple.Pair;
 
 public class BlockFrameTransformUtils {
-    public static final Direction CW0 = Direction.NORTH;
-    public static final Direction CW90 = Direction.EAST;
-    public static final Direction CW180 = Direction.SOUTH;
-    public static final Direction CW270 = Direction.WEST;
-
-    public static final Direction CCW0 = Direction.NORTH;
-    public static final Direction CCW90 = Direction.WEST;
-    public static final Direction CCW180 = Direction.SOUTH;
-    public static final Direction CCW270 = Direction.EAST;
-
+    /*
+    // This does not do anything anymore.
     public static Direction[] all(BlockState blockState){
-        Direction directionA = LittleTools.getDirection(blockState);
-        Direction directionB = LittleTools.getDirectionB(blockState);
+        Direction directionA, directionB;
+        Block block = blockState.getBlock();
+        if(block instanceof PrimarySecondaryDirectionBlockInterface psdbi){
+            directionA = psdbi.getPrimaryDirection(blockState);
+            directionB = psdbi.getSecondaryDirection(blockState);
+        } else {
+            directionA = LittleTools.getDirection(blockState);
+            directionB = LittleTools.getDirectionB(blockState);
+        }
         directionB = directionB.getCounterClockWise(Direction.Axis.X);
         Direction[] directions = {Direction.NORTH,Direction.NORTH,Direction.NORTH,Direction.NORTH};
         for(int i = 0; i < 4; i++){
@@ -36,12 +36,11 @@ public class BlockFrameTransformUtils {
         }
         return directions;
     }
-    public static Pair<Direction, Direction> getPrimarySecondaryDirections(BlockState blockState) {
+    */
+    public static Pair<Direction, Direction> getPrimarySecondaryDirectionsPropertyCatch(BlockState blockState){
         Property<?> prop = blockState.getBlock().getStateDefinition().getProperty("rotation");
-
         Direction primary;
         Direction secondary;
-
         if (prop instanceof DirectionProperty dirProp) {
             primary = blockState.getValue(dirProp);
             secondary = LittleTools.getDirection(blockState);
@@ -49,14 +48,20 @@ public class BlockFrameTransformUtils {
             primary = LittleTools.getDirection(blockState);
             secondary = Direction.DOWN;
         }
-
         return Pair.of(primary, secondary);
+    }
+    public static Pair<Direction, Direction> getPrimarySecondaryDirections(BlockState blockState) {
+        if(blockState.getBlock() instanceof PrimarySecondaryDirectionBlockInterface psdbi)
+            return psdbi.getPrimarySecondaryDirections(blockState);
+        return getPrimarySecondaryDirectionsPropertyCatch(blockState);
     }
     public static Pair<Direction, Direction> getPrimarySecondaryDirections(LevelAccessor world, BlockPos pos) {
         BlockState blockState = world.getBlockState(pos);
-        if(blockState.getBlock() instanceof CustomBlockPrimarySecondaryDirectionInterface b)
+        if(blockState.getBlock() instanceof PrimarySecondaryDirectionBlockInterface psdbi)
+            return psdbi.getPrimarySecondaryDirections(blockState);
+        if(blockState.getBlock() instanceof PrimarySecondaryDirectionInterface b)
             return b.getPrimarySecondaryDirections(world, pos);
-        return getPrimarySecondaryDirections(blockState);
+        return getPrimarySecondaryDirectionsPropertyCatch(blockState);
     }
     public static Pair<Direction, Direction> getDefaultPrimarySecondaryDirections(){
         return Pair.of(Direction.NORTH, Direction.DOWN);
@@ -70,7 +75,7 @@ public class BlockFrameTransformUtils {
      * @param sourceFace
      * @return
      */
-    public static ConnectionFace getRequesterConnectionFace(LevelAccessor world, BlockPos requesterPos, ConnectionFace sourceFace, Direction direction){
+    public static byte getRequesterConnectionFace(LevelAccessor world, BlockPos requesterPos, byte sourceFace, Direction direction){
         BlockState requesterState = world.getBlockState(requesterPos);
         Block requesterBlock = requesterState.getBlock();
         if(requesterBlock instanceof RedstoneSignalInterface si){
@@ -79,16 +84,16 @@ public class BlockFrameTransformUtils {
         return getGenericTargetBlockConnectionFace(requesterState, direction);
     }
 
-    public static ConnectionFace getConnectionFace(LevelAccessor world, BlockPos pos, Direction localDir){
+    public static byte getConnectionFace(LevelAccessor world, BlockPos pos, Direction localDir){
         BlockState blockState = world.getBlockState(pos);
-        if(blockState.getBlock() instanceof CustomBlockPrimarySecondaryDirectionInterface b)
-            return getConnectionFace(
-                    b.getPrimarySecondaryDirections(world, pos),
-                    localDir
-            );
+        Block block = blockState.getBlock();
+        if(block instanceof PrimarySecondaryDirectionBlockInterface b)
+            return getConnectionFace(b.getPrimarySecondaryDirections(blockState), localDir);
+        if(block instanceof PrimarySecondaryDirectionInterface b)
+            return getConnectionFace(b.getPrimarySecondaryDirections(world, pos), localDir);
         return getConnectionFace(blockState, localDir);
     }
-    public static ConnectionFace getConnectionFace(Pair<Direction, Direction> dirs, Direction localDir){
+    public static byte getConnectionFace(Pair<Direction, Direction> dirs, Direction localDir){
         return getConnectionFace(dirs.getLeft(),dirs.getRight(),localDir);
     }
     /**
@@ -105,7 +110,7 @@ public class BlockFrameTransformUtils {
      * @param localDir The local direction (relative to the block's frame).
      * @return The ConnectionFace representing that side in world coordinates.
      */
-    public static ConnectionFace getConnectionFace(BlockState blockState, Direction localDir){
+    public static byte getConnectionFace(BlockState blockState, Direction localDir){
         Pair<Direction, Direction> dirs = getPrimarySecondaryDirections(blockState);
         return getConnectionFace(dirs.getLeft(),dirs.getRight(),localDir);
     }
@@ -125,30 +130,38 @@ public class BlockFrameTransformUtils {
      * @param localDir The local direction (relative to the block's frame).
      * @return The ConnectionFace representing that side in world coordinates.
      */
-    public static ConnectionFace getConnectionFace(Direction primary, Direction secondary, Direction localDir){
+    public static byte getConnectionFace(Direction primary, Direction secondary, Direction localDir){
         localDir = rotateDirectionClockwiseY(primary, localDir);
-        return new ConnectionFace(localDir,secondary);
+        return ConnectionFace.primitive(localDir,secondary);
     }
 
-    public static ConnectionFace getConnectionFaceWorldSide(LevelAccessor world, BlockPos pos, Direction worldDir){
-        BlockState blockState = world.getBlockState(pos);
-        if(blockState.getBlock() instanceof CustomBlockPrimarySecondaryDirectionInterface b)
-            return getConnectionFaceWorldSide(
-                    b.getPrimarySecondaryDirections(world, pos),
-                    worldDir
-            );
-        return getConnectionFaceWorldSide(blockState, worldDir);
+    public static byte getConnectionFaceWorldSide(LevelAccessor world, BlockPos pos, Direction worldDir){
+        return getConnectionFaceWorldSide(getPrimarySecondaryDirections(world, pos),worldDir);
     }
-    public static ConnectionFace getConnectionFaceWorldSide(BlockState blockState, Direction worldDir){
+    public static byte getConnectionFaceWorldSide(BlockState blockState, Direction worldDir){
         Pair<Direction, Direction> dirs = getPrimarySecondaryDirections(blockState);
         return getConnectionFaceWorldSide(dirs.getLeft(),dirs.getRight(),worldDir);
     }
-    public static ConnectionFace getConnectionFaceWorldSide(Pair<Direction, Direction> dirs, Direction worldDir){
+    public static byte getConnectionFaceWorldSide(Pair<Direction, Direction> dirs, Direction worldDir){
         return getConnectionFaceWorldSide(dirs.getLeft(),dirs.getRight(),worldDir);
     }
-    public static ConnectionFace getConnectionFaceWorldSide(Direction primary, Direction secondary, Direction worldDir){
+    public static byte getConnectionFaceWorldSide(Direction primary, Direction secondary, Direction worldDir){
         Direction localDir = getLocalDirectionFromWorld(primary, secondary, worldDir);
         return getConnectionFace(primary, secondary, localDir);
+    }
+
+    public static byte getConnectionFaceForRequester(LevelAccessor world, BlockPos pos, byte requesterFace){
+        return getConnectionFaceForRequester(getPrimarySecondaryDirections(world, pos), requesterFace);
+    }
+    public static byte getConnectionFaceForRequester(BlockState blockState, byte requesterFace){
+        Pair<Direction, Direction> dirs = getPrimarySecondaryDirections(blockState);
+        return getConnectionFaceForRequester(dirs.getLeft(),dirs.getRight(), requesterFace);
+    }
+    public static byte getConnectionFaceForRequester(Pair<Direction, Direction> dirs, byte requesterFace){
+        return getConnectionFaceForRequester(dirs.getLeft(),dirs.getRight(), requesterFace);
+    }
+    public static byte getConnectionFaceForRequester(Direction primary, Direction secondary, byte requesterFace){
+        return getConnectionFaceWorldSide(primary, secondary, ConnectionFace.decodeFace(requesterFace).getOpposite());
     }
 
     /**
@@ -158,7 +171,7 @@ public class BlockFrameTransformUtils {
      * @param blockState The block state to extract orientation from.
      * @return The ConnectionFace representing the block's output direction.
      */
-    public static ConnectionFace getForwardConnectionFace(BlockState blockState){
+    public static byte getForwardConnectionFace(BlockState blockState){
         return getConnectionFace(blockState,Direction.NORTH);
     }
 
@@ -171,12 +184,17 @@ public class BlockFrameTransformUtils {
      * @param direction Direction from the querying block to the target block.
      * @return A simplified ConnectionFace for use in connection checking.
      */
-    public static ConnectionFace getGenericTargetBlockConnectionFace(BlockState neighborState, Direction direction){
-        ConnectionFace connectionFace = new ConnectionFace(direction.getOpposite());
-        if (neighborState.is(Blocks.REDSTONE_WIRE)) {
-            connectionFace.CHANNEL = (direction == Direction.UP || direction == Direction.DOWN) ? 5 : 2;
-        }
+    public static byte getGenericTargetBlockConnectionFace(BlockState neighborState, Direction direction){
+        byte connectionFace = ConnectionFace.primitiveAll(direction.getOpposite());
+        if (neighborState.is(Blocks.REDSTONE_WIRE))
+            return ConnectionFace.setChannelMask(connectionFace, (direction == Direction.UP || direction == Direction.DOWN) ? ConnectionFace.MASK_NONE : ConnectionFace.MASK_CHANNEL_C);
         return connectionFace;
+    }
+
+    public static byte getGenericTargetBlockConnectionFace(BlockState neighborState, Direction direction, byte defaultFace){
+        if (neighborState.is(Blocks.REDSTONE_WIRE))
+            return ConnectionFace.setChannelMask(defaultFace, (direction == Direction.UP || direction == Direction.DOWN) ? ConnectionFace.MASK_NONE : ConnectionFace.MASK_CHANNEL_C);
+        return defaultFace;
     }
 
     /*public static ConnectionFace getTargetBlockConnectionFace(LevelAccessor world, BlockPos pos, BlockState neighborState, Direction direction){
@@ -190,23 +208,36 @@ public class BlockFrameTransformUtils {
     /**
      * Gets the ConnectionFace for a neighboring (target) block from the perspective of the querying block.
      * If the neighboring block is a connectable gate or a connectable wire, delegates to its own method.
-     * Otherwise falls back to default interpretation based on block type (e.g., redstone wire).
+     * Otherwise, falls back to default interpretation based on block type (e.g., redstone wire).
      *
      * //@param neighborState The state of the neighboring block (the target block).
      * //@param direction The direction **from the querying block to the target block**.
      * @return The ConnectionFace that represents the target block's relevant output/input face.
      */
-    public static ConnectionFace getTargetBlockConnectionFace(LevelAccessor world, BlockPos requesterPos, ConnectionFace requesterFace){
-        BlockPos pos = requesterPos.relative(requesterFace.FACE);
+    public static byte getTargetBlockConnectionFace(LevelAccessor world, BlockPos requesterPos, byte requesterFace){
+        Direction face = ConnectionFace.decodeFace(requesterFace);
+        BlockPos pos = requesterPos.relative(face);
         BlockState neighborState = world.getBlockState(pos);
-        if(neighborState.getBlock() instanceof RedstoneSignalInterface gateBlock){
+        if(neighborState.getBlock() instanceof RedstoneSignalInterface gateBlock)
             return gateBlock.getAnyConnectionFace(world, pos, requesterFace);
-        }
-        return getGenericTargetBlockConnectionFace(neighborState, requesterFace.FACE);
+        return getGenericTargetBlockConnectionFace(neighborState, face);
     }
 
-    public static ConnectionFace getGenericTargetGateConnectionFace(BlockState blockState, Direction direction){
-        Direction secondary = LittleTools.getDirection(blockState);
+    public static byte getTargetBlockConnectionFace(LevelAccessor world, BlockPos requesterPos, byte requesterFace, byte defaultFace){
+        Direction face = ConnectionFace.decodeFace(requesterFace);
+        BlockPos pos = requesterPos.relative(face);
+        BlockState neighborState = world.getBlockState(pos);
+        if(neighborState.getBlock() instanceof RedstoneSignalInterface gateBlock)
+            return gateBlock.getAnyConnectionFace(world, pos, requesterFace);
+        return getGenericTargetBlockConnectionFace(neighborState, face, defaultFace);
+    }
+
+    public static byte getGenericTargetGateConnectionFace(BlockState blockState, Direction direction){
+        Direction secondary;
+        if(blockState.getBlock() instanceof PrimarySecondaryDirectionBlockInterface b)
+            secondary = b.getSecondaryDirection(blockState);
+        else
+            secondary = LittleTools.getDirection(blockState);
         int channel = 5;
         if(secondary != direction && secondary != direction.getOpposite()) {
             channel = switch (secondary) {
@@ -226,7 +257,7 @@ public class BlockFrameTransformUtils {
                 case UP -> 0;
             };
         }
-        return new ConnectionFace(direction,channel);
+        return ConnectionFace.primitiveChannel(direction,channel);
     }
 
     /**
@@ -237,12 +268,15 @@ public class BlockFrameTransformUtils {
      * @param direction  The direction from the neighbor block to the current (i.e., redstone input/output).
      * @return The ConnectionFace of the neighbor block.
      */
-    public static ConnectionFace canConnectRedstoneTargetConnectionFace(BlockGetter world, BlockPos pos, Direction direction) {
-        if (direction == null) {
-            return new ConnectionFace(Direction.UP, 5);
+    public static byte canConnectRedstoneTargetConnectionFace(BlockGetter world, BlockPos pos, Direction direction) {
+        if (direction == null)
+            return ConnectionFace.primitiveNone(Direction.UP);
+        return getTargetBlockConnectionFace((LevelAccessor) world, pos, ConnectionFace.primitiveAll(direction.getOpposite()));
+        /*if (direction == null) {
+            return new ConnectionFace(Direction.UP, ConnectionFace.CHANNEL_NONE);
         }
         ConnectionFace connectionFaceA = new ConnectionFace(direction.getOpposite());
-        return getTargetBlockConnectionFace((LevelAccessor) world, pos, connectionFaceA);
+        return getTargetBlockConnectionFace((LevelAccessor) world, pos, connectionFaceA);*/
     }
 
     /**

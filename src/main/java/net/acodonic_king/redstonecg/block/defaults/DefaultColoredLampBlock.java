@@ -28,20 +28,21 @@ public class DefaultColoredLampBlock extends SuperBlock implements EntityBlock {
         super(props);
     }
 
-    @Override
+    /*@Override
     public RenderShape getRenderShape(BlockState state) {
         return RenderShape.INVISIBLE;
-    }
+    }*/
 
     @Override
     public @Nullable BlockEntity newBlockEntity(BlockPos blockPos, BlockState blockState) {
         return new DefaultColoredLampBlockEntity(blockPos, blockState);
     }
 
+    /*
     @Override
     public VoxelShape getVisualShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
         return Shapes.empty();
-    }
+    }*/
 
     @Override
     public VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
@@ -77,5 +78,11 @@ public class DefaultColoredLampBlock extends SuperBlock implements EntityBlock {
     @Override
     public boolean hasAnalogOutputSignal(BlockState state) {
         return true;
+    }
+
+    public static int getColor(BlockState blockState, BlockGetter level, BlockPos pos, int tintindex){
+        if(level.getBlockEntity(pos) instanceof DefaultColoredLampBlockEntity be)
+            return be.getColor();
+        return 0xF2BD74;
     }
 }

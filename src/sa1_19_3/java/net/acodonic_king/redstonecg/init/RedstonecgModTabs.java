@@ -16,10 +16,10 @@ public class RedstonecgModTabs {
 
     public static void load(CreativeModeTabEvent.BuildContents event) {
         if(event.getTab() == TAB_REDSTONE_CG_CREATIVE_TAB){
-            event.accept(RedstonecgModItems.RED_CU_METER);
-            event.accept(RedstonecgModItems.RED_CU_MIXTURE);
-            event.accept(RedstonecgModItems.RED_CU_INGOT);
-            event.accept(RedstonecgModItems.RED_CU_CRAFTER);
+            event.accept(RedstonecgModItems.REDCU_METER);
+            event.accept(RedstonecgModItems.REDCU_MIXTURE);
+            event.accept(RedstonecgModItems.REDCU_INGOT);
+            event.accept(RedstonecgModItems.REDCU_CRAFTER);
             event.accept(RedstonecgModItems.SMOOTH_STONE_PLATE);
             event.accept(RedstonecgModItems.ROTATION_BRACKET);
             //==== Floor ====

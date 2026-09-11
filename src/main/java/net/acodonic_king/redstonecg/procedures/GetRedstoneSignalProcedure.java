@@ -1,5 +1,6 @@
 package net.acodonic_king.redstonecg.procedures;
 
+import net.acodonic_king.redstonecg.RedstonecgMod;
 import net.acodonic_king.redstonecg.block.defaults.DefaultRedstoneActionGate;
 import net.acodonic_king.redstonecg.block.defaults.RedstoneSignalInterface;
 import net.acodonic_king.redstonecg.block.defaults.WireInterface;
@@ -19,14 +20,17 @@ public class GetRedstoneSignalProcedure {
 	 * @param requesterFace Requesters Connection Face
 	 * @return redstone signal in redstone units
 	 */
-	public static int execute(LevelAccessor world, BlockPos requesterPos, ConnectionFace requesterFace){
-		BlockPos targetPos = requesterPos.relative(requesterFace.FACE);
+	public static int execute(LevelAccessor world, BlockPos requesterPos, byte requesterFace){
+		Direction face = ConnectionFace.decodeFace(requesterFace);
+		BlockPos targetPos = requesterPos.relative(face);
 		BlockState targetState = world.getBlockState(targetPos);
 		Block targetBlock = targetState.getBlock();
-		if(targetBlock instanceof RedstoneSignalInterface si){
+		if(targetBlock instanceof WireInterface si) {
+			return si.getWirePower(world, targetPos, requesterFace) >> 4;
+		} if(targetBlock instanceof RedstoneSignalInterface si){
 			return si.getRedstonePower(world, targetPos, requesterFace);
 		}
-		int SidePower = world instanceof Level _lvl_getRedPow ? _lvl_getRedPow.getSignal(targetPos, requesterFace.FACE) : 0;
+		int SidePower = world instanceof Level _lvl_getRedPow ? _lvl_getRedPow.getSignal(targetPos, face) : 0;
 		if (SidePower == 0) {
 			if (targetState.is(Blocks.REDSTONE_WIRE)) {
 				SidePower = LittleTools.getIntegerProperty(targetState,"power");
@@ -43,7 +47,7 @@ public class GetRedstoneSignalProcedure {
 	 * @return
 	 */
 	public static int execute(LevelAccessor world, BlockPos requesterPos, Direction requesterLocalDirection){
-		ConnectionFace sourceFace = BlockFrameTransformUtils.getConnectionFace(world, requesterPos, requesterLocalDirection);
+		byte sourceFace = BlockFrameTransformUtils.getConnectionFace(world, requesterPos, requesterLocalDirection);
 		return execute(world, requesterPos, sourceFace);
 	}
 
@@ -55,7 +59,7 @@ public class GetRedstoneSignalProcedure {
 	 * @return
 	 */
 	public static int executeWorldDirection(LevelAccessor world, BlockPos requesterPos, Direction requesterWorldDirection){
-		ConnectionFace sourceFace = BlockFrameTransformUtils.getConnectionFaceWorldSide(world, requesterPos, requesterWorldDirection);
+		byte sourceFace = BlockFrameTransformUtils.getConnectionFaceWorldSide(world, requesterPos, requesterWorldDirection);
 		return execute(world, requesterPos, sourceFace);
 	}
 
@@ -66,8 +70,9 @@ public class GetRedstoneSignalProcedure {
 	 * @param requesterFace
 	 * @return
 	 */
-	public static int executeWire(LevelAccessor world, BlockPos requesterPos, ConnectionFace requesterFace){
-		BlockPos targetPos = requesterPos.relative(requesterFace.FACE);
+	public static int executeWire(LevelAccessor world, BlockPos requesterPos, byte requesterFace){
+		Direction face = ConnectionFace.decodeFace(requesterFace);
+		BlockPos targetPos = requesterPos.relative(face);
 		BlockState targetState = world.getBlockState(targetPos);
 		Block targetBlock = targetState.getBlock();
 		if(targetBlock instanceof WireInterface si){
@@ -75,7 +80,7 @@ public class GetRedstoneSignalProcedure {
 		} else if (targetBlock instanceof RedstoneSignalInterface si){
 			return si.getRedstonePower(world, targetPos, requesterFace) << 4;
 		}
-		int SidePower = world instanceof Level _lvl_getRedPow ? _lvl_getRedPow.getSignal(targetPos, requesterFace.FACE) : 0;
+		int SidePower = world instanceof Level _lvl_getRedPow ? _lvl_getRedPow.getSignal(targetPos, face) : 0;
 		if (SidePower == 0) {
 			if (targetState.is(Blocks.REDSTONE_WIRE)) {
 				SidePower = LittleTools.getIntegerProperty(targetState,"power");

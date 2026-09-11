@@ -83,7 +83,8 @@ public class RedCuCrafterBlock extends Block implements EntityBlock {
 		if (state.getBlock() != newState.getBlock()) {
 			BlockEntity blockEntity = world.getBlockEntity(pos);
 			if (blockEntity instanceof RedCuCrafterBlockEntity be) {
-				Containers.dropContents(world, pos, be);
+				for(int i = 0; i < 3; i++)
+					Containers.dropItemStack(world, pos.getX(), pos.getY(), pos.getZ(), be.getItem(i));
 				world.updateNeighbourForOutputSignal(pos, this);
 			}
 			super.onRemove(state, world, pos, newState, isMoving);

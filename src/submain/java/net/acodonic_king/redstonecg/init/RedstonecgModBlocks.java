@@ -2,14 +2,11 @@ package net.acodonic_king.redstonecg.init;
 
 import net.acodonic_king.redstonecg.RedstonecgMod;
 import net.acodonic_king.redstonecg.block.*;
-import net.acodonic_king.redstonecg.block.normal.interaction.CodedControlPanelBlock;
-import net.acodonic_king.redstonecg.block.normal.interaction.ControlPanelBlock;
 import net.acodonic_king.redstonecg.block.normal.hybrid.*;
 import net.acodonic_king.redstonecg.block.normal.analog.*;
 import net.acodonic_king.redstonecg.block.normal.digital.*;
 import net.acodonic_king.redstonecg.block.normal.indicator.*;
-import net.acodonic_king.redstonecg.block.normal.interaction.RedButtonBlock;
-import net.acodonic_king.redstonecg.block.normal.interaction.RedSwitchBlock;
+import net.acodonic_king.redstonecg.block.normal.interaction.*;
 import net.acodonic_king.redstonecg.block.normal.wire.*;
 import net.acodonic_king.redstonecg.block.parallel.analog.*;
 import net.acodonic_king.redstonecg.block.parallel.digital.*;

@@ -44,7 +44,7 @@ public class ReversedPathSelectorBlock extends DefaultRedstoneActionGate impleme
 
 	@Override
 	public boolean canConnectRedstone(BlockState state, BlockGetter world, BlockPos pos, Direction side) {
-		ConnectionFace connectionFaceB = BlockFrameTransformUtils.canConnectRedstoneTargetConnectionFace(world, pos, side);
+		byte connectionFaceB = BlockFrameTransformUtils.canConnectRedstoneTargetConnectionFace(world, pos, side);
 		return CanConnectWallGateProcedure.To4Gate(state, connectionFaceB);
 	}
 
@@ -113,9 +113,9 @@ public class ReversedPathSelectorBlock extends DefaultRedstoneActionGate impleme
 	}
 
 	@Override
-	public int getRedstonePower(LevelAccessor world, BlockPos pos, ConnectionFace sourceFace) {
-		ConnectionFace thisFace = getOutputConnectionFace(world, pos, sourceFace);
-		if(thisFace.canConnect(sourceFace)){
+	public int getRedstonePower(LevelAccessor world, BlockPos pos, byte sourceFace) {
+		byte thisFace = getOutputConnectionFace(world, pos, sourceFace);
+		if(ConnectionFace.canConnect(thisFace, sourceFace)){
 			if(world.getBlockEntity(pos) instanceof DefaultAnalogGateBlockEntity be){
 				return be.POWER;
 			}

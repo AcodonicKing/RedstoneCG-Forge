@@ -29,7 +29,7 @@ public class ParallelOneWayThroughGateBlock extends DefaultParallelAnalogInterac
 	@Override
 	public int onRedstoneUpdate(LevelAccessor world, BlockState thisState, BlockPos thisPos, int recursion){
 		int linePower = GetParallelSignalProcedure.getParallelLinePower(world, thisPos);
-		ConnectionFace connectionFaceA = BlockFrameTransformUtils.getConnectionFace(thisState, Direction.NORTH);
+		byte connectionFaceA = BlockFrameTransformUtils.getConnectionFace(thisState, Direction.NORTH);
 		int backPower = GetRedstoneSignalProcedure.execute(world, thisPos, connectionFaceA);
 		int ASignal = linePower;
 		int BSignal = backPower;
@@ -44,13 +44,17 @@ public class ParallelOneWayThroughGateBlock extends DefaultParallelAnalogInterac
 		if (world.getBlockEntity(thisPos) instanceof DefaultAnalogGateBlockEntity be) {
 			be.POWER = ASignal;
 			be.setChanged();
-			sendRedstoneUpdateInDirection(world, thisState.getBlock(), thisPos, connectionFaceA.FACE.getOpposite(), recursion);
+			sendRedstoneUpdateInDirection(
+					world, thisState.getBlock(), thisPos,
+					ConnectionFace.decodeFace(connectionFaceA).getOpposite(),
+					recursion
+			);
 		}
 		return 0;
 	}
 
 	@Override
-	public ConnectionFace getOutputConnectionFace(LevelAccessor world, BlockPos pos, ConnectionFace requesterFace) {
+	public byte getOutputConnectionFace(LevelAccessor world, BlockPos pos, byte requesterFace) {
 		return BlockFrameTransformUtils.getConnectionFace(world.getBlockState(pos), Direction.SOUTH);
 	}
 

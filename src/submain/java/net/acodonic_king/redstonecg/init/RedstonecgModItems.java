@@ -22,11 +22,11 @@ import java.util.function.Supplier;
 public class RedstonecgModItems {
 	public static final DeferredRegister<Item> REGISTRY = DeferredRegister.create(ForgeRegistries.ITEMS, RedstonecgMod.MODID);
 
-	public static final RegistryObject<Item> RED_CU_METER = item("redcu_meter", RedCuMeterItem::new);
-	public static final RegistryObject<Item> RED_CU_MIXTURE = item("redcu_mixture", RedCuMixtureItem::new);
-	public static final RegistryObject<Item> RED_CU_INGOT = item("redcu_ingot", RedCuIngotItem::new);
+	public static final RegistryObject<Item> REDCU_METER = item("redcu_meter", RedCuMeterItem::new);
+	public static final RegistryObject<Item> REDCU_MIXTURE = item("redcu_mixture", RedCuMixtureItem::new);
+	public static final RegistryObject<Item> REDCU_INGOT = item("redcu_ingot", RedCuIngotItem::new);
 	public static final RegistryObject<Item> ROTATION_BRACKET = item("rotation_bracket", RotationBracket::new);
-	public static final RegistryObject<Item> RED_CU_CRAFTER = block(RedstonecgModBlocks.REDCU_CRAFTER);
+	public static final RegistryObject<Item> REDCU_CRAFTER = block(RedstonecgModBlocks.REDCU_CRAFTER);
 	public static final RegistryObject<Item> SMOOTH_STONE_PLATE = block(RedstonecgModBlocks.SMOOTH_STONE_PLATE);
 	//==== Floor ====
 	//Digital
@@ -175,7 +175,7 @@ public class RedstonecgModItems {
 	@SubscribeEvent
 	public static void clientLoad(FMLClientSetupEvent event) {
 		event.enqueueWork(() -> {
-			ItemProperties.register(RED_CU_METER.get(), new ResourceLocation("redstonecg:red_cu_meter_measuring"), (itemStackToRender, clientWorld, entity, itemEntityId) -> RedCuMeterMeasuringProcedure.GetTextureID(itemStackToRender));
+			ItemProperties.register(REDCU_METER.get(), new ResourceLocation("redstonecg:red_cu_meter_measuring"), (itemStackToRender, clientWorld, entity, itemEntityId) -> RedCuMeterMeasuringProcedure.GetTextureID(itemStackToRender));
 		});
 	}
 }

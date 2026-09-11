@@ -56,7 +56,7 @@ public class ColorfulLampBlock  extends DefaultColoredLampBlock implements Power
             be.setChanged();
             BlockState state = world.getBlockState(pos).setValue(POWER, signal);
             world.setBlock(pos, state, 3);
-            MessengerBlockEntityPigeon.send(new MessengerBlockEntityPigeon(pos, be.getUpdateTag()));
+            MessengerBlockEntityPigeon.send(new MessengerBlockEntityPigeon(pos, be.getUpdateTag()), false);
         }
     }
 

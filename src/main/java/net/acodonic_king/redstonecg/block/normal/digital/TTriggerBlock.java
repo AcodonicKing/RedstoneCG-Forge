@@ -25,7 +25,7 @@ public class TTriggerBlock extends DefaultDigitalInteractableTriggerGate impleme
 
 	@Override
 	public boolean canConnectRedstone(BlockState state, BlockGetter world, BlockPos pos, Direction side) {
-		ConnectionFace connectionFaceB = BlockFrameTransformUtils.canConnectRedstoneTargetConnectionFace(world, pos, side);
+		byte connectionFaceB = BlockFrameTransformUtils.canConnectRedstoneTargetConnectionFace(world, pos, side);
 		return CanConnectWallGateProcedure.To1Gate(state, connectionFaceB);
 	}
 
@@ -40,7 +40,7 @@ public class TTriggerBlock extends DefaultDigitalInteractableTriggerGate impleme
 		Level world = (Level) level;
 		if (world.getBlockEntity(pos) instanceof DefaultDigitalTriggerGateBlockEntity be) {
 			Direction Side = GetGateInputSidesProcedure.Get1GateForth(blockState);
-			ConnectionFace thisFace = BlockFrameTransformUtils.getConnectionFace(blockState, Side);
+			byte thisFace = BlockFrameTransformUtils.getConnectionFace(blockState, Side);
 			int SidePower = GetRedstoneSignalProcedure.execute(world, pos, thisFace);
 
 			boolean output = be.OUTPUT;

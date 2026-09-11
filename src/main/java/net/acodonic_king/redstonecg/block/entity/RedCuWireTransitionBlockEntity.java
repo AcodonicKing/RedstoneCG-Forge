@@ -125,7 +125,7 @@ public class RedCuWireTransitionBlockEntity extends DefaultContainerBlockEntity 
     // Save NBT
     @Override
     public void saveAdditional(CompoundTag tag) {
-        super.saveAdditional(tag);
+        saveAdditionalNoItems(tag);
         //tag.putIntArray("render_objects", RENDER_OBJECTS);
         tag.putByte("power", (byte) (POWER & 0xFF));
         tag.putByte("ax", (byte) (((EAST & 0x0F) << 4) | (WEST & 0x0F)));
@@ -167,6 +167,44 @@ public class RedCuWireTransitionBlockEntity extends DefaultContainerBlockEntity 
             m &= 1;
             this.getLevel().sendBlockUpdated(this.getBlockPos(), blockState, blockState.setValue(RedCuWireTransitionBlock.MODEL, m), 3);
         }*/
+    }
+
+    public void shapeFind(){
+        Map<String, Integer> NodesMap = new HashMap<>();
+        SHAPE = 0;
+        List<String> cables = getCables((node, knot, c) -> {
+            int h = (node.indexOf(knot) == 0) ? 1 : 0;
+            h = 1 << h;
+            int g = 1 << c;
+            if (NodesMap.containsKey(knot)) {
+                NodesMap.replace(knot, NodesMap.get(knot) | g);
+            } else {
+                NodesMap.put(knot, g);
+            }
+            if (NodesMap.containsKey(node)) {
+                NodesMap.replace(node, NodesMap.get(node) | h);
+            } else {
+                NodesMap.put(node, h);
+            }
+        }, (node) -> {
+            NodesMap.put(node,0);
+            for(byte c: node.getBytes()){
+                SHAPE |= (byte) (1 << getShapeIndexCharacter((char) c));
+            }
+            SHAPE |= (byte) (1 << 6);
+        });
+        if(!cables.isEmpty()){
+            nodeConnection(NodesMap, "D", DOWN);
+            nodeConnection(NodesMap, "N", NORTH);
+            nodeConnection(NodesMap, "E", EAST);
+            nodeConnection(NodesMap, "S", SOUTH);
+            nodeConnection(NodesMap, "W", WEST);
+            nodeConnection(NodesMap, "U", UP);
+        }
+        NodesMap.forEach((String node, Integer IValue) -> {
+            if(node.length() == 1)
+                SHAPE |= (byte) (1 << getShapeIndexCharacter(node.charAt(0)));
+        });
     }
 
     public void pathFind(){
@@ -254,7 +292,6 @@ public class RedCuWireTransitionBlockEntity extends DefaultContainerBlockEntity 
         addNode(nodes, "S", SOUTH);
         addNode(nodes, "W", WEST);
         addNode(nodes, "U", UP);
-
         if(nodes.isEmpty()){return new ArrayList<>();}
         if(nodes.size() == 1){
             one_node.accept(nodes.get(0));

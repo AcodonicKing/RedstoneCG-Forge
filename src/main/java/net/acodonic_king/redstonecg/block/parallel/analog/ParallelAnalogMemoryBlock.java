@@ -18,7 +18,7 @@ public class ParallelAnalogMemoryBlock extends DefaultParallelAnalogInteractable
 	@Override
 	public int onRedstoneUpdate(LevelAccessor world, BlockState thisState, BlockPos thisPos, int recursion){
 		int linePower = GetParallelSignalProcedure.getParallelLinePower(world, thisPos);
-		ConnectionFace connectionFaceA = BlockFrameTransformUtils.getConnectionFace(thisState, Direction.SOUTH);
+		byte connectionFaceA = BlockFrameTransformUtils.getConnectionFace(thisState, Direction.SOUTH);
 		int backPower = GetRedstoneSignalProcedure.execute(world, thisPos, connectionFaceA);
 		int ASignal = linePower;
 		int BSignal = backPower;
@@ -34,7 +34,7 @@ public class ParallelAnalogMemoryBlock extends DefaultParallelAnalogInteractable
 				be.POWER = ASignal;
 				be.setChanged();
 				updateVisibleState((Level) world, thisPos, thisState, ASignal);
-				sendRedstoneUpdateInDirection(world, thisState.getBlock(), thisPos, connectionFaceA.FACE.getOpposite(), recursion);
+				sendRedstoneUpdateInDirection(world, thisState.getBlock(), thisPos, ConnectionFace.decodeFace(connectionFaceA).getOpposite(), recursion);
 			}
 		}
 		return 0;

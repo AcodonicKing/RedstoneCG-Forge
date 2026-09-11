@@ -27,7 +27,7 @@ public class BinaryEncoderBlock extends DefaultAnalogInteractable3ABCGate {
         int[] power = {0,0,0};
         int i = 0;
         for(Direction side: Sides){
-            ConnectionFace thisFace = BlockFrameTransformUtils.getConnectionFace(blockState, side);
+            byte thisFace = BlockFrameTransformUtils.getConnectionFace(blockState, side);
             power[i] = GetRedstoneSignalProcedure.execute(world, pos, thisFace);
             i++;
         }

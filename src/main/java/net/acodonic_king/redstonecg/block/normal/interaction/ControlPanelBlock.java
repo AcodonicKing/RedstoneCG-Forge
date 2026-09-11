@@ -2,6 +2,7 @@ package net.acodonic_king.redstonecg.block.normal.interaction;
 
 import io.netty.buffer.Unpooled;
 import net.acodonic_king.redstonecg.ModLoaderRider;
+import net.acodonic_king.redstonecg.RedstonecgMod;
 import net.acodonic_king.redstonecg.block.defaults.RedstoneSignalInterface;
 import net.acodonic_king.redstonecg.block.defaults.RotationBracketInterface;
 import net.acodonic_king.redstonecg.block.defaults.SuperBlock;
@@ -44,8 +45,6 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-
-import java.util.List;
 
 import static net.acodonic_king.redstonecg.procedures.RightAngleRotation.*;
 
@@ -108,13 +107,15 @@ public class ControlPanelBlock extends SuperBlock implements SimpleWaterloggedBl
             }
         } else if (orientation < 30) {
             orientation -= 6;
+            int group = orientation >> 2;
             builder.rotateY(CCW_MAP[orientation & 3], 8, 8, 8);
-            orientation >>= 2;
-            if(orientation == 5)
+            if(group == 5) {
                 builder.rotateX(CW2, 8, 8, 8);
-            else if(orientation > 0) {
+                if((orientation & 1) != 0)
+                    builder.rotateY(CW2, 8, 8, 8);
+            } else if(group > 0) {
                 builder.rotateX(CW1, 8, 8, 8);
-                builder.rotateY(CCW_MAP[orientation - 1], 8, 8, 8);
+                builder.rotateY(CCW_MAP[group - 1], 8, 8, 8);
             }
         } else {
             if(orientation > 37)
@@ -205,12 +206,19 @@ public class ControlPanelBlock extends SuperBlock implements SimpleWaterloggedBl
 
     public BlockState getStateForPlacementDirect(BlockPlaceContext context) {
         Direction clickedFace = context.getClickedFace().getOpposite();
-        Direction lookDirection = context.getHorizontalDirection();
+        Direction lookDirection = context.getNearestLookingDirection();
+        lookDirection = BlockFrameTransformUtils.getLocalDirectionFromWorld(Direction.NORTH, clickedFace, lookDirection);
+        if(lookDirection == Direction.UP || lookDirection == Direction.DOWN)
+            lookDirection = Direction.NORTH;
+        if(clickedFace == Direction.UP && lookDirection.getAxis() == Direction.Axis.X)
+            lookDirection = lookDirection.getOpposite();
         Level world = context.getLevel();
         BlockPos pos = context.getClickedPos();
         boolean flag = context.getLevel().getFluidState(context.getClickedPos()).getType() == Fluids.WATER;
         BlockState blockState = this.defaultBlockState().setValue(WATERLOGGED, flag);
-        blockState = blockState.setValue(ORIENTATION, BlockFrameTransformUtils.encodeDirectionToInt(clickedFace));
+        int orientation = (BlockFrameTransformUtils.encodeDirectionToInt(clickedFace) << 2) + 5;
+        orientation += BlockFrameTransformUtils.encodeDirectionToInt(lookDirection);
+        blockState = blockState.setValue(ORIENTATION, orientation);
         /*if(clickedFace == Direction.UP){
             blockState = switch (lookDirection){
                 case NORTH, SOUTH -> blockState.setValue(ROTATION, lookDirection.getOpposite());
@@ -335,12 +343,17 @@ public class ControlPanelBlock extends SuperBlock implements SimpleWaterloggedBl
     public int getSignal(BlockState blockstate, BlockGetter blockAccess, BlockPos pos, Direction direction) {
         LevelAccessor world = (LevelAccessor) blockAccess;
         if(blockAccess.getBlockEntity(pos) instanceof ControlPanelBlockEntity be){
-            ConnectionFace connectionFaceB = new ConnectionFace(direction); //temporary
-            ConnectionFace connectionFaceA = be.getConnectionFace(world.getBlockState(pos).getValue(ORIENTATION), connectionFaceB);
-            connectionFaceB = BlockFrameTransformUtils.getRequesterConnectionFace(world, pos.relative(direction.getOpposite()), connectionFaceA, direction.getOpposite());
+            byte connectionFaceB = ConnectionFace.primitiveAll(direction); //temporary
+            byte connectionFaceA = be.getConnectionFace(world.getBlockState(pos).getValue(ORIENTATION), connectionFaceB);
+            connectionFaceB = BlockFrameTransformUtils.getRequesterConnectionFace(
+                    world,
+                    pos.relative(direction.getOpposite()),
+                    connectionFaceA,
+                    direction.getOpposite()
+            );
             connectionFaceA = be.getConnectionFace(world.getBlockState(pos).getValue(ORIENTATION), connectionFaceB);
             //RedstonecgMod.LOGGER.debug("s "+connectionFaceA+" "+connectionFaceB);
-            if(connectionFaceA.canConnect(connectionFaceB))
+            if(ConnectionFace.canConnect(connectionFaceA, connectionFaceB))
                 return be.provideRedstone((LevelAccessor) blockAccess, pos);
         }
         return 0;
@@ -358,9 +371,11 @@ public class ControlPanelBlock extends SuperBlock implements SimpleWaterloggedBl
         if(world.isClientSide())
             return 0;
         if(world.getBlockEntity(pos) instanceof ControlPanelBlockEntity be){
-            List<ConnectionFace> connectionFaces = be.getConnectionFaces(blockstate.getValue(ORIENTATION));
-            for(ConnectionFace connectionFace: connectionFaces)
+            //List<ConnectionFace> connectionFaces = be.getConnectionFaces(blockstate.getValue(ORIENTATION));
+            for(byte connectionFace: be.getConnectionFaces(blockstate.getValue(ORIENTATION))) {
+                //RedstonecgMod.LOGGER.debug(connectionFace);
                 power = Math.max(power, GetRedstoneSignalProcedure.execute(world, pos, connectionFace));
+            }
             if(be.receiveRedstone(world, pos, power))
                 be.syncInventory(pos);
         }
@@ -418,28 +433,25 @@ public class ControlPanelBlock extends SuperBlock implements SimpleWaterloggedBl
     }
 
     @Override
-    public int getRedstonePower(LevelAccessor world, BlockPos pos, ConnectionFace requesterFace) {
+    public int getRedstonePower(LevelAccessor world, BlockPos pos, byte requesterFace) {
         if(world.getBlockEntity(pos) instanceof ControlPanelBlockEntity be){
-            ConnectionFace thisFace = be.getConnectionFace(world.getBlockState(pos).getValue(ORIENTATION), requesterFace);
+            byte thisFace = be.getConnectionFace(world.getBlockState(pos).getValue(ORIENTATION), requesterFace);
             //RedstonecgMod.LOGGER.debug("p "+thisFace+" "+requesterFace);
-            if(thisFace.canConnect(requesterFace))
+            if(ConnectionFace.canConnect(thisFace, requesterFace))
                 return be.provideRedstone(world, pos);
         }
         return 0;
     }
 
     @Override
-    public ConnectionFace getOutputConnectionFace(LevelAccessor world, BlockPos pos, ConnectionFace requesterFace) {
-        if(world.getBlockEntity(pos) instanceof ControlPanelBlockEntity be) {
-            ConnectionFace thisFace = be.getConnectionFace(world.getBlockState(pos).getValue(ORIENTATION), requesterFace);
-            //RedstonecgMod.LOGGER.debug("o "+thisFace+" "+requesterFace);
-            return thisFace;
-        }
-        return new ConnectionFace(requesterFace.FACE, 5);
+    public byte getOutputConnectionFace(LevelAccessor world, BlockPos pos, byte requesterFace) {
+        if(world.getBlockEntity(pos) instanceof ControlPanelBlockEntity be)
+            return be.getConnectionFace(world.getBlockState(pos).getValue(ORIENTATION), requesterFace);
+        return ConnectionFace.setChannelMask(requesterFace, ConnectionFace.MASK_NONE);
     }
 
     @Override
-    public ConnectionFace getAnyConnectionFace(LevelAccessor world, BlockPos pos, ConnectionFace requesterFace) {
+    public byte getAnyConnectionFace(LevelAccessor world, BlockPos pos, byte requesterFace) {
         return getOutputConnectionFace(world, pos, requesterFace);
     }
 

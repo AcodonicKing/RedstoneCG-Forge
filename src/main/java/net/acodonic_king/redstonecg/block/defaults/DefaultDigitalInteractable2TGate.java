@@ -1,5 +1,6 @@
 package net.acodonic_king.redstonecg.block.defaults;
 
+import net.acodonic_king.redstonecg.RedstonecgMod;
 import net.acodonic_king.redstonecg.procedures.*;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -22,7 +23,7 @@ public class DefaultDigitalInteractable2TGate extends DefaultDigitalInteractable
 
     @Override
     public boolean canConnectRedstone(BlockState state, BlockGetter world, BlockPos pos, Direction side) {
-        ConnectionFace connectionFaceB = BlockFrameTransformUtils.canConnectRedstoneTargetConnectionFace(world, pos, side);
+        byte connectionFaceB = BlockFrameTransformUtils.canConnectRedstoneTargetConnectionFace(world, pos, side);
         return CanConnectWallGateProcedure.To2TGate(state, connectionFaceB);
     }
 
@@ -34,8 +35,9 @@ public class DefaultDigitalInteractable2TGate extends DefaultDigitalInteractable
         int[] power = new int[Sides.length];
         int i = 0;
         for(Direction side: Sides){
-            ConnectionFace thisFace = BlockFrameTransformUtils.getConnectionFace(blockState, side);
+            byte thisFace = BlockFrameTransformUtils.getConnectionFace(blockState, side);
             power[i] = GetRedstoneSignalProcedure.execute(world, pos, thisFace);
+            //RedstonecgMod.LOGGER.debug(pos+" "+power[i]+" "+thisFace);
             i++;
         }
         boolean output = this.redstoneOutputOperation(power);

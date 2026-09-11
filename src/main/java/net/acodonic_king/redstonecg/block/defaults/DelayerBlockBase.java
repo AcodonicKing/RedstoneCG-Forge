@@ -4,6 +4,7 @@ import io.netty.buffer.Unpooled;
 import net.acodonic_king.redstonecg.ModLoaderRider;
 import net.acodonic_king.redstonecg.block.entity.DefaultAnalogIndicatorBlockEntity;
 import net.acodonic_king.redstonecg.block.entity.DelayerBlockEntity;
+import net.acodonic_king.redstonecg.block.entity.OrientationHolderBlockEntity;
 import net.acodonic_king.redstonecg.block.gui.delayer.DelayerGUIMenu;
 import net.acodonic_king.redstonecg.init.RedstonecgModItems;
 import net.acodonic_king.redstonecg.init.RedstonecgModVersionRides;
@@ -43,7 +44,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.Nullable;
 
-public class DelayerBlockBase extends SuperBlock implements SimpleWaterloggedBlock, EntityBlock, FlooringInterface, RedstoneSignalInterface, MeasurementProvider, CustomBlockPrimarySecondaryDirectionInterface {
+public class DelayerBlockBase extends SuperBlock implements SimpleWaterloggedBlock, EntityBlock, FlooringInterface, RedstoneSignalInterface, MeasurementProvider, PrimarySecondaryDirectionInterface {
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
     public static final IntegerProperty DELAY = IntegerProperty.create("delay",1,8);
     public static final BooleanProperty POWERED = BooleanProperty.create("powered");
@@ -65,9 +66,9 @@ public class DelayerBlockBase extends SuperBlock implements SimpleWaterloggedBlo
     }
 
     @Override
-    public int getRedstonePower(LevelAccessor world, BlockPos pos, ConnectionFace sourceFace) {
-        ConnectionFace thisFace = getOutputConnectionFace(world, pos, sourceFace);
-        if (thisFace.canConnect(sourceFace)) {
+    public int getRedstonePower(LevelAccessor world, BlockPos pos, byte sourceFace) {
+        byte thisFace = getOutputConnectionFace(world, pos, sourceFace);
+        if (ConnectionFace.canConnect(thisFace, sourceFace)) {
             if (world.getBlockEntity(pos) instanceof DelayerBlockEntity be) {
                 return be.getSignal(world.getBlockState(pos).getValue(DELAY) - 1);
             }
@@ -77,9 +78,10 @@ public class DelayerBlockBase extends SuperBlock implements SimpleWaterloggedBlo
 
     @Override
     public int getSignal(BlockState blockstate, BlockGetter blockAccess, BlockPos pos, Direction direction) {
-        ConnectionFace connectionFaceB = new ConnectionFace(direction); //temporary
+        //ConnectionFace connectionFaceB = new ConnectionFace(direction); //temporary
+        byte connectionFaceB = ConnectionFace.primitiveAll(direction); //temporary
         LevelAccessor world = (LevelAccessor) blockAccess;
-        ConnectionFace connectionFaceA = getOutputConnectionFace(world, pos, connectionFaceB);
+        byte connectionFaceA = getOutputConnectionFace(world, pos, connectionFaceB);
         connectionFaceB = BlockFrameTransformUtils.getRequesterConnectionFace(world, pos.relative(direction.getOpposite()), connectionFaceA, direction.getOpposite());
         return getRedstonePower(world, pos, connectionFaceB);
     }
@@ -95,11 +97,26 @@ public class DelayerBlockBase extends SuperBlock implements SimpleWaterloggedBlo
         world.scheduleTick(pos, world.getBlockState(pos).getBlock(), 1);
     }
 
+    @Override
     public Pair<Direction,Direction> getPrimarySecondaryDirections(LevelAccessor world, BlockPos pos){
         Pair<Direction,Direction> dirs = BlockFrameTransformUtils.getDefaultPrimarySecondaryDirections();
         if(world.getBlockEntity(pos) instanceof DelayerBlockEntity be)
             dirs = be.getPrimarySecondaryDirections();
         return dirs;
+    }
+
+    @Override
+    public Direction getPrimaryDirection(LevelAccessor world, BlockPos pos) {
+        if(world.getBlockEntity(pos) instanceof OrientationHolderBlockEntity be)
+            return be.getPrimaryDirection();
+        return Direction.NORTH;
+    }
+
+    @Override
+    public Direction getSecondaryDirection(LevelAccessor world, BlockPos pos) {
+        if(world.getBlockEntity(pos) instanceof OrientationHolderBlockEntity be)
+            return be.getSecondaryDirection();
+        return Direction.DOWN;
     }
 
     public int[] getSidePower(BlockState blockState, LevelAccessor world, BlockPos pos, Pair<Direction,Direction> dirs){
@@ -165,15 +182,13 @@ public class DelayerBlockBase extends SuperBlock implements SimpleWaterloggedBlo
     }
 
     @Override
-    public ConnectionFace getOutputConnectionFace(LevelAccessor world, BlockPos pos, ConnectionFace requesterFace) {
+    public byte getOutputConnectionFace(LevelAccessor world, BlockPos pos, byte requesterFace) {
         return BlockFrameTransformUtils.getConnectionFace(getPrimarySecondaryDirections(world, pos), Direction.NORTH);
     }
 
     @Override
-    public ConnectionFace getAnyConnectionFace(LevelAccessor world, BlockPos pos, ConnectionFace requesterFace) {
-        Pair<Direction, Direction> dirs = getPrimarySecondaryDirections(world, pos);
-        Direction localDirection = BlockFrameTransformUtils.getLocalDirectionFromWorld(dirs,requesterFace.FACE.getOpposite());
-        return BlockFrameTransformUtils.getConnectionFace(dirs,localDirection);
+    public byte getAnyConnectionFace(LevelAccessor world, BlockPos pos, byte requesterFace) {
+        return BlockFrameTransformUtils.getConnectionFaceForRequester(world, pos, requesterFace);
     }
 
     @Override

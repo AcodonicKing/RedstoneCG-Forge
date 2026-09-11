@@ -4,6 +4,7 @@ import net.acodonic_king.redstonecg.block.defaults.DefaultColoredLampBlock;
 import net.acodonic_king.redstonecg.block.defaults.PowerIntegerPropertyInterface;
 import net.acodonic_king.redstonecg.block.defaults.StainLampInterface;
 import net.acodonic_king.redstonecg.block.entity.DefaultColoredLampBlockEntity;
+import net.acodonic_king.redstonecg.block.entity.RedCuWireBlockEntity;
 import net.acodonic_king.redstonecg.init.RedstonecgModVersionRides;
 import net.acodonic_king.redstonecg.item.ColoredLampItem;
 import net.acodonic_king.redstonecg.procedures.AdventureProcedure;
@@ -18,9 +19,11 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BeaconBeamBlock;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.RedStoneWireBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
@@ -109,7 +112,7 @@ public class ColoredLampBlock extends DefaultColoredLampBlock implements PowerIn
         if(world.getBlockEntity(pos) instanceof DefaultColoredLampBlockEntity be){
             be.setColor(color);
             be.setChanged();
-            world.updateNeighborsAt(pos, blockstate.getBlock());
+            world.sendBlockUpdated(pos, blockstate, blockstate, 3);
             if(be.ITEM != null)
                 Containers.dropItemStack(world, pos.getX(), pos.getY(), pos.getZ(), new ItemStack(be.ITEM));
             if(stainItem != null)

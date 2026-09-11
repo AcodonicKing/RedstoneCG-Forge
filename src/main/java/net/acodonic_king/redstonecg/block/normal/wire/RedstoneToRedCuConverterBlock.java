@@ -1,10 +1,15 @@
 
 package net.acodonic_king.redstonecg.block.normal.wire;
 
+import net.acodonic_king.redstonecg.RedstonecgMod;
 import net.acodonic_king.redstonecg.block.defaults.*;
 import net.acodonic_king.redstonecg.block.entity.RedCuWireBlockEntity;
+import net.acodonic_king.redstonecg.network.MessengerBlockEntityPigeon;
 import net.acodonic_king.redstonecg.procedures.*;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.block.RedStoneWireBlock;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
@@ -17,8 +22,9 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.core.Direction;
 import net.minecraft.core.BlockPos;
+import org.apache.commons.lang3.tuple.Pair;
 
-import java.util.List;
+import java.util.logging.Logger;
 
 public class RedstoneToRedCuConverterBlock extends DefaultWire implements OldInterface, PinMarkConnectionInterface {
 	public static final IntegerProperty CONNECTION = IntegerProperty.create("connection",0,12);
@@ -57,9 +63,9 @@ public class RedstoneToRedCuConverterBlock extends DefaultWire implements OldInt
 		int filter = blockState.getValue(CONNECTION);
 		filter = RedCuWireCanConnectRedstoneProcedure.redstoneToRedCu_AllFilter(filter);
 		filter = ConnectionFacePrimaryRange.rotateFilter(filter,blockState.getValue(ROTATION));
-		ConnectionFace connectionFaceB = BlockFrameTransformUtils.canConnectRedstoneTargetConnectionFace(world, pos, side);
-		ConnectionFacePrimaryRange connectionFaceA = new ConnectionFacePrimaryRange(blockState.getValue(DefaultWire.FACING));
-		return connectionFaceA.canConnectAvoid(connectionFaceB,filter);
+		byte connectionFaceB = BlockFrameTransformUtils.canConnectRedstoneTargetConnectionFace(world, pos, side);
+		short connectionFaceA = ConnectionFacePrimaryRange.primitive(blockState.getValue(DefaultWire.FACING));
+		return ConnectionFacePrimaryRange.canConnectAllow(connectionFaceA, connectionFaceB, filter);
 	}
 
 	@Override
@@ -82,8 +88,8 @@ public class RedstoneToRedCuConverterBlock extends DefaultWire implements OldInt
 	@Override
 	public void onTick(LevelAccessor world, BlockPos pos, int recursion){
 		BlockState thisBlock = world.getBlockState(pos);
-		ConnectionFacePrimaryRange connectionFaceRangeA = new ConnectionFacePrimaryRange(thisBlock.getValue(DefaultWire.FACING));
-		List<ConnectionFace> connectionFaceList = connectionFaceRangeA.getList();
+		short connectionFaceRangeA = ConnectionFacePrimaryRange.primitive(thisBlock.getValue(DefaultWire.FACING));
+		byte[] connectionFaceList = ConnectionFacePrimaryRange.getArray(connectionFaceRangeA);
 		int connection = thisBlock.getValue(RedstoneToRedCuConverterBlock.CONNECTION);
 		Direction rotation = thisBlock.getValue(ROTATION);
 		int filterRedCu = RedCuWireCanConnectRedstoneProcedure.redstoneToRedCu_RedCuFilter(connection);
@@ -96,11 +102,10 @@ public class RedstoneToRedCuConverterBlock extends DefaultWire implements OldInt
 			boolean isRedstone = ((filterRedstone >> i) & 1) > 0;
 			//RedstonecgMod.LOGGER.debug("{} {} {}",i,isRedCu,isRedstone);
 			if(!(isRedCu || isRedstone)){continue;}
-			ConnectionFace connectionFaceA = connectionFaceList.get(i);
+			byte connectionFaceA = connectionFaceList[i];
 			int powerB = 0;
-			if(isRedCu){
+			if(isRedCu)
 				powerB = GetRedstoneSignalProcedure.executeWire(world, pos, connectionFaceA);
-			}
 			if(isRedstone){
 				powerB = GetRedstoneSignalProcedure.execute(world, pos, connectionFaceA);
 				powerB = (powerB << 4) + 16;
@@ -115,13 +120,17 @@ public class RedstoneToRedCuConverterBlock extends DefaultWire implements OldInt
 			if(wireEntity.POWER == power){return;}
 			wireEntity.POWER = power;
 			wireEntity.setChanged();
-			//((Level) world).sendBlockUpdated(pos, thisBlock, thisBlock, 2);
+			MessengerBlockEntityPigeon.send(new MessengerBlockEntityPigeon(pos, wireEntity.getUpdateTag()), false);
+			//world.scheduleTick(pos, thisBlock.getBlock(), 1);
+			//world.blockUpdated(pos, thisBlock.getBlock());
+			/*if(world instanceof Level lvl)
+				lvl.sendBlockUpdated(pos, thisBlock, thisBlock, Block.UPDATE_CLIENTS);*/
 			recursion++;
 			boolean exceedsRecursion = recursion > getWireChainLimit(world);
 			for(int i = 0; i < 4; i++){
 				if(((filterRedCu >> i) & 1) == 0){continue;}
-				ConnectionFace connectionFaceA = connectionFaceList.get(i);
-				BlockPos targetPos = pos.offset(connectionFaceA.FACE.getNormal());
+				byte connectionFaceA = connectionFaceList[i];
+				BlockPos targetPos = pos.offset(ConnectionFace.decodeFace(connectionFaceA).getNormal());
 				//RedstonecgMod.LOGGER.debug("Sending RedCu wire update to {}", targetPos);
 				BlockState bs = world.getBlockState(targetPos);
 				Block targetBlock = bs.getBlock();
@@ -138,24 +147,25 @@ public class RedstoneToRedCuConverterBlock extends DefaultWire implements OldInt
 					}
 					nb.onTick(world, targetPos, recursion);
 				} else {
-					Block nb = bs.getBlock();
+					//Block nb = bs.getBlock();
 					//nb.neighborChanged(bs,(Level) world,targetPos,thisBlock.getBlock(),pos,false);
-					((Level) world).neighborChanged(targetPos,thisBlock.getBlock(),pos);
+					if(world instanceof Level lvl)
+						lvl.neighborChanged(targetPos,thisBlock.getBlock(),pos);
 				}
 			}
 		}
 	}
 
 	@Override
-	public int getWirePower(LevelAccessor world, BlockPos pos, ConnectionFace requesterFace){
+	public int getWirePower(LevelAccessor world, BlockPos pos, byte requesterFace){
 		BlockEntity blockEntity = world.getBlockEntity(pos);
 		BlockState blockState = blockEntity.getBlockState();
-		ConnectionFacePrimaryRange connectionFaceRange = new ConnectionFacePrimaryRange(blockState.getValue(DefaultWire.FACING));
+		short connectionFaceRange = ConnectionFacePrimaryRange.primitive(blockState.getValue(DefaultWire.FACING));
 		int filter = blockState.getValue(CONNECTION);
 		filter = RedCuWireCanConnectRedstoneProcedure.redstoneToRedCu_RedCuFilter(filter);
 		filter = ConnectionFacePrimaryRange.rotateFilter(filter,blockState.getValue(ROTATION));
 		//RedstonecgMod.LOGGER.debug("{} {} {}", filter, requesterFace, pos);
-		if(!connectionFaceRange.canConnectAvoid(requesterFace,filter))
+		if(!ConnectionFacePrimaryRange.canConnectAllow(connectionFaceRange,requesterFace,filter))
 			return 0;
 		if (blockEntity instanceof RedCuWireBlockEntity wireEntity) {
 			return wireEntity.POWER;
@@ -176,17 +186,15 @@ public class RedstoneToRedCuConverterBlock extends DefaultWire implements OldInt
 	}
 
 	@Override
-	public ConnectionFace getOutputConnectionFace(LevelAccessor world, BlockPos pos, ConnectionFace requesterFace) {
+	public byte getOutputConnectionFace(LevelAccessor world, BlockPos pos, byte requesterFace) {
 		BlockState blockState = world.getBlockState(pos);
-		ConnectionFace connectionFace = requesterFace.getConnectable();
-		ConnectionFacePrimaryRange connectionFaceRange = new ConnectionFacePrimaryRange(blockState.getValue(DefaultWire.FACING));
+		short connectionFaceRange = ConnectionFacePrimaryRange.primitive(blockState.getValue(DefaultWire.FACING));
 		int filter = blockState.getValue(CONNECTION);
 		filter = RedCuWireCanConnectRedstoneProcedure.redstoneToRedCu_RedCuFilter(filter);
 		filter = ConnectionFacePrimaryRange.rotateFilter(filter,blockState.getValue(ROTATION));
-		if(!connectionFaceRange.inRangeAvoid(requesterFace,filter)){
-			connectionFace.CHANNEL = 5;
-		}
-		return connectionFace;
+		if(!ConnectionFacePrimaryRange.canConnectAllow(connectionFaceRange,requesterFace,filter))
+			return ConnectionFace.setChannelMask(ConnectionFace.getConnectable(requesterFace), ConnectionFace.MASK_NONE);
+		return BlockFrameTransformUtils.getConnectionFaceForRequester(blockState, requesterFace);
 	}
 
 	@Override
@@ -238,5 +246,33 @@ public class RedstoneToRedCuConverterBlock extends DefaultWire implements OldInt
 	@Override
 	public int connectionFilter(int connection) {
 		return RedCuWireCanConnectRedstoneProcedure.redstoneToRedCu_AllFilter(connection);
+	}
+
+	@Override
+	public Pair<Direction, Direction> getPrimarySecondaryDirections(LevelAccessor world, BlockPos pos) {
+		BlockState blockState = world.getBlockState(pos);
+		return Pair.of(blockState.getValue(ROTATION), blockState.getValue(FACING));
+	}
+
+	@Override
+	public Direction getPrimaryDirection(LevelAccessor world, BlockPos pos) {
+		BlockState blockState = world.getBlockState(pos);
+		return blockState.getValue(ROTATION);
+	}
+
+	@Override
+	public Direction getPrimaryDirection(BlockState blockState) {
+		return blockState.getValue(primaryDirectionProperty());
+	}
+
+	@Override
+	public DirectionProperty primaryDirectionProperty() {
+		return ROTATION;
+	}
+
+	public static int getColor(BlockState blockState, BlockGetter level, BlockPos pos, int tintindex){
+		if(level.getBlockEntity(pos) instanceof RedCuWireBlockEntity be)
+			return RedStoneWireBlock.getColorForPower((be.POWER & 0xFF) >> 4);
+		return 0xFF0000;
 	}
 }

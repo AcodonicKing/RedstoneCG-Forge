@@ -36,7 +36,7 @@ public class ParallelLineOutputBlock extends DefaultParallelGate implements Enti
 	}
 
 	@Override
-	public int getRedstonePower(LevelAccessor world, BlockPos pos, ConnectionFace requesterFace) {
+	public int getRedstonePower(LevelAccessor world, BlockPos pos, byte requesterFace) {
 		BlockState blockState = world.getBlockState(pos);
 		if(!CanConnectWallGateProcedure.To1_3Gate(blockState, requesterFace))
 			return 0;
@@ -55,12 +55,11 @@ public class ParallelLineOutputBlock extends DefaultParallelGate implements Enti
 	}
 
 	@Override
-	public ConnectionFace getOutputConnectionFace(LevelAccessor world, BlockPos pos, ConnectionFace requesterFace) {
+	public byte getOutputConnectionFace(LevelAccessor world, BlockPos pos, byte requesterFace) {
 		BlockState blockState = world.getBlockState(pos);
-		ConnectionFace connectionFaceA = requesterFace.getConnectable();
 		if(!CanConnectWallGateProcedure.To1_3Gate(blockState, requesterFace))
-			connectionFaceA.CHANNEL = 5;
-		return connectionFaceA;
+			return ConnectionFace.setChannelMask(ConnectionFace.getConnectable(requesterFace), ConnectionFace.MASK_NONE);
+		return BlockFrameTransformUtils.getConnectionFaceForRequester(blockState, requesterFace);
 	}
 
 	/*@Override
@@ -100,24 +99,23 @@ public class ParallelLineOutputBlock extends DefaultParallelGate implements Enti
 			int connection = thisState.getValue(CONNECTION);
 			connection = (connection + 1) << 1;
 			connection = ConnectionFacePrimaryRange.rotateFilter(connection, thisState.getValue(ROTATION));
-			ConnectionFacePrimaryRange connectionFaceRange = new ConnectionFacePrimaryRange(thisState.getValue(FACING));
-			for(ConnectionFace connectionFaceA: connectionFaceRange.getList(connection)){
-				//RedstonecgMod.LOGGER.debug("Updating in {}", connectionFaceA.FACE);
-				sendRedstoneUpdateInDirection(world, thisState.getBlock(), thisPos, connectionFaceA.FACE, recursion);
-			}
+			short connectionFaceRange = ConnectionFacePrimaryRange.primitive(thisState.getValue(FACING));
+			for(byte connectionFaceA: ConnectionFacePrimaryRange.getArray(connectionFaceRange, connection))
+				sendRedstoneUpdateInDirection(
+						world, thisState.getBlock(), thisPos, ConnectionFace.decodeFace(connectionFaceA), recursion);
 		}
 		return 0;
 	}
 
 	@Override
 	public boolean canConnectRedstone(BlockState state, BlockGetter world, BlockPos pos, Direction side) {
-		ConnectionFace connectionFaceB = BlockFrameTransformUtils.canConnectRedstoneTargetConnectionFace(world, pos, side);
+		byte connectionFaceB = BlockFrameTransformUtils.canConnectRedstoneTargetConnectionFace(world, pos, side);
 		return CanConnectWallGateProcedure.To1_3Gate(state, connectionFaceB);
 	}
 
 	@Override
 	public boolean isOutput(LevelAccessor world, BlockState blockState, BlockPos pos, Direction direction){
-		ConnectionFace connectionFaceB = new ConnectionFace(direction.getOpposite());
+		byte connectionFaceB = ConnectionFace.primitiveAll(direction.getOpposite());
 		return CanConnectWallGateProcedure.To1_3Gate(blockState, connectionFaceB);
 	}
 

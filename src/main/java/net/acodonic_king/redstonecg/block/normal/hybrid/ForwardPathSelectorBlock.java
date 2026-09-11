@@ -53,19 +53,18 @@ public class ForwardPathSelectorBlock extends DefaultConnectableGate implements 
 
 	@Override
 	public int getSignal(BlockState blockstate, BlockGetter blockAccess, BlockPos pos, Direction direction) {
-		ConnectionFace connectionFaceB = new ConnectionFace(direction); //temporary
+		byte connectionFaceB = ConnectionFace.primitiveAll(direction); //temporary
 		LevelAccessor world = (LevelAccessor) blockAccess;
-		ConnectionFace connectionFaceA = getOutputConnectionFace(world, pos, connectionFaceB);
+		byte connectionFaceA = getOutputConnectionFace(world, pos, connectionFaceB);
 		connectionFaceB = BlockFrameTransformUtils.getRequesterConnectionFace(world, pos.relative(direction.getOpposite()), connectionFaceA, direction.getOpposite());
-		if(connectionFaceA.canConnect(connectionFaceB)){
+		if(ConnectionFace.canConnect(connectionFaceA, connectionFaceB))
 			return getRedstonePower(world, pos, connectionFaceB);
-		}
 		return 0;
 	}
 
 	@Override
 	public boolean canConnectRedstone(BlockState state, BlockGetter world, BlockPos pos, Direction side) {
-		ConnectionFace connectionFaceB = BlockFrameTransformUtils.canConnectRedstoneTargetConnectionFace(world, pos, side);
+		byte connectionFaceB = BlockFrameTransformUtils.canConnectRedstoneTargetConnectionFace(world, pos, side);
 		return CanConnectWallGateProcedure.To4Gate(state, connectionFaceB);
 	}
 
@@ -162,13 +161,13 @@ public class ForwardPathSelectorBlock extends DefaultConnectableGate implements 
 	}
 
 	@Override
-	public int getRedstonePower(LevelAccessor world, BlockPos pos, ConnectionFace requesterFace) {
+	public int getRedstonePower(LevelAccessor world, BlockPos pos, byte requesterFace) {
 		BlockState thisState = world.getBlockState(pos);
-		Direction localDir = BlockFrameTransformUtils.getLocalDirectionFromWorld(thisState, requesterFace.FACE.getOpposite());
+		Direction localDir = BlockFrameTransformUtils.getLocalDirectionFromWorld(thisState, ConnectionFace.decodeFace(requesterFace).getOpposite());
 		Direction[] Sides = GetGateInputSidesProcedure.Get3ABCGateForth(thisState);
 		if(localDir != Sides[0] && localDir != Sides[1]){return 0;}
-		ConnectionFace thisFace = BlockFrameTransformUtils.getConnectionFace(thisState, localDir);
-		if(!thisFace.canConnect(requesterFace)){return 0;}
+		byte thisFace = BlockFrameTransformUtils.getConnectionFace(thisState, localDir);
+		if(!ConnectionFace.canConnect(thisFace, requesterFace)){return 0;}
 		if(world.getBlockEntity(pos) instanceof DefaultAnalogGateBlockEntity be) {
 			int SideAPower = 0;
 			int SideBPower = 0;
@@ -184,23 +183,19 @@ public class ForwardPathSelectorBlock extends DefaultConnectableGate implements 
 	}
 
 	@Override
-	public ConnectionFace getOutputConnectionFace(LevelAccessor world, BlockPos pos, ConnectionFace requesterFace) {
+	public byte getOutputConnectionFace(LevelAccessor world, BlockPos pos, byte requesterFace) {
 		BlockState thisState = world.getBlockState(pos);
-		ConnectionFace thisFace = requesterFace.getConnectable();
-		Direction localDir = BlockFrameTransformUtils.getLocalDirectionFromWorld(thisState, thisFace.FACE);
+		byte thisFace = ConnectionFace.getConnectable(requesterFace);
+		Direction localDir = BlockFrameTransformUtils.getLocalDirectionFromWorld(thisState, ConnectionFace.decodeFace(thisFace));
 		Direction[] Sides = GetGateInputSidesProcedure.Get3ABCGateForth(thisState);
-		if(localDir == Sides[0] || localDir == Sides[1]){
-			return thisFace;
-		}
-		thisFace.CHANNEL = 5;
-		return thisFace;
+		if(localDir == Sides[0] || localDir == Sides[1])
+			return BlockFrameTransformUtils.getConnectionFace(getPrimarySecondaryDirections(thisState), localDir);
+		return ConnectionFace.setChannelMask(thisFace, ConnectionFace.MASK_NONE);
 	}
 
 	@Override
-	public ConnectionFace getAnyConnectionFace(LevelAccessor world, BlockPos pos, ConnectionFace requesterFace) {
-		BlockState blockState = world.getBlockState(pos);
-		Direction localDirection = BlockFrameTransformUtils.getLocalDirectionFromWorld(blockState,requesterFace.FACE.getOpposite());
-		return BlockFrameTransformUtils.getConnectionFace(blockState,localDirection);
+	public byte getAnyConnectionFace(LevelAccessor world, BlockPos pos, byte requesterFace) {
+		return BlockFrameTransformUtils.getConnectionFaceForRequester(world, pos, requesterFace);
 	}
 
 	@Override

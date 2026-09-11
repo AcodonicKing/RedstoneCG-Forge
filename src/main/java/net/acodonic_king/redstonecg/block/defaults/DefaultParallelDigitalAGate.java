@@ -49,7 +49,7 @@ public class DefaultParallelDigitalAGate extends DefaultParallelGate implements 
     @Override
     public int onRedstoneUpdate(LevelAccessor world, BlockState thisState, BlockPos thisPos, int recursion){
         int linePower = GetParallelSignalProcedure.getParallelLinePower(world, thisPos);
-        ConnectionFace connectionFaceA = BlockFrameTransformUtils.getConnectionFace(thisState, Direction.SOUTH);
+        byte connectionFaceA = BlockFrameTransformUtils.getConnectionFace(thisState, Direction.SOUTH);
         int backPower = GetRedstoneSignalProcedure.execute(world, thisPos, connectionFaceA);
         boolean output = redstoneOutputOperation(linePower, backPower);
         //RedstonecgMod.LOGGER.debug("{} {} {} {}", linePower, backPower, output, thisPos);
@@ -58,7 +58,7 @@ public class DefaultParallelDigitalAGate extends DefaultParallelGate implements 
             be.OUTPUT = output;
             be.setChanged();
             updateVisibleState((Level) world, thisPos, thisState, output);
-            sendRedstoneUpdateInDirection(world, thisState.getBlock(), thisPos, connectionFaceA.FACE.getOpposite(), recursion);
+            sendRedstoneUpdateInDirection(world, thisState.getBlock(), thisPos, ConnectionFace.decodeFace(connectionFaceA).getOpposite(), recursion);
         }
         return 0;
     }
@@ -70,9 +70,9 @@ public class DefaultParallelDigitalAGate extends DefaultParallelGate implements 
     }
 
     @Override
-    public int getRedstonePower(LevelAccessor world, BlockPos pos, ConnectionFace sourceFace) {
-        ConnectionFace thisFace = getOutputConnectionFace(world, pos, sourceFace);
-        if(thisFace.canConnect(sourceFace)){
+    public int getRedstonePower(LevelAccessor world, BlockPos pos, byte sourceFace) {
+        byte thisFace = getOutputConnectionFace(world, pos, sourceFace);
+        if(ConnectionFace.canConnect(thisFace, sourceFace)){
             if(world.getBlockEntity(pos) instanceof DefaultDigitalGateBlockEntity be){
                 return be.OUTPUT ? 15 : 0;
             }

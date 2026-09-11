@@ -1,16 +1,16 @@
 package net.acodonic_king.redstonecg.block.entity;
 
-import net.acodonic_king.redstonecg.init.RedstonecgModBlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+
+import static net.acodonic_king.redstonecg.init.RedstonecgModBlockEntities.REDCU_WIRE_INTERSECTION;
 
 public class RedCuWireIntersectionBlockEntity extends SuperBlockEntity {
     public int POWER_A = 0;
     public int POWER_B = 0;
     public RedCuWireIntersectionBlockEntity(BlockPos position, BlockState state) {
-        super(RedstonecgModBlockEntities.RED_CU_INTERSECTION.get(), position, state);
+        super(REDCU_WIRE_INTERSECTION.get(), position, state);
     }
     @Override
     public void saveAdditional(CompoundTag tag) {

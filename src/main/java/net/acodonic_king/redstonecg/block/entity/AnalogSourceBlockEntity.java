@@ -31,8 +31,8 @@ public class AnalogSourceBlockEntity extends SuperBlockEntity {
 	public void saveAdditional(CompoundTag tag) {
 		super.saveAdditional(tag);
 		tag.putByte("power", (byte)POWER);
-		tag.putInt("power_min", POWER_RANGE[0]);
-		tag.putInt("power_max", POWER_RANGE[1]);
+		tag.putByte("power_min", (byte)POWER_RANGE[0]);
+		tag.putByte("power_max", (byte)POWER_RANGE[1]);
 		if(!CUSTOM_NAME.isEmpty())
 			tag.putString("CustomName", CUSTOM_NAME);
 		//tag.putBoolean("base_read", BASE_OUT);
@@ -42,8 +42,8 @@ public class AnalogSourceBlockEntity extends SuperBlockEntity {
 	public void load(CompoundTag tag) {
 		super.load(tag);
 		if(tag.contains("power")) POWER = tag.getByte("power");
-		if(tag.contains("power_min")) POWER_RANGE[0] = tag.getInt("power_min");
-		if(tag.contains("power_max")) POWER_RANGE[1] = tag.getInt("power_max");
+		if(tag.contains("power_min")) POWER_RANGE[0] = tag.getByte("power_min");
+		if(tag.contains("power_max")) POWER_RANGE[1] = tag.getByte("power_max");
 		if(tag.contains("CustomName")) setName(tag.getString("CustomName"));
 		//if (tag.contains("base_read")) BASE_OUT = tag.getBoolean("base_read");
 		setAngle();

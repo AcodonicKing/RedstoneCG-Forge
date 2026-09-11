@@ -2,7 +2,6 @@ package net.acodonic_king.redstonecg.init;
 
 import net.acodonic_king.redstonecg.RedstonecgMod;
 import net.acodonic_king.redstonecg.block.entity.*;
-import net.acodonic_king.redstonecg.block.normal.indicator.ArrowIndicatorBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.registries.RegistryObject;
@@ -19,12 +18,12 @@ public class RedstonecgModBlockEntities {
 			AnalogSourceBlockEntity::new,
 			RedstonecgModBlocks.NORMAL_ANALOG_SOURCE.get()
 	).build(null));
-	public static final RegistryObject<BlockEntityType<?>> RED_CU_INTERSECTION = register("red_cu_intersection", RedstonecgModBlocks.REDCU_WIRE_INTERSECTION, RedCuWireIntersectionBlockEntity::new);
+	public static final RegistryObject<BlockEntityType<?>> REDCU_WIRE_INTERSECTION = register("redcu_wire_intersection", RedstonecgModBlocks.REDCU_WIRE_INTERSECTION, RedCuWireIntersectionBlockEntity::new);
 	public static final RegistryObject<BlockEntityType<RedCuWireTransitionBlockEntity>> REDCU_WIRE_TRANSITION = REGISTRY.register("redcu_wire_transition", () -> BlockEntityType.Builder.of(
 			RedCuWireTransitionBlockEntity::new,
 			RedstonecgModBlocks.REDCU_WIRE_TRANSITION.get()
 	).build(null));
-	public static final RegistryObject<BlockEntityType<?>> RED_CU_CRAFTER = register("red_cu_crafter", RedstonecgModBlocks.REDCU_CRAFTER, RedCuCrafterBlockEntity::new);
+	public static final RegistryObject<BlockEntityType<?>> REDCU_CRAFTER = register("redcu_crafter", RedstonecgModBlocks.REDCU_CRAFTER, RedCuCrafterBlockEntity::new);
 	public static final RegistryObject<BlockEntityType<DefaultAnalogGateBlockEntity>> DEFAULT_ANALOG_GATE = REGISTRY.register("default_analog_gate", () -> BlockEntityType.Builder.of(
 			DefaultAnalogGateBlockEntity::new,
 			//RedstonecgModBlocks.NORMAL_ANALOG_SOURCE.get(),
@@ -37,8 +36,6 @@ public class RedstonecgModBlockEntities {
 			RedstonecgModBlocks.NORMAL_ANALOG_MAX.get(),
 			RedstonecgModBlocks.NORMAL_ANALOG_MIN.get(),
 
-			RedstonecgModBlocks.NORMAL_COMPARATOR.get(),
-			RedstonecgModBlocks.NORMAL_N_COMPARATOR.get(),
 			RedstonecgModBlocks.NORMAL_FORWARD_PATH_SELECTOR.get(),
 			RedstonecgModBlocks.NORMAL_REVERSED_PATH_SELECTOR.get(),
 			RedstonecgModBlocks.NORMAL_ONE_WAY_THROUGH_GATE.get(),
@@ -72,8 +69,11 @@ public class RedstonecgModBlockEntities {
 			RedstonecgModBlocks.NORMAL_NXOR.get(),
 			RedstonecgModBlocks.NORMAL_SR_LATCH.get(),
 			RedstonecgModBlocks.NORMAL_D_LATCH.get(),
-			RedstonecgModBlocks.NORMAL_JK_TRIGGER.get(),
-			RedstonecgModBlocks.NORMAL_T_TRIGGER.get(),
+
+			RedstonecgModBlocks.NORMAL_BUF.get(),
+			RedstonecgModBlocks.NORMAL_NOT.get(),
+			RedstonecgModBlocks.NORMAL_COMPARATOR.get(),
+			RedstonecgModBlocks.NORMAL_N_COMPARATOR.get(),
 
 			RedstonecgModBlocks.PARALLEL_AND.get(),
 			RedstonecgModBlocks.PARALLEL_OR.get(),
@@ -116,7 +116,7 @@ public class RedstonecgModBlockEntities {
 			RedstonecgModBlocks.COLORED_FLAT_LAMP_INDICATOR.get(),
 			RedstonecgModBlocks.COLORFUL_FLAT_LAMP_INDICATOR.get()
 	).build(null));
-	public static final RegistryObject<BlockEntityType<RedCuWireBlockEntity>> RED_CU_WIRE = REGISTRY.register("red_cu_wire", () -> BlockEntityType.Builder.of(
+	public static final RegistryObject<BlockEntityType<RedCuWireBlockEntity>> REDCU_WIRE = REGISTRY.register("redcu_wire", () -> BlockEntityType.Builder.of(
 			RedCuWireBlockEntity::new,
 			RedstonecgModBlocks.REDCU_WIRE.get(),
 			RedstonecgModBlocks.REDSTONE_TO_REDCU_CONVERTER.get()
@@ -143,6 +143,11 @@ public class RedstonecgModBlockEntities {
 			RedstonecgModBlocks.RED_SWITCH.get(),
 			RedstonecgModBlocks.RED_BUTTON.get()
 	).build(null));
+
+	//OLD
+	public static final RegistryObject<BlockEntityType<RedCuWireBlockEntity>> RED_CU_WIRE = REGISTRY.register("red_cu_wire", () -> BlockEntityType.Builder.of(RedCuWireBlockEntity::new).build(null));
+	public static final RegistryObject<BlockEntityType<?>> RED_CU_INTERSECTION = REGISTRY.register("red_cu_intersection", () -> BlockEntityType.Builder.of(RedCuWireIntersectionBlockEntity::new).build(null));
+	public static final RegistryObject<BlockEntityType<?>> RED_CU_CRAFTER = REGISTRY.register("red_cu_crafter", () -> BlockEntityType.Builder.of(RedCuCrafterBlockEntity::new).build(null));
 
 	private static RegistryObject<BlockEntityType<?>> register(String registryname, RegistryObject<Block> block, BlockEntityType.BlockEntitySupplier<?> supplier) {
 		return REGISTRY.register(registryname, () -> BlockEntityType.Builder.of(supplier, block.get()).build(null));

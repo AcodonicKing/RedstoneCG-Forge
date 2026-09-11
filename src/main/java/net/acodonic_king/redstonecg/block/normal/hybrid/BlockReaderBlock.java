@@ -39,20 +39,19 @@ public class BlockReaderBlock extends DefaultAnalogInteractableGate implements P
     }
     @Override
     public boolean canConnectRedstone(BlockState state, BlockGetter world, BlockPos pos, Direction side) {
-        ConnectionFace connectionFaceB = BlockFrameTransformUtils.canConnectRedstoneTargetConnectionFace(world, pos, side);
+        byte connectionFaceB = BlockFrameTransformUtils.canConnectRedstoneTargetConnectionFace(world, pos, side);
         return CanConnectWallGateProcedure.To1_3Gate(state, connectionFaceB);
     }
     @Override
-    public ConnectionFace getOutputConnectionFace(LevelAccessor world, BlockPos pos, ConnectionFace requesterFace) {
+    public byte getOutputConnectionFace(LevelAccessor world, BlockPos pos, byte requesterFace) {
         BlockState blockState = world.getBlockState(pos);
-        ConnectionFace connectionFaceA = requesterFace.getConnectable();
         if(!CanConnectWallGateProcedure.To1_3Gate(blockState, requesterFace))
-            connectionFaceA.CHANNEL = 5;
-        return connectionFaceA;
+            return ConnectionFace.setChannelMask(ConnectionFace.getConnectable(requesterFace), ConnectionFace.MASK_NONE);
+        return BlockFrameTransformUtils.getConnectionFaceForRequester(blockState, requesterFace);
     }
     @Override
     public boolean isOutput(LevelAccessor world, BlockState blockState, BlockPos pos, Direction direction){
-        ConnectionFace connectionFaceB = new ConnectionFace(direction.getOpposite());
+        byte connectionFaceB = ConnectionFace.primitiveAll(direction.getOpposite());
         return CanConnectWallGateProcedure.To1_3Gate(blockState, connectionFaceB);
     }
     @Override
@@ -64,7 +63,7 @@ public class BlockReaderBlock extends DefaultAnalogInteractableGate implements P
             side = BlockFrameTransformUtils.getWorldDirectionFromLocalForward(blockState);
         int power = getInputSignal((Level) world, pos, side);
         if (power == 0) {
-            ConnectionFace thisFace = BlockFrameTransformUtils.getConnectionFace(blockState, side);
+            byte thisFace = BlockFrameTransformUtils.getConnectionFace(blockState, side);
             power = GetRedstoneSignalProcedure.execute(world, pos, thisFace);
         }
         if(world.getBlockEntity(pos) instanceof DefaultAnalogGateBlockEntity be){
@@ -75,10 +74,9 @@ public class BlockReaderBlock extends DefaultAnalogInteractableGate implements P
             int connection = blockState.getValue(CONNECTION);
             connection = (connection + 1) << 1;
             connection = ConnectionFacePrimaryRange.rotateFilter(connection, blockState.getValue(ROTATION));
-            ConnectionFacePrimaryRange connectionFaceRange = new ConnectionFacePrimaryRange(blockState.getValue(FACING));
-            for(ConnectionFace connectionFaceA: connectionFaceRange.getList(connection)){
-                sendRedstoneUpdateInDirection(world, blockState.getBlock(), pos, connectionFaceA.FACE, recursion);
-            }
+            short connectionFaceRange = ConnectionFacePrimaryRange.primitive(blockState.getValue(FACING));
+            for(byte connectionFaceA: ConnectionFacePrimaryRange.getArray(connectionFaceRange,connection))
+                sendRedstoneUpdateInDirection(world, blockState.getBlock(), pos, ConnectionFace.decodeFace(connectionFaceA), recursion);
         }
         return power;
     }

@@ -16,7 +16,7 @@ public class ParallelOneWayThroughNotGateBlock extends ParallelOneWayThroughGate
 	@Override
 	public int onRedstoneUpdate(LevelAccessor world, BlockState thisState, BlockPos thisPos, int recursion){
 		int linePower = GetParallelSignalProcedure.getParallelLinePower(world, thisPos);
-		ConnectionFace connectionFaceA = BlockFrameTransformUtils.getConnectionFace(thisState, Direction.NORTH);
+		byte connectionFaceA = BlockFrameTransformUtils.getConnectionFace(thisState, Direction.NORTH);
 		int backPower = GetRedstoneSignalProcedure.execute(world, thisPos, connectionFaceA);
 		int ASignal = linePower;
 		int BSignal = backPower;
@@ -31,7 +31,7 @@ public class ParallelOneWayThroughNotGateBlock extends ParallelOneWayThroughGate
 		if (world.getBlockEntity(thisPos) instanceof DefaultAnalogGateBlockEntity be) {
 			be.POWER = ASignal;
 			be.setChanged();
-			sendRedstoneUpdateInDirection(world, thisState.getBlock(), thisPos, connectionFaceA.FACE.getOpposite(), recursion);
+			sendRedstoneUpdateInDirection(world, thisState.getBlock(), thisPos, ConnectionFace.decodeFace(connectionFaceA).getOpposite(), recursion);
 		}
 		return 0;
 	}

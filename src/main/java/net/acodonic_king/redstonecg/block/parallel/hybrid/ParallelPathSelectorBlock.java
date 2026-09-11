@@ -48,7 +48,7 @@ public class ParallelPathSelectorBlock extends DefaultParallelGateWithAlternate 
 	@Override
 	public int onRedstoneUpdate(LevelAccessor world, BlockState thisState, BlockPos thisPos, int recursion){
 		int linePower = GetParallelSignalProcedure.getParallelLinePower(world, thisPos);
-		ConnectionFace connectionFaceA = BlockFrameTransformUtils.getConnectionFace(thisState, Direction.NORTH);
+		byte connectionFaceA = BlockFrameTransformUtils.getConnectionFace(thisState, Direction.NORTH);
 		int backPower = GetRedstoneSignalProcedure.execute(world, thisPos, connectionFaceA);
 		int Changed = (((linePower > 0) != thisState.getValue(DIRECTION)) ? 1 : 0);
 		//RedstonecgMod.LOGGER.debug("Received update {} {} {} {} {}", thisPos, linePower, backPower, thisState.getValue(DIRECTION), Changed);
@@ -66,7 +66,7 @@ public class ParallelPathSelectorBlock extends DefaultParallelGateWithAlternate 
 		if(Changed > 0) {
 			//RedstonecgMod.LOGGER.debug("Block updated to {}", thisState);
 			world.setBlock(thisPos, thisState, 2);
-			sendRedstoneUpdateInDirection(world, thisState.getBlock(), thisPos, connectionFaceA.FACE.getOpposite(), recursion);
+			sendRedstoneUpdateInDirection(world, thisState.getBlock(), thisPos, ConnectionFace.decodeFace(connectionFaceA).getOpposite(), recursion);
             Direction alternateDirection = getAlternateReadDirection(thisState, thisState.getValue(CONNECTION));
             BlockPos targetPos = thisPos.relative(alternateDirection.getOpposite());
             updateAlternate(world, thisPos, targetPos, recursion + 1);
@@ -143,9 +143,9 @@ public class ParallelPathSelectorBlock extends DefaultParallelGateWithAlternate 
 		return InteractionResult.SUCCESS;
 	}
 	@Override
-	public int getRedstonePower(LevelAccessor world, BlockPos thisPos, ConnectionFace requesterFace){
-		ConnectionFace connectionFaceA = getOutputConnectionFace(world, thisPos, requesterFace);
-		if(!connectionFaceA.canConnect(requesterFace)){return 0;}
+	public int getRedstonePower(LevelAccessor world, BlockPos thisPos, byte requesterFace){
+		byte connectionFaceA = getOutputConnectionFace(world, thisPos, requesterFace);
+		if(!ConnectionFace.canConnect(connectionFaceA, requesterFace)){return 0;}
 		BlockState thisState = world.getBlockState(thisPos);
 		int connection = thisState.getValue(CONNECTION);
 		boolean direction = thisState.getValue(DIRECTION);
@@ -162,7 +162,7 @@ public class ParallelPathSelectorBlock extends DefaultParallelGateWithAlternate 
 	}
 
 	@Override
-	public ConnectionFace getOutputConnectionFace(LevelAccessor world, BlockPos pos, ConnectionFace requesterFace) {
+	public byte getOutputConnectionFace(LevelAccessor world, BlockPos pos, byte requesterFace) {
 		return BlockFrameTransformUtils.getConnectionFace(world.getBlockState(pos), Direction.SOUTH);
 	}
 

@@ -4,10 +4,8 @@ import net.acodonic_king.redstonecg.procedures.*;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
@@ -25,17 +23,16 @@ public class DefaultEmitting1_4Gate extends DefaultRedstoneActionGate implements
     }
     @Override
     public boolean canConnectRedstone(BlockState state, BlockGetter world, BlockPos pos, Direction side) {
-        ConnectionFace connectionFaceB = BlockFrameTransformUtils.canConnectRedstoneTargetConnectionFace(world, pos, side);
+        byte connectionFaceB = BlockFrameTransformUtils.canConnectRedstoneTargetConnectionFace(world, pos, side);
         return CanConnectWallGateProcedure.To1_4Gate(state, connectionFaceB);
     }
 
     @Override
-    public ConnectionFace getOutputConnectionFace(LevelAccessor world, BlockPos pos, ConnectionFace requesterFace) {
+    public byte getOutputConnectionFace(LevelAccessor world, BlockPos pos, byte requesterFace) {
         BlockState blockState = world.getBlockState(pos);
-        ConnectionFace connectionFaceA = requesterFace.getConnectable();
         if(!CanConnectWallGateProcedure.To1_4Gate(blockState, requesterFace))
-            connectionFaceA.CHANNEL = 5;
-        return connectionFaceA;
+            return ConnectionFace.setChannelMask(ConnectionFace.getConnectable(requesterFace), ConnectionFace.MASK_NONE);
+        return BlockFrameTransformUtils.getConnectionFaceForRequester(blockState, requesterFace);
     }
 
     @Override

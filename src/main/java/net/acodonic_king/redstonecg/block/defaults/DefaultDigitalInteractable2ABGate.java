@@ -22,7 +22,7 @@ public class DefaultDigitalInteractable2ABGate extends DefaultDigitalInteractabl
 
     @Override
     public boolean canConnectRedstone(BlockState state, BlockGetter world, BlockPos pos, Direction side) {
-        ConnectionFace connectionFaceB = BlockFrameTransformUtils.canConnectRedstoneTargetConnectionFace(world, pos, side);
+        byte connectionFaceB = BlockFrameTransformUtils.canConnectRedstoneTargetConnectionFace(world, pos, side);
         return CanConnectWallGateProcedure.To2ABGate(state, connectionFaceB);
     }
 
@@ -34,7 +34,7 @@ public class DefaultDigitalInteractable2ABGate extends DefaultDigitalInteractabl
         int [] power = {0,0};
         int i = 0;
         for(Direction side: Sides){
-            ConnectionFace thisFace = BlockFrameTransformUtils.getConnectionFace(blockState, side);
+            byte thisFace = BlockFrameTransformUtils.getConnectionFace(blockState, side);
             power[i] = GetRedstoneSignalProcedure.execute(world, pos, thisFace);
             i++;
         }

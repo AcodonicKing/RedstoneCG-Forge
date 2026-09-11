@@ -29,7 +29,7 @@ public class DefaultParallelDigitalInteractableABGate extends DefaultParallelDig
     @Override
     public int onRedstoneUpdate(LevelAccessor world, BlockState thisState, BlockPos thisPos, int recursion){
         int linePower = GetParallelSignalProcedure.getParallelLinePower(world, thisPos);
-        ConnectionFace connectionFaceA = BlockFrameTransformUtils.getConnectionFace(thisState, Direction.SOUTH);
+        byte connectionFaceA = BlockFrameTransformUtils.getConnectionFace(thisState, Direction.SOUTH);
         int backPower = GetRedstoneSignalProcedure.execute(world, thisPos, connectionFaceA);
         boolean output = false;
         if(thisState.getValue(CONNECTION) == 0){
@@ -42,7 +42,7 @@ public class DefaultParallelDigitalInteractableABGate extends DefaultParallelDig
             be.OUTPUT = output;
             be.setChanged();
             updateVisibleState((Level) world, thisPos, thisState, output);
-            sendRedstoneUpdateInDirection(world, thisState.getBlock(), thisPos, connectionFaceA.FACE.getOpposite(), recursion);
+            sendRedstoneUpdateInDirection(world, thisState.getBlock(), thisPos, ConnectionFace.decodeFace(connectionFaceA).getOpposite(), recursion);
         }
         return 0;
     }

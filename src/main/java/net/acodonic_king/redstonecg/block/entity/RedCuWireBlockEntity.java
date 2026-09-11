@@ -1,10 +1,8 @@
 package net.acodonic_king.redstonecg.block.entity;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.Connection;
-import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 
@@ -16,7 +14,7 @@ public class RedCuWireBlockEntity extends SuperBlockEntity {
 		super(blockEntityType, position, state);
 	}
 	public RedCuWireBlockEntity(BlockPos position, BlockState state) {
-		super(RedstonecgModBlockEntities.RED_CU_WIRE.get(), position, state);
+		super(RedstonecgModBlockEntities.REDCU_WIRE.get(), position, state);
 	}
 	@Override
 	public void saveAdditional(CompoundTag tag) {

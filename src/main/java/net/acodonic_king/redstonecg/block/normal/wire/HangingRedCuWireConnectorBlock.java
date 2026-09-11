@@ -41,11 +41,9 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.apache.commons.lang3.tuple.Pair;
 
-import java.util.List;
-
 import static net.acodonic_king.redstonecg.block.defaults.DefaultWire.getWireChainLimit;
 
-public class HangingRedCuWireConnectorBlock extends SuperBlock implements EntityBlock, WireInterface, MeasurementProvider, FlooringInterface, RedstoneSignalInterface, PinMarkConnectionInterface, SupportingFaceInterface {
+public class HangingRedCuWireConnectorBlock extends SuperBlock implements EntityBlock, WireInterface, MeasurementProvider, FlooringInterface, RedstoneSignalInterface, PinMarkConnectionInterface, SupportingFaceInterface, PrimarySecondaryDirectionInterface {
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
     public static final IntegerProperty CONNECTION = IntegerProperty.create("connection",0,15);
 
@@ -209,13 +207,13 @@ public class HangingRedCuWireConnectorBlock extends SuperBlock implements Entity
 
     @Override
     public boolean canConnectRedstone(BlockState state, BlockGetter world, BlockPos pos, Direction side) {
-        ConnectionFace connectionFaceB = BlockFrameTransformUtils.canConnectRedstoneTargetConnectionFace(world, pos, side);
+        byte connectionFaceB = BlockFrameTransformUtils.canConnectRedstoneTargetConnectionFace(world, pos, side);
         Direction secondary = Direction.DOWN;
         if(world.getBlockEntity(pos) instanceof HangingRedCuWireConnectorBlockEntity be)
             secondary = be.FACING;
-        ConnectionFacePrimaryRange connectionFaceA = new ConnectionFacePrimaryRange(secondary);
+        short connectionFaceA = ConnectionFacePrimaryRange.primitive(secondary);
         int filter = CanConnectWallGateProcedure.To1_4GateConnectionFilter(state.getValue(CONNECTION));
-        return connectionFaceA.canConnectAvoid(connectionFaceB,filter);
+        return ConnectionFacePrimaryRange.canConnectAllow(connectionFaceA, connectionFaceB, filter);
     }
 
     @Override
@@ -227,17 +225,19 @@ public class HangingRedCuWireConnectorBlock extends SuperBlock implements Entity
     public void onTick(LevelAccessor world, BlockPos pos, int power, int recursion){
         BlockState thisBlock = world.getBlockState(pos);
         if(world.getBlockEntity(pos) instanceof HangingRedCuWireConnectorBlockEntity wireEntity){
-            ConnectionFacePrimaryRange connectionFaceRangeA = new ConnectionFacePrimaryRange(wireEntity.FACING);
+            short connectionFaceRangeA = ConnectionFacePrimaryRange.primitive(wireEntity.FACING);
             int filter = CanConnectWallGateProcedure.To1_4GateConnectionFilter(thisBlock.getValue(CONNECTION));
-            List<ConnectionFace> connectionFaceList = connectionFaceRangeA.getList(filter);
-            for(ConnectionFace connectionFaceA: connectionFaceList){
+            byte[] connectionFaceList = ConnectionFacePrimaryRange.getArray(connectionFaceRangeA, filter);
+            //List<ConnectionFace> connectionFaceList = connectionFaceRangeA.getList(filter);
+            for(byte connectionFaceA: connectionFaceList){
                 int powerB = GetRedstoneSignalProcedure.executeWire(world, pos, connectionFaceA);
                 power = Math.max(power, powerB);
             }
             //RedstonecgMod.LOGGER.debug("{} updated to {} (was {})",pos,power,wireEntity.POWER);
             if(wireEntity.BASE_READ){
-                ConnectionFace connectionFaceA = new ConnectionFace(Direction.DOWN, wireEntity.FACING);
-                connectionFaceA.CHANNEL = 4;
+                byte connectionFaceA = (byte) (ConnectionFace.getFaceMask(Direction.DOWN, wireEntity.FACING) | ConnectionFace.MASK_ALL);
+                /*ConnectionFace connectionFaceA = new ConnectionFace(Direction.DOWN, wireEntity.FACING);
+                connectionFaceA.channel(ConnectionFace.CHANNEL_ALL);*/
                 int powerB = GetRedstoneSignalProcedure.executeWire(world, pos, connectionFaceA);
                 power = Math.max(power, powerB);
             }
@@ -248,8 +248,8 @@ public class HangingRedCuWireConnectorBlock extends SuperBlock implements Entity
             wireEntity.setChanged();
             recursion++;
             boolean exceedsRecursion = recursion > getWireChainLimit(world);
-            for(ConnectionFace connectionFaceA: connectionFaceList){
-                BlockPos targetPos = pos.relative(connectionFaceA.FACE);
+            for(byte connectionFaceA: connectionFaceList){
+                BlockPos targetPos = pos.relative(ConnectionFace.decodeFace(connectionFaceA));
                 BlockState bs = world.getBlockState(targetPos);
                 Block targetBlock = bs.getBlock();
                 if (targetBlock instanceof DefaultRedstoneActionGate nb){
@@ -334,17 +334,19 @@ public class HangingRedCuWireConnectorBlock extends SuperBlock implements Entity
     }
 
     @Override
-    public int getWirePower(LevelAccessor world, BlockPos pos, ConnectionFace requesterFace){
+    public int getWirePower(LevelAccessor world, BlockPos pos, byte requesterFace){
         if(world.getBlockEntity(pos) instanceof HangingRedCuWireConnectorBlockEntity be){
             BlockState blockState = world.getBlockState(pos);
             Direction secondary = be.FACING;
-            Direction localDir = BlockFrameTransformUtils.getLocalDirectionFromWorld(Direction.NORTH, secondary, requesterFace.FACE.getOpposite());
-            if(localDir == Direction.DOWN)
+            if(ConnectionFace.decodeFace(requesterFace).getOpposite() == secondary && be.BASE_READ)
                 return be.POWER;
-            ConnectionFace connectionFace = new ConnectionFace(localDir, secondary);
-            ConnectionFacePrimaryRange connectionFaceRange = new ConnectionFacePrimaryRange(secondary);
+            /*Direction localDir = BlockFrameTransformUtils.getLocalDirectionFromWorld(Direction.NORTH, secondary, requesterFace.face().getOpposite());
+            if(localDir == Direction.DOWN)
+                return be.POWER;*/
+            //ConnectionFace connectionFace = new ConnectionFace(localDir, secondary);
+            short connectionFaceRange = ConnectionFacePrimaryRange.primitive(secondary);
             int filter = CanConnectWallGateProcedure.To1_4GateConnectionFilter(blockState.getValue(CONNECTION));
-            if(!connectionFaceRange.inRangeAvoid(connectionFace,filter)){return 0;}
+            if(!ConnectionFacePrimaryRange.canConnectAllow(connectionFaceRange,requesterFace,filter)){return 0;}
             return be.POWER;
         }
         return 0;
@@ -386,27 +388,34 @@ public class HangingRedCuWireConnectorBlock extends SuperBlock implements Entity
     }
 
     @Override
-    public int getRedstonePower(LevelAccessor world, BlockPos pos, ConnectionFace requesterFace) {
+    public int getRedstonePower(LevelAccessor world, BlockPos pos, byte requesterFace) {
         return getWirePower(world, pos, requesterFace) >> 4;
     }
 
     @Override
-    public ConnectionFace getOutputConnectionFace(LevelAccessor world, BlockPos pos, ConnectionFace requesterFace) {
-        return requesterFace.getConnectable();
+    public byte getOutputConnectionFace(LevelAccessor world, BlockPos pos, byte requesterFace) {
+        BlockState blockState = world.getBlockState(pos);
+        if(!CanConnectWallGateProcedure.To1_4Gate(
+                getPrimaryDirection(world, pos),
+                getSecondaryDirection(world, pos),
+                getConnection(blockState),
+                requesterFace
+        ))
+            return ConnectionFace.setChannelMask(ConnectionFace.getConnectable(requesterFace), ConnectionFace.MASK_NONE);
+        return BlockFrameTransformUtils.getConnectionFaceForRequester(world, pos, requesterFace);
+        //return ConnectionFace.getConnectable(requesterFace);
     }
 
     @Override
-    public ConnectionFace getAnyConnectionFace(LevelAccessor world, BlockPos pos, ConnectionFace requesterFace) {
-        BlockState blockState = world.getBlockState(pos);
-        Direction localDirection = BlockFrameTransformUtils.getLocalDirectionFromWorld(blockState,requesterFace.FACE.getOpposite());
-        return BlockFrameTransformUtils.getConnectionFace(blockState,localDirection);
+    public byte getAnyConnectionFace(LevelAccessor world, BlockPos pos, byte requesterFace) {
+        return BlockFrameTransformUtils.getConnectionFaceForRequester(world, pos, requesterFace);
     }
 
     @Override
     public int getSignal(BlockState blockstate, BlockGetter blockAccess, BlockPos pos, Direction direction) {
-        ConnectionFace connectionFaceB = new ConnectionFace(direction); //temporary
+        byte connectionFaceB = ConnectionFace.primitiveAll(direction); //temporary
         LevelAccessor world = (LevelAccessor) blockAccess;
-        ConnectionFace connectionFaceA = getOutputConnectionFace(world, pos, connectionFaceB);
+        byte connectionFaceA = getOutputConnectionFace(world, pos, connectionFaceB);
         connectionFaceB = BlockFrameTransformUtils.getRequesterConnectionFace(world, pos.relative(direction.getOpposite()), connectionFaceA, direction.getOpposite());
         return getRedstonePower(world, pos, connectionFaceB);
         /*if (connectionFaceA.canConnect(connectionFaceB)) {
@@ -430,5 +439,17 @@ public class HangingRedCuWireConnectorBlock extends SuperBlock implements Entity
         if(world.getBlockEntity(blockPos) instanceof HangingRedCuWireConnectorBlockEntity be)
             return be.FACING == face;
         return false;
+    }
+
+    @Override
+    public Direction getPrimaryDirection(LevelAccessor world, BlockPos pos) {
+        return Direction.NORTH;
+    }
+
+    @Override
+    public Direction getSecondaryDirection(LevelAccessor world, BlockPos pos) {
+        if(world.getBlockEntity(pos) instanceof HangingRedCuWireConnectorBlockEntity be)
+            return be.FACING;
+        return Direction.DOWN;
     }
 }

@@ -30,7 +30,7 @@ public class ParallelDelayerBlock extends DelayerBlockBase implements ParallelGa
     }
     @Override
     public boolean canConnectRedstone(BlockState state, BlockGetter world, BlockPos pos, Direction side) {
-        ConnectionFace connectionFaceB = BlockFrameTransformUtils.canConnectRedstoneTargetConnectionFace(world, pos, side);
+        byte connectionFaceB = BlockFrameTransformUtils.canConnectRedstoneTargetConnectionFace(world, pos, side);
         return CanConnectWallGateProcedure.execute(
                 getPrimarySecondaryDirections((LevelAccessor) world, pos),
                 CanConnectWallGateProcedure.To2ABGateConnectionFilter(state.getValue(CONNECTION)),
@@ -40,7 +40,7 @@ public class ParallelDelayerBlock extends DelayerBlockBase implements ParallelGa
     @Override
     public int[] getSidePower(BlockState thisState, LevelAccessor world, BlockPos thisPos, Pair<Direction,Direction> dirs){
         int linePower = GetParallelSignalProcedure.getParallelLinePower(world, thisPos);
-        ConnectionFace connectionFaceA = BlockFrameTransformUtils.getConnectionFace(thisState, Direction.SOUTH);
+        byte connectionFaceA = BlockFrameTransformUtils.getConnectionFace(thisState, Direction.SOUTH);
         int backPower = GetRedstoneSignalProcedure.execute(world, thisPos, connectionFaceA);
         if(thisState.getValue(CONNECTION) == 0){
             return new int[]{backPower,linePower};

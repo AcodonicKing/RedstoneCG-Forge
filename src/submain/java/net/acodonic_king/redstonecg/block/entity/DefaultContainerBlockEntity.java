@@ -47,6 +47,10 @@ public abstract class DefaultContainerBlockEntity extends RandomizableContainerB
         }
     }
 
+    public void saveAdditionalNoItems(CompoundTag compound) {
+        super.saveAdditional(compound);
+    }
+
     @Override
     public ClientboundBlockEntityDataPacket getUpdatePacket() {
         return ClientboundBlockEntityDataPacket.create(this);

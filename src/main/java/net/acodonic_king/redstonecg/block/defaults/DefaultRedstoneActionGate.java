@@ -1,6 +1,5 @@
 package net.acodonic_king.redstonecg.block.defaults;
 
-import net.acodonic_king.redstonecg.RedstonecgMod;
 import net.acodonic_king.redstonecg.network.RedstonecgModVariables;
 import net.acodonic_king.redstonecg.procedures.BlockFrameTransformUtils;
 import net.acodonic_king.redstonecg.procedures.ConnectionFace;
@@ -47,12 +46,12 @@ public class DefaultRedstoneActionGate extends DefaultConnectableGate implements
     }
     @Override
     public int getSignal(BlockState blockstate, BlockGetter blockAccess, BlockPos pos, Direction direction) {
-        ConnectionFace connectionFaceB = new ConnectionFace(direction); //temporary
+        //ConnectionFace connectionFaceB = new ConnectionFace(direction); //temporary
+        byte connectionFaceB = ConnectionFace.primitiveAll(direction); //temporary
         LevelAccessor world = (LevelAccessor) blockAccess;
         if (blockstate.getBlock() instanceof RedstoneSignalInterface si){
-            ConnectionFace connectionFaceA = si.getOutputConnectionFace(world, pos, connectionFaceB);
+            byte connectionFaceA = si.getOutputConnectionFace(world, pos, connectionFaceB);
             connectionFaceB = BlockFrameTransformUtils.getRequesterConnectionFace(world, pos.relative(direction.getOpposite()), connectionFaceA, direction.getOpposite());
-
             return si.getRedstonePower(world, pos, connectionFaceB);
         }
         return 0;
@@ -104,20 +103,18 @@ public class DefaultRedstoneActionGate extends DefaultConnectableGate implements
     }
 
     @Override
-    public int getRedstonePower(LevelAccessor world, BlockPos pos, ConnectionFace requesterFace) {
+    public int getRedstonePower(LevelAccessor world, BlockPos pos, byte requesterFace) {
         return 0;
     }
 
     @Override
-    public ConnectionFace getOutputConnectionFace(LevelAccessor world, BlockPos pos, ConnectionFace requesterFace) {
-        return BlockFrameTransformUtils.getConnectionFace(world.getBlockState(pos), Direction.NORTH);
+    public byte getOutputConnectionFace(LevelAccessor world, BlockPos pos, byte requesterFace) {
+        return BlockFrameTransformUtils.getConnectionFace(world, pos, Direction.NORTH);
     }
 
     @Override
-    public ConnectionFace getAnyConnectionFace(LevelAccessor world, BlockPos pos, ConnectionFace requesterFace) {
-        BlockState blockState = world.getBlockState(pos);
-        Direction localDirection = BlockFrameTransformUtils.getLocalDirectionFromWorld(blockState,requesterFace.FACE.getOpposite());
-        return BlockFrameTransformUtils.getConnectionFace(blockState,localDirection);
+    public byte getAnyConnectionFace(LevelAccessor world, BlockPos pos, byte requesterFace) {
+        return BlockFrameTransformUtils.getConnectionFaceForRequester(world, pos, requesterFace);
     }
 
 

@@ -45,7 +45,7 @@ public class OneWayThroughGateBlock extends DefaultRedstoneActionGate implements
 
     @Override
     public boolean canConnectRedstone(BlockState state, BlockGetter world, BlockPos pos, Direction side) {
-        ConnectionFace connectionFaceB = BlockFrameTransformUtils.canConnectRedstoneTargetConnectionFace(world, pos, side);
+        byte connectionFaceB = BlockFrameTransformUtils.canConnectRedstoneTargetConnectionFace(world, pos, side);
         return CanConnectWallGateProcedure.To2ABGate(state, connectionFaceB);
     }
 
@@ -107,21 +107,19 @@ public class OneWayThroughGateBlock extends DefaultRedstoneActionGate implements
     }
 
     @Override
-    public ConnectionFace getOutputConnectionFace(LevelAccessor world, BlockPos pos, ConnectionFace requesterFace) {
+    public byte getOutputConnectionFace(LevelAccessor world, BlockPos pos, byte requesterFace) {
         BlockState thisState = world.getBlockState(pos);
         Direction[] Sides = GetGateInputSidesProcedure.Get2ABGateForth(thisState);
         return BlockFrameTransformUtils.getConnectionFace(thisState, Sides[1]);
     }
 
     @Override
-    public int getRedstonePower(LevelAccessor world, BlockPos pos, ConnectionFace sourceFace) {
+    public int getRedstonePower(LevelAccessor world, BlockPos pos, byte sourceFace) {
         if(world.getBlockState(pos).getValue(ENABLED)) {
-            ConnectionFace thisFace = getOutputConnectionFace(world, pos, sourceFace);
-            if (thisFace.canConnect(sourceFace)) {
-                if (world.getBlockEntity(pos) instanceof DefaultAnalogGateBlockEntity be) {
+            byte thisFace = getOutputConnectionFace(world, pos, sourceFace);
+            if (ConnectionFace.canConnect(thisFace, sourceFace))
+                if (world.getBlockEntity(pos) instanceof DefaultAnalogGateBlockEntity be)
                     return be.POWER;
-                }
-            }
         }
         return 0;
     }

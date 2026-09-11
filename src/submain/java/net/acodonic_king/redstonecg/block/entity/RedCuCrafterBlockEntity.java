@@ -13,14 +13,10 @@ import net.acodonic_king.redstonecg.block.gui.redcu_crafter.RedCuCrafterGUIMenu;
 import net.acodonic_king.redstonecg.init.RedstonecgModBlockEntities;
 
 import io.netty.buffer.Unpooled;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.util.LazyOptional;
-
-import javax.annotation.Nullable;
 
 public class RedCuCrafterBlockEntity extends DefaultContainerBlockEntity {
 	public RedCuCrafterBlockEntity(BlockPos position, BlockState state) {
-		super(RedstonecgModBlockEntities.RED_CU_CRAFTER.get(), position, state, 4);
+		super(RedstonecgModBlockEntities.REDCU_CRAFTER.get(), position, state, 4);
 	}
 
 	@Override

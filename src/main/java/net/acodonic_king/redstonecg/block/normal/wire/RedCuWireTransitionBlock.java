@@ -2,11 +2,13 @@ package net.acodonic_king.redstonecg.block.normal.wire;
 
 import io.netty.buffer.Unpooled;
 import net.acodonic_king.redstonecg.ModLoaderRider;
+import net.acodonic_king.redstonecg.RedstonecgMod;
 import net.acodonic_king.redstonecg.block.defaults.*;
 import net.acodonic_king.redstonecg.block.entity.RedCuWireTransitionBlockEntity;
 import net.acodonic_king.redstonecg.block.gui.redcu_wire_transition.RedCuWireTransitionGUIMenu;
 import net.acodonic_king.redstonecg.init.RedstonecgModItems;
 import net.acodonic_king.redstonecg.init.RedstonecgModVersionRides;
+import net.acodonic_king.redstonecg.network.MessengerBlockEntityPigeon;
 import net.acodonic_king.redstonecg.procedures.*;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -67,14 +69,20 @@ public class RedCuWireTransitionBlock extends SuperBlock implements EntityBlock,
                 for(byte side: "DNESWU".getBytes()) {
                     char char_side = (char) side;
                     Direction direction = RedCuWireTransitionBlockEntity.getDirectionCharacter(char_side);
-                    ConnectionFace connectionFaceA = new ConnectionFace(direction, 4);
-                    ConnectionFace connectionFaceB = BlockFrameTransformUtils.getTargetBlockConnectionFace(world, pos, connectionFaceA);
+                    byte connectionFaceA = ConnectionFace.primitiveAll(direction);
+                    BlockState neighborState = world.getBlockState(pos.relative(direction));
+                    if(!RedstonecgModVersionRides.isBlockStateSoftSolid(neighborState))
+                        continue;
+                    byte connectionFaceB = BlockFrameTransformUtils.getTargetBlockConnectionFace(world, pos, connectionFaceA, ConnectionFace.primitiveChannelMask(direction.getOpposite(), ConnectionFace.MASK_CHANNEL_C));
                     //RedstonecgMod.LOGGER.debug("{} {}",connectionFaceA,connectionFaceB);
-                    if(connectionFaceB.CHANNEL < 4){
-                        be.setSideCharacter(char_side, (byte) connectionFaceB.CHANNEL);
-                    }
+                    int ch = ConnectionFace.toChannel(connectionFaceB);
+                    if(ch < 4)
+                        be.setSideCharacter(char_side, (byte) ch);
                 }
                 be.setChanged();
+                be.shapeFind();
+                //be.pathFind();
+                //MessengerBlockEntityPigeon.send(new MessengerBlockEntityPigeon(pos, be.getUpdateTag()));
                 //world.setBlock(pos, blockstate, 3);
                 world.sendBlockUpdated(pos, blockstate, blockstate, 3);
             }
@@ -89,13 +97,15 @@ public class RedCuWireTransitionBlock extends SuperBlock implements EntityBlock,
 
     @Override
     public void onTick(LevelAccessor world, BlockPos pos, int power, int recursion){
+        if(world.isClientSide())
+            return;
         if(world.getBlockEntity(pos) instanceof RedCuWireTransitionBlockEntity blockEntity){
             for(byte side: "DNESWU".getBytes()){
                 char char_side = (char) side;
                 byte connection = blockEntity.getSideCharacter(char_side);
                 if(connection == 5){continue;}
                 Direction direction = RedCuWireTransitionBlockEntity.getDirectionCharacter(char_side);
-                ConnectionFace connectionFaceA = new ConnectionFace(direction, connection);
+                byte connectionFaceA = ConnectionFace.primitiveChannel(direction, connection);
                 int powerB = GetRedstoneSignalProcedure.executeWire(world, pos, connectionFaceA);
                 power = Math.max(power, powerB);
             }
@@ -103,6 +113,7 @@ public class RedCuWireTransitionBlock extends SuperBlock implements EntityBlock,
             if (blockEntity.POWER == power) {return;}
             blockEntity.POWER = power;
             blockEntity.setChanged();
+            //MessengerBlockEntityPigeon.send(new MessengerBlockEntityPigeon(pos, blockEntity.getUpdateTag()));
             BlockState thisBlock = blockEntity.getBlockState();
             recursion++;
             boolean exceedsRecursion = recursion > getWireChainLimit(world);
@@ -161,6 +172,7 @@ public class RedCuWireTransitionBlock extends SuperBlock implements EntityBlock,
     @Override
     public VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
         if(world.getBlockEntity(pos) instanceof RedCuWireTransitionBlockEntity be){
+            //RedstonecgMod.LOGGER.debug(be.SHAPE+" "+be.DOWN+" "+be.NORTH+" "+be.EAST+" "+be.SOUTH+" "+be.WEST+" "+be.UP);
             if(be.SHAPE != 0){
                 VoxelShape shape = Shapes.empty();
                 if((be.SHAPE & 0b01000000) > 0){
@@ -234,12 +246,12 @@ public class RedCuWireTransitionBlock extends SuperBlock implements EntityBlock,
     }
 
     @Override
-    public int getWirePower(LevelAccessor world, BlockPos pos, ConnectionFace requesterFace) {
-        Direction direction = requesterFace.FACE.getOpposite();
+    public int getWirePower(LevelAccessor world, BlockPos pos, byte requesterFace) {
+        Direction direction = ConnectionFace.decodeFace(requesterFace).getOpposite();
         if(world.getBlockEntity(pos) instanceof RedCuWireTransitionBlockEntity be){
             char d = RedCuWireTransitionBlockEntity.getCharacterDirection(direction);
             byte c = be.getSideCharacter(d);
-            if (c == requesterFace.CHANNEL || requesterFace.CHANNEL == 4)
+            if (c == ConnectionFace.toChannel(requesterFace) || ConnectionFace.connectsAll(requesterFace))
                 return be.POWER;
         }
         return 0;
@@ -248,9 +260,8 @@ public class RedCuWireTransitionBlock extends SuperBlock implements EntityBlock,
     @Override
     public int getSignal(BlockState blockstate, BlockGetter blockAccess, BlockPos pos, Direction direction) {
         if(canConnectRedstone(blockstate, blockAccess, pos, direction)){
-            if(blockAccess.getBlockEntity(pos) instanceof RedCuWireTransitionBlockEntity be){
+            if(blockAccess.getBlockEntity(pos) instanceof RedCuWireTransitionBlockEntity be)
                 return be.POWER >> 4;
-            }
         }
         return 0;
     }
@@ -316,31 +327,31 @@ public class RedCuWireTransitionBlock extends SuperBlock implements EntityBlock,
     }
 
     @Override
-    public int getRedstonePower(LevelAccessor world, BlockPos pos, ConnectionFace requesterFace) {
+    public int getRedstonePower(LevelAccessor world, BlockPos pos, byte requesterFace) {
         return getWirePower(world, pos, requesterFace) >> 4;
     }
 
     @Override
-    public ConnectionFace getOutputConnectionFace(LevelAccessor world, BlockPos pos, ConnectionFace requesterFace) {
-        Direction direction = requesterFace.FACE.getOpposite();
+    public byte getOutputConnectionFace(LevelAccessor world, BlockPos pos, byte requesterFace) {
+        Direction direction = ConnectionFace.decodeFace(requesterFace).getOpposite();
         if(world.getBlockEntity(pos) instanceof RedCuWireTransitionBlockEntity be){
             char d = RedCuWireTransitionBlockEntity.getCharacterDirection(direction);
             byte c = be.getSideCharacter(d);
-            return new ConnectionFace(direction,c);
+            return ConnectionFace.primitiveChannel(direction,c);
         }
-        return new ConnectionFace(direction,5);
+        return ConnectionFace.primitiveNone(direction);
     }
 
     @Override
-    public ConnectionFace getAnyConnectionFace(LevelAccessor world, BlockPos pos, ConnectionFace requesterFace) {
+    public byte getAnyConnectionFace(LevelAccessor world, BlockPos pos, byte requesterFace) {
         return getOutputConnectionFace(world, pos, requesterFace);
     }
 
     @Override
     public boolean canConnectRedstone(BlockState state, BlockGetter world, BlockPos pos, Direction side) {
-        ConnectionFace connectionFaceB = BlockFrameTransformUtils.canConnectRedstoneTargetConnectionFace(world, pos, side);
-        ConnectionFace connectionFaceA = getOutputConnectionFace((LevelAccessor) world, pos, connectionFaceB);
-        return connectionFaceA.canConnect(connectionFaceB);
+        byte connectionFaceB = BlockFrameTransformUtils.canConnectRedstoneTargetConnectionFace(world, pos, side);
+        byte connectionFaceA = getOutputConnectionFace((LevelAccessor) world, pos, connectionFaceB);
+        return ConnectionFace.canConnect(connectionFaceA, connectionFaceB);
     }
 
     @Override

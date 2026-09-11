@@ -1,6 +1,7 @@
 package net.acodonic_king.redstonecg.block.entity;
 
 import io.netty.buffer.Unpooled;
+import net.acodonic_king.redstonecg.RedstonecgMod;
 import net.acodonic_king.redstonecg.block.normal.interaction.ControlPanelBlock;
 import net.acodonic_king.redstonecg.block.control_panel.PanelLogicRegistry;
 import net.acodonic_king.redstonecg.block.control_panel.logic.DefaultPanelLogic;
@@ -282,8 +283,24 @@ public class ControlPanelBlockEntity extends DefaultContainerBlockEntity {
         return matrix.rotateX(ANGLES[1]).translate(-0.5f, -0.5f, -0.5f);
     }
 
-    public List<ConnectionFace> getConnectionFaces(int orientation){
-        List<ConnectionFace> conn = new ArrayList<>();
+    public static byte bO(int o, Direction B, Direction Ba){
+        return switch (o){
+            case 0 -> ConnectionFace.primitive(Ba.getOpposite(), B);
+            case 1 -> ConnectionFace.primitive(Ba.getCounterClockWise(), B);
+            case 3 -> ConnectionFace.primitive(Ba.getClockWise(), B);
+            default -> 0;
+        };
+    }
+    public static byte aO(int o, Direction A, Direction Ab){
+        return switch (o){
+            case 2 -> ConnectionFace.primitiveChannelMask(Ab.getOpposite(), A, ConnectionFace.MASK_ALL);
+            case 1 -> ConnectionFace.primitive(Ab.getCounterClockWise(), A);
+            case 3 -> ConnectionFace.primitive(Ab.getClockWise(), A);
+            default -> 0;
+        };
+    }
+    public List<Byte> getConnectionFaces(int orientation){
+        List<Byte> conn = new ArrayList<>();
         if (orientation < 30) {
             int connection = CONNECTION & 0xFF;
             connection &= 0b1111;
@@ -298,25 +315,63 @@ public class ControlPanelBlockEntity extends DefaultContainerBlockEntity {
                 if (orientation < 6) {
                     Direction f = BlockFrameTransformUtils.decodeIntToDirection(orientation);
                     if(i == 4)
-                        conn.add(new ConnectionFace(f, 4));
+                        conn.add(ConnectionFace.primitiveAll(f));
                     else {
                         Direction d = BlockFrameTransformUtils.decodeIntToDirection(i + 1);
-                        conn.add(new ConnectionFace(d, f));
+                        conn.add(ConnectionFace.primitive(d, f));
                     }
                 } else {
                     Direction f = BlockFrameTransformUtils.decodeIntToDirection((orientation - 6) >> 2);
                     if(i == 4)
-                        conn.add(new ConnectionFace(f,4));
+                        conn.add(ConnectionFace.primitiveAll(f));
                     else {
                         Direction d = BlockFrameTransformUtils.decodeIntToDirection(i + 1);
                         Direction r = BlockFrameTransformUtils.decodeIntToDirection(((orientation - 6) & 3) + 1);
                         d = BlockFrameTransformUtils.rotateDirectionClockwiseY(d, r);
-                        conn.add(new ConnectionFace(d, f));
+                        conn.add(ConnectionFace.primitive(d, f));
                     }
                 }
             }
         } else {
-            Direction A = Direction.DOWN;
+            Direction A, B;
+            if (orientation < 34) {
+                A = Direction.DOWN;
+                B = BlockFrameTransformUtils.decodeIntToDirection(orientation - 29);
+            } else if (orientation < 38) {
+                A = BlockFrameTransformUtils.decodeIntToDirection(((orientation - 35) & 3) + 1);
+                B = BlockFrameTransformUtils.decodeIntToDirection(orientation - 33);
+            } else {
+                A = Direction.UP;
+                B = BlockFrameTransformUtils.decodeIntToDirection(orientation - 37);
+            }
+            if ((CONNECTION & BEASBSADANBNBDAW[4]) != 0)
+                conn.add(ConnectionFace.primitiveAll(B));
+            if ((CONNECTION & BEASBSADANBNBDAW[5]) != 0){
+                if (orientation < 34)
+                    conn.add(ConnectionFace.primitiveChannelMask(B.getOpposite(), ConnectionFace.MASK_CHANNEL_C));
+                else if (orientation < 38)
+                    conn.add(ConnectionFace.primitive(Direction.WEST, A));
+                else
+                    conn.add(ConnectionFace.primitiveChannelMask(B.getOpposite(), ConnectionFace.MASK_CHANNEL_A));
+            }
+            Direction Ba = BlockFrameTransformUtils.getLocalDirectionFromWorld(Direction.NORTH, B, A);
+            Direction Ab = BlockFrameTransformUtils.getLocalDirectionFromWorld(Direction.NORTH, B, A);
+            for(int o = 0; o < 4; o++){
+                int c = BEASBSADANBNBDAW[o] & CONNECTION;
+                if(c == 0)
+                    continue;
+                if(c == BEASBSADANBNBDAW[1] || c == BEASBSADANBNBDAW[3]){
+                    conn.add(ConnectionFace.combine(aO(o, A, Ab), bO(o, B, Ba)));
+                    continue;
+                }
+                if((c & 0x70) != 0){
+                    conn.add(bO(o, B, Ba));
+                    continue;
+                }
+                conn.add(aO(o, A, Ab));
+            }
+
+            /*Direction A = Direction.DOWN;
             Direction B = Direction.NORTH;
             if (orientation < 34) {
                 B = BlockFrameTransformUtils.decodeIntToDirection(orientation - 29);
@@ -331,7 +386,7 @@ public class ControlPanelBlockEntity extends DefaultContainerBlockEntity {
                 if ((im[1] & CONNECTION) == 0)
                     continue;
                 if (im[0] == 4)
-                    conn.add(new ConnectionFace(A, 4));
+                    conn.add(ConnectionFace.primitiveAll(A));
                 else {
                     Direction d = BlockFrameTransformUtils.decodeIntToDirection(im[0] + 1);
                     if (orientation < 34) {
@@ -341,29 +396,29 @@ public class ControlPanelBlockEntity extends DefaultContainerBlockEntity {
                         d = BlockFrameTransformUtils.rotateDirectionClockwiseY(d, Direction.EAST);
                         d = BlockFrameTransformUtils.rotateDirectionClockwiseY(B, d);
                     }
-                    conn.add(new ConnectionFace(d, A));
+                    conn.add(ConnectionFace.primitive(d, A));
                 }
             }
             for (int[] im : O2SMB) {
                 if ((im[1] & CONNECTION) == 0)
                     continue;
                 if (im[0] == 4)
-                    conn.add(new ConnectionFace(B, 4));
+                    conn.add(ConnectionFace.primitiveAll(B));
                 else {
                     Direction d = BlockFrameTransformUtils.decodeIntToDirection(im[0] + 1);
                     if (orientation < 34)
                         d = BlockFrameTransformUtils.rotateDirectionClockwiseY(d, Direction.WEST);
                     else if (orientation > 37)
                         d = BlockFrameTransformUtils.rotateDirectionClockwiseY(d, Direction.EAST);
-                    conn.add(new ConnectionFace(d, B));
+                    conn.add(ConnectionFace.primitive(d, B));
                 }
-            }
+            }*/
         }
         return conn;
     }
 
-    public ConnectionFace getConnectionFace(int orientation, ConnectionFace requesterFace){
-        Direction direction = requesterFace.FACE.getOpposite();
+    public byte getConnectionFace(int orientation, byte requesterFace){
+        Direction direction = ConnectionFace.decodeFace(requesterFace).getOpposite();
         if (orientation < 30) {
             int connection = CONNECTION & 0xFF;
             connection &= 0b1111;
@@ -377,52 +432,110 @@ public class ControlPanelBlockEntity extends DefaultContainerBlockEntity {
             Direction secondary = BlockFrameTransformUtils.decodeIntToDirection(o);
             Direction d = BlockFrameTransformUtils.getLocalDirectionFromWorld(primary, secondary, direction);
             if(d == Direction.UP)
-                return new ConnectionFace(direction, 5);
+                return ConnectionFace.primitiveNone(direction);
             if(d == Direction.DOWN){
                 if((connection & 0b00010000) > 0)
-                    return new ConnectionFace(direction, 4);
-                return new ConnectionFace(direction, 5);
+                    return ConnectionFace.primitiveAll(direction);
+                return ConnectionFace.primitiveNone(direction);
             }
             int s = BlockFrameTransformUtils.encodeDirectionToInt(d) - 1;
             d = BlockFrameTransformUtils.rotateDirectionClockwiseY(d, primary);
             if((connection & (1 << s)) > 0)
-                return new ConnectionFace(d, secondary);
+                return ConnectionFace.primitive(d, secondary);
         }
-        Direction A = Direction.DOWN;
+
+        /*
+            A	    B	    Mixed sides B	Face sides B	Standard sides B
+        30	DOWN	NORTH	EAST, WEST	    DOWN, SOUTH	    NORTH, UP
+        31	DOWN	EAST
+        32	DOWN	SOUTH
+        33	DOWN	WEST
+        34	WEST	NORTH	NORTH, SOUTH	DOWN, WEST	    EAST, UP
+        35	NORTH	EAST
+        36	EAST	SOUTH
+        37	SOUTH	WEST
+        38	UP	    NORTH	EAST, WEST	    DOWN, NORTH	    SOUTH, UP
+        39	UP	    EAST
+        40	UP	    SOUTH
+        41	UP	    WEST
+
+        Connection 	WSEN 	WSEN
+        A		    D	    WS N
+        B		     SEN	  D
+        In relation to B	DOWN	NORTH	EAST	SOUTH	WEST	UP
+        30-33			    BD 4	BE	    AS BS	AD	    AN BN	AW C
+        34-37			    BD 4	AN BN	BE	    AS BS	AD	    AW
+        38-41			    BD 4    AD	    AN BN	BE	    AS BS	AW A
+         */
+        Direction A, B;
+        int o;
+        if (orientation < 34) {
+            o = 1;
+            A = Direction.DOWN;
+            B = BlockFrameTransformUtils.decodeIntToDirection(orientation - 29);
+        } else if (orientation < 38) {
+            o = 2;
+            A = BlockFrameTransformUtils.decodeIntToDirection(((orientation - 35) & 3) + 1);
+            B = BlockFrameTransformUtils.decodeIntToDirection(orientation - 33);
+        } else {
+            o = 3;
+            A = Direction.UP;
+            B = BlockFrameTransformUtils.decodeIntToDirection(orientation - 37);
+        }
+        Direction Bl = BlockFrameTransformUtils.getLocalDirectionFromWorld(Direction.NORTH, B, direction);
+        if ((Bl == Direction.DOWN) && (CONNECTION & BEASBSADANBNBDAW[4]) != 0)
+            return ConnectionFace.primitiveAll(direction);
+        if ((Bl == Direction.UP) && (CONNECTION & BEASBSADANBNBDAW[5]) != 0){
+            if (orientation < 34)
+                return ConnectionFace.primitiveChannelMask(direction, ConnectionFace.MASK_CHANNEL_C);
+            else if (orientation < 38)
+                return ConnectionFace.primitive(Direction.WEST, A);
+            return ConnectionFace.primitiveChannelMask(direction, ConnectionFace.MASK_CHANNEL_A);
+        }
+        o = (BlockFrameTransformUtils.encodeDirectionToInt(Bl) - o) & 3;
+        int c = BEASBSADANBNBDAW[o] & CONNECTION;
+        if(c != 0){
+            if(c == BEASBSADANBNBDAW[1] || c == BEASBSADANBNBDAW[3]){
+                Direction Al = BlockFrameTransformUtils.getLocalDirectionFromWorld(Direction.NORTH, A, direction);
+                return ConnectionFace.combine(Al, A, Bl, B);
+            }
+            if(c > 0x0F)
+                return ConnectionFace.primitive(Bl, B);
+            Direction Al = BlockFrameTransformUtils.getLocalDirectionFromWorld(Direction.NORTH, A, direction);
+            return ConnectionFace.primitive(Al, A);
+        }
+
+        /*Direction A = Direction.DOWN;
         Direction B = Direction.NORTH;
         Direction Ar = Direction.NORTH;
         Direction Br = Direction.NORTH;
-        if (orientation < 34) {
+        if (orientation < 34)
             B = BlockFrameTransformUtils.decodeIntToDirection(orientation - 29);
-            //Ar = BlockFrameTransformUtils.rotateDirectionClockwiseY(B, Direction.WEST);
-            //Br = Direction.WEST;
-        } else if (orientation < 38) {
+        else if (orientation < 38) {
             A = BlockFrameTransformUtils.decodeIntToDirection(((orientation - 35) & 3) + 1);
             B = BlockFrameTransformUtils.decodeIntToDirection(orientation - 33);
         } else {
             A = Direction.UP;
             B = BlockFrameTransformUtils.decodeIntToDirection(orientation - 37);
-            //Ar = BlockFrameTransformUtils.rotateDirectionClockwiseY(B, Direction.EAST);
-            //Br = Direction.EAST;
         }
         Direction Al = BlockFrameTransformUtils.getLocalDirectionFromWorld(Ar, A, direction);
         Direction Bl = BlockFrameTransformUtils.getLocalDirectionFromWorld(Br, B, direction);
         if (Al == Direction.DOWN) {
-            if ((CONNECTION & O2SMA[3][1]) > 0)
-                return new ConnectionFace(A, 4);
-            return new ConnectionFace(A, 5);
+            if ((CONNECTION & O2SMA[3][1]) != 0)
+                return ConnectionFace.primitiveAll(A);
+            return ConnectionFace.primitiveNone(A);
         }
         if (Bl == Direction.DOWN) {
-            if ((CONNECTION & O2SMB[3][1]) > 0)
-                return new ConnectionFace(B, 4);
-            return new ConnectionFace(B, 5);
+            if ((CONNECTION & O2SMB[3][1]) != 0)
+                return ConnectionFace.primitiveAll(B);
+            return ConnectionFace.primitiveNone(B);
         }
         for (int[] im : O2SMA) {
             if ((im[1] & CONNECTION) == 0)
                 continue;
             if (im[0] == 4)
                 continue;
-            else {
+            {
                 Direction d = BlockFrameTransformUtils.decodeIntToDirection(im[0] + 1);
                 if (orientation < 34) {
                     d = BlockFrameTransformUtils.rotateDirectionClockwiseY(d, Direction.WEST);
@@ -431,8 +544,8 @@ public class ControlPanelBlockEntity extends DefaultContainerBlockEntity {
                     d = BlockFrameTransformUtils.rotateDirectionClockwiseY(d, Direction.EAST);
                     d = BlockFrameTransformUtils.rotateDirectionClockwiseY(B, d);
                 }
-                ConnectionFace out = new ConnectionFace(d, A);
-                if(out.canConnect(requesterFace))
+                byte out = ConnectionFace.primitive(d, A);
+                if(ConnectionFace.canConnect(out, requesterFace))
                     return out;
             }
         }
@@ -441,22 +554,25 @@ public class ControlPanelBlockEntity extends DefaultContainerBlockEntity {
                 continue;
             if (im[0] == 4)
                 continue;
-            else {
+            {
                 Direction d = BlockFrameTransformUtils.decodeIntToDirection(im[0] + 1);
                 if (orientation < 34)
                     d = BlockFrameTransformUtils.rotateDirectionClockwiseY(d, Direction.WEST);
                 else if (orientation > 37)
                     d = BlockFrameTransformUtils.rotateDirectionClockwiseY(d, Direction.EAST);
-                ConnectionFace out = new ConnectionFace(d, B);
-                if(out.canConnect(requesterFace))
+                byte out = ConnectionFace.primitive(d, B);
+                if(ConnectionFace.canConnect(out, requesterFace))
                     return out;
             }
-        }
-        return new ConnectionFace(direction, 5);
+        }*/
+        return ConnectionFace.primitiveNone(direction);
+        //return new ConnectionFace(direction, ConnectionFace.CHANNEL_NONE);
     }
 
     public static final int[][] O2SMA = {{0, 0b00000001}, {2, 0b00000100}, {3, 0b00001000}, {4, 0b10000000}};
     public static final int[][] O2SMB = {{0, 0b00010000}, {1, 0b00100000}, {2, 0b01000000}, {4, 0b00000010}};
+
+    public static final int[] BEASBSADANBNBDAW = {0b00100000, 0b01000100, 0b10000000, 0b00010001, 0b00000010, 0b00001000};
 
     public RCGMatrix.M4F slotOrientationTransform(RCGMatrix.M4F matrix, int i){
         int orientation = this.getBlockState().getValue(ControlPanelBlock.ORIENTATION);
@@ -476,6 +592,7 @@ public class ControlPanelBlockEntity extends DefaultContainerBlockEntity {
         } else if (orientation < 26) {
             int o = orientation - 10;
             matrix.rotateY(-ANGLES[o >> 2]);
+            //matrix.translate(-0.5f, 0.415f, 0.49f).rotateX(0.3926990817f + ANGLES[1]);
             switch (o & 3){
                 case 0 -> matrix.translate(-0.5f, 0.415f, 0.49f).rotateX(0.3926990817f + ANGLES[1]);
                 case 1 -> matrix.translate(-0.51f, 0.5f, 0.115f).rotateY(-0.3926990817f).rotateX(ANGLES[1]);

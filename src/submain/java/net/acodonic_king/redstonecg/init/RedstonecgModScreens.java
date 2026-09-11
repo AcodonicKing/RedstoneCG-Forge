@@ -18,7 +18,7 @@ public class RedstonecgModScreens {
 	public static void clientLoad(FMLClientSetupEvent event) {
 		event.enqueueWork(() -> {
 			MenuScreens.register(RedstonecgModMenus.ANALOG_SOURCE_GUI.get(), AnalogSourceGUIScreen::new);
-			MenuScreens.register(RedstonecgModMenus.RED_CU_CRAFTER_GUI.get(), RedCuCrafterGUIScreen::new);
+			MenuScreens.register(RedstonecgModMenus.REDCU_CRAFTER_GUI.get(), RedCuCrafterGUIScreen::new);
 			MenuScreens.register(RedstonecgModMenus.REDCU_WIRE_TRANSITION_GUI.get(), RedCuWireTransitionGUIScreen::new);
 			MenuScreens.register(RedstonecgModMenus.DELAYER_GUI.get(), DelayerGUIScreen::new);
 			MenuScreens.register(RedstonecgModMenus.ARROW_INDICATOR_GUI.get(), ArrowIndicatorGUIScreen::new);

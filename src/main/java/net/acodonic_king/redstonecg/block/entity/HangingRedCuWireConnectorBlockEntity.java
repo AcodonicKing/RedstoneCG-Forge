@@ -388,7 +388,7 @@ public class HangingRedCuWireConnectorBlockEntity extends RedCuWireBlockEntity{
                             thisPos.getZ() + obj.RELATIVE[2]
                     };
                 }
-                obj.setDistanceTo();
+            obj.setDistanceTo();
             if(tag.contains("render"))
                 obj.RENDER = tag.getBoolean("render");
             return obj;

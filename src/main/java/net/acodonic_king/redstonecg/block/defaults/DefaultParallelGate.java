@@ -18,7 +18,7 @@ public class DefaultParallelGate extends DefaultRedstoneActionGate implements Pa
     }
     @Override
     public boolean canConnectRedstone(BlockState state, BlockGetter world, BlockPos pos, Direction side) {
-        ConnectionFace connectionFaceB = BlockFrameTransformUtils.canConnectRedstoneTargetConnectionFace(world, pos, side);
+        byte connectionFaceB = BlockFrameTransformUtils.canConnectRedstoneTargetConnectionFace(world, pos, side);
         return CanConnectWallGateProcedure.To4Gate(state, connectionFaceB);
     }
     public static int getParallelChainLimit(LevelAccessor world){

@@ -20,7 +20,7 @@ public class BinaryDecoderBlock extends DefaultAnalogInteractable3ABCGate {
         int[] power = {0,0};
         for(int i = 0; i < 2; i++){
             Direction side = Sides[i];
-            ConnectionFace thisFace = BlockFrameTransformUtils.getConnectionFace(blockState, side);
+            byte thisFace = BlockFrameTransformUtils.getConnectionFace(blockState, side);
             power[i] = GetRedstoneSignalProcedure.execute(world, pos, thisFace);
         }
 
@@ -58,19 +58,16 @@ public class BinaryDecoderBlock extends DefaultAnalogInteractable3ABCGate {
     }
 
     @Override
-    public int getRedstonePower(LevelAccessor world, BlockPos pos, ConnectionFace sourceFace) {
+    public int getRedstonePower(LevelAccessor world, BlockPos pos, byte sourceFace) {
         BlockState blockState = world.getBlockState(pos);
-        ConnectionFace bus = BlockFrameTransformUtils.getConnectionFace(blockState, Direction.NORTH);
+        byte bus = BlockFrameTransformUtils.getConnectionFace(blockState, Direction.NORTH);
         Direction lead_side = GetGateInputSidesProcedure.Get3ABCGate(Direction.NORTH, blockState.getValue(CONNECTION), 3);
-        ConnectionFace lead = BlockFrameTransformUtils.getConnectionFace(blockState, lead_side);
-        if(bus.canConnect(sourceFace)){
-            if(world.getBlockEntity(pos) instanceof DefaultAnalogGateBlockEntity be){
+        byte lead = BlockFrameTransformUtils.getConnectionFace(blockState, lead_side);
+        if(ConnectionFace.canConnect(bus,sourceFace))
+            if(world.getBlockEntity(pos) instanceof DefaultAnalogGateBlockEntity be)
                 return be.POWER;
-            }
-        }
-        if(lead.canConnect(sourceFace)){
+        if(ConnectionFace.canConnect(lead,sourceFace))
             return blockState.getValue(VISIBLE_STATE) ? 15 : 0;
-        }
         return 0;
     }
 

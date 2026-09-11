@@ -22,7 +22,7 @@ import java.util.function.Supplier;
 @Mod.EventBusSubscriber
 public class RedCuCrafterGUIMenu extends ContainerMenu {
 	public RedCuCrafterGUIMenu(int id, Inventory inv, FriendlyByteBuf extraData) {
-		super(RedstonecgModMenus.RED_CU_CRAFTER_GUI.get(), 4, id, inv, extraData);
+		super(RedstonecgModMenus.REDCU_CRAFTER_GUI.get(), 4, id, inv, extraData);
 		checkForBind(extraData);
 		int[][] slot_pos = {
 				{31, 12},
